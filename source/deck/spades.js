@@ -883,7 +883,7 @@
     id: 's-10', rank: '10', suit: 'spade', title: 'Midnight Again',
     pair: ['Brigade Road', 'Times Square'],
     sentence: ['Midnight again.', 'Same resolutions.'],
-    why: 'Both crowds count down, hug strangers, and swear the gym starts on the second.',
+    why: 'Both crowds count down, hug strangers and swear the gym starts on the second.',
     mechanism: 'Two crowds, feet to feet. One kid on shoulders at the centre of each, arms up.',
     sound: 'A countdown, a roar, party horns, a police whistle, auld lang syne.',
     draw(ctx) {

@@ -944,7 +944,7 @@
     id: 'c-q', rank: 'Q', suit: 'club', title: 'Still Open',
     pair: ['Iyengar bakery', 'Corner bodega'],
     sentence: ["Open before you're up.", "Still open when you're not okay."],
-    why: 'Bad day, any hour. A lit sign, a warm puff, and nobody asking questions.',
+    why: 'Bad day, any hour. A lit sign, a warm puff and nobody asking questions.',
     mechanism: 'Two counters back to back. Rusks in a jar, coffee in a cup. The cat stays.',
     sound: 'A buzzing tube light, a jar lid, a door bell, a cat.',
     draw(ctx) {

@@ -54,7 +54,7 @@
   h1, h2, h3 { font-family: var(--display); font-weight: 500; text-wrap: balance; margin: 0; }
   p { margin: 0; }
 
-  header { padding-top: 48px; display: grid; gap: 14px; }
+  header { padding-top: 48px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
   header h1 { font-size: clamp(42px, 7vw, 84px); line-height: 1; letter-spacing: -0.01em; }
   header h1 em { font-style: italic; color: var(--marigold); }
   header .thesis { font-size: 24px; font-style: italic; color: var(--muted); max-width: 40ch; }
@@ -189,7 +189,7 @@
   .seg { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
   .seg .label { margin-right: 4px; }
   .seg button { text-transform: none; letter-spacing: 0.02em; font-size: 14px; }
-  .progress { display: flex; align-items: center; gap: 10px 14px; min-width: 0; flex: 1 1 260px; max-width: 460px; }
+  .progress { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; min-width: 0; flex: 1 1 260px; max-width: 460px; }
   .deck-count { display: grid; gap: 2px; }
   .deck-count b { font-family: var(--display); font-weight: 500; font-size: 22px; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .tips { font-size: 16px; color: var(--muted); margin-top: 6px; }
@@ -197,7 +197,17 @@
   .bar { flex: 1 1 80px; min-width: 60px; height: 4px; background: var(--rule); border-radius: 2px; overflow: hidden; }
   .bar i { display: block; height: 100%; width: 0; background: var(--marigold); transition: width 0.5s; }
   .linkish { border: 0; padding: 4px 2px; min-height: 0; font-size: 11px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
-  #cat-badge svg { width: 22px; height: 22px; display: block; }
+  #cat-badge { display: none !important; }
+  .cats { display: inline-flex; gap: 4px; }
+  .cats svg { width: 18px; height: 18px; fill: none; stroke: var(--muted); stroke-width: 1.4; opacity: 0.7; transition: fill 0.3s, stroke 0.3s, opacity 0.3s; }
+  .cats svg.got { fill: var(--marigold); stroke: var(--marigold); opacity: 1; }
+  .cats svg.pop { animation: cat-pop 0.6s cubic-bezier(0.2, 0.7, 0.3, 1.4); }
+  @keyframes cat-pop { from { transform: scale(0.2) rotate(-20deg); } }
+  .found-cat svg { display: block; width: 100%; height: 100%; fill: var(--marigold); }
+  .found-cat { position: fixed; z-index: 70; width: 46px; height: 46px; margin: -23px 0 0 -23px; pointer-events: none; animation: found 1.1s cubic-bezier(0.2, 0.7, 0.3, 1) forwards; }
+  @keyframes found { 0% { transform: scale(0.3); opacity: 0; } 25% { transform: scale(1.2); opacity: 1; } 100% { transform: translateY(-60px) scale(1); opacity: 0; } }
+  .hint { margin: 0; text-align: center; font-style: italic; font-size: 16px; color: var(--muted); transition: opacity 0.6s; }
+  .hint.done { opacity: 0; }
 
   /* The card leans toward the cursor and catches the light */
   .tilt { position: relative; transform: perspective(1100px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform 0.25s ease-out; border-radius: 4.8% / 3.4%; }
@@ -475,6 +485,11 @@
   .cursor-ring span { position: absolute; left: calc(100% + 10px); top: 50%; translate: 0 -50%; white-space: nowrap; font-family: var(--label); font-weight: 700; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--table); background: var(--marigold); padding: 4px 8px; border-radius: 99px; opacity: 0; transition: opacity 0.2s; }
   .cursor-ring.label span { opacity: 1; }
 
+  /* On short screens the card shrinks to fit, so the whole card and its controls stay in view */
+  @media (min-height: 520px) {
+    .tilt { width: min(100%, calc((100vh - 175px) * 0.714)); width: min(100%, calc((100svh - 175px) * 0.714)); margin-inline: auto; }
+  }
+
   /* Phones: the card belongs on the first screen */
   @media (max-width: 600px) {
     .wrap { gap: 56px; }
@@ -523,7 +538,7 @@
     </div>
     <h1>A Tale of <em>Two</em> Cities</h1>
     <p class="thesis">For anyone whose phone shows two clocks.</p>
-    <p class="tips"><b>Tap</b> to turn, <b>swipe</b> for the next one. Turn <b>all 52</b> to unlock the Jokers. Three cats are hiding.</p>
+    <p class="tips">Turn <b>all 52</b> for the Jokers. Spot the three hidden cats and tap them.</p>
     <div class="strip">
       <div class="where" role="group" aria-label="Which city are you in?">
         <span class="label">I'm in</span>
@@ -533,6 +548,7 @@
       <div class="progress">
         <button type="button" class="deck-count" id="b-wall" aria-haspopup="dialog"><span class="label">Your deck · <u>see all</u></span><b id="prog-label">0 / 52 turned</b></button>
         <span class="bar" aria-hidden="true"><i id="prog-bar"></i></span>
+        <span class="cats" id="cats" role="img" aria-label="Cats found: 0 of 3"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z"/></svg></span>
         <span id="cat-badge" hidden title="You found all three cats"><svg viewBox="0 0 24 24" aria-label="Cat badge"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z" fill="#f2b330"/><circle cx="10" cy="13" r="1" fill="#12151f"/><circle cx="14" cy="13" r="1" fill="#12151f"/></svg></span>
         <button type="button" class="linkish" id="b-reset">Start over</button>
       </div>
@@ -546,6 +562,7 @@
       <div class="bigword ink" id="ink" aria-hidden="true"><span id="bw2"></span></div>
       <p class="cross" id="cross" aria-hidden="true"><svg viewBox="-12 -12 24 24"><circle r="10.5" fill="none" stroke="currentColor" stroke-width="1.2"/><line id="hand-h" y2="-5.5" stroke="#f4ecdc" stroke-width="1.8" stroke-linecap="round"/><line id="hand-m" y2="-8.2" stroke="#f2b330" stroke-width="1.2" stroke-linecap="round"/><circle r="1.3" fill="#f4ecdc"/></svg><b id="cross-time">--:--</b><span id="cross-city"></span><span class="cross-hint" id="cross-hint">· Scroll to cross</span></p>
       <div class="tilt" id="tilt"><div class="rings" id="rings" aria-hidden="true" hidden><i></i><i></i><i></i></div><div class="card" id="feature" role="button" tabindex="0" aria-label="Turn the card around"></div><span class="glint" id="glint" aria-hidden="true"></span><div class="loupe" id="loupe" aria-hidden="true" hidden><div class="lens" id="lens"></div></div></div>
+      <p class="hint" id="hint">Read half, tap for the rest, swipe for the next.</p>
       <div class="stepper">
         <button type="button" class="nav" id="b-sound" aria-pressed="false" aria-label="Sound on"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3,7 H6 L10,3.5 V14.5 L6,11 H3 Z" fill="currentColor"/><path class="ico-on" d="M12.5,6.2 Q14.4,9 12.5,11.8 M14.6,4.4 Q17.6,9 14.6,13.6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path class="ico-off" d="M12.5,6.8 L16.5,11.2 M16.5,6.8 L12.5,11.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
         <span class="step-mid">
@@ -593,8 +610,6 @@
       <p class="status" id="status" role="status"></p>
     </div>
   </section>
-
-  <div class="ticker" aria-hidden="true" data-in="home"><div class="ticker-track" id="ticker"></div></div>
 
   <section class="system" aria-label="Deck system" data-in="home">
     <div class="reel-head">
@@ -703,7 +718,7 @@
     let uid = 0;
     const $ = (id) => document.getElementById(id);
     const isJoker = (id) => id === 'departure' || id === 'return';
-    const NOTE = 'Read one half, then tap the card to read the rest.';
+    const NOTE = '';
 
     const jokerInfo = {
       departure: {
@@ -1005,7 +1020,7 @@
       club: 'M0,-6 A2.7,2.7 0 1 1 0.01,-6 Z M-3,-0.6 A2.7,2.7 0 1 1 -2.99,-0.6 Z M3,-0.6 A2.7,2.7 0 1 1 3.01,-0.6 Z M-0.8,0.6 L-1.9,6.2 L1.9,6.2 L0.8,0.6 Z',
       spade: 'M0,-6.2 C1,-4 6,-1.6 6,1.6 C6,4.1 3,5 0.9,3.3 L1.9,6.2 L-1.9,6.2 L-0.9,3.3 C-3,5 -6,4.1 -6,1.6 C-6,-1.6 -1,-4 0,-6.2 Z'
     };
-    $('suits').innerHTML = suits.map((x) => `<button type="button" class="suit" data-suit="${x.s}" aria-expanded="false" aria-controls="spread"><span class="pile" aria-hidden="true"><span>${render('back', { static: true })}</span><span>${render('back', { static: true })}</span><span>${render('back', { static: true })}</span></span><span class="label">${x.name} · ${all.filter((c) => c.suit === x.s).length} cards</span><h3><svg viewBox="-7 -7 14 14" aria-hidden="true"><path d="${pipPath[x.s]}" fill="${x.s === 'heart' || x.s === 'diamond' ? 'var(--vermilion)' : 'var(--ivory)'}"/></svg>${x.theme}</h3><p>${x.d}</p><p class="ex">${x.ex}</p></button>`).join('');
+    $('suits').innerHTML = suits.map((x) => `<button type="button" class="suit" data-suit="${x.s}" aria-expanded="false" aria-controls="spread"><span class="pile" aria-hidden="true"><span>${render('back', { static: true })}</span><span>${render('back', { static: true })}</span><span>${render('back', { static: true })}</span></span><span class="label">${x.name} · ${all.filter((c) => c.suit === x.s).length} cards</span><h3><svg viewBox="-7 -7 14 14" aria-hidden="true"><path d="${pipPath[x.s]}" fill="${x.s === 'heart' || x.s === 'diamond' ? 'var(--vermilion)' : 'var(--ivory)'}"/></svg>${x.theme}</h3><p class="ex">${x.ex}</p></button>`).join('');
     document.querySelectorAll('#suits .suit').forEach((b) => b.addEventListener('click', () => openSuit(b.dataset.suit)));
     $('hours').innerHTML = ['2', '3', '4', '5', '6', '7', '8', '9', '10'].map((r) => `<span><b>${r}</b> ${T.HOURS[r]}</span>`).join('');
 
@@ -1020,6 +1035,35 @@
         : '';
     });
     // Tap the card to turn it around, like a real one. Your city's side comes back on the next card.
+    // The cats live on the New York side of three cards. Tap one to find it.
+    const CAT_AT = { weather: [188, 255], 'h-q': [125, 222], 'c-q': [172, 222] };
+    const catsFound = new Set();
+    const CAT_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z"/></svg>';
+    function showCats(pop) {
+      const svgs = $('cats').querySelectorAll('svg');
+      svgs.forEach((s, i) => { s.classList.toggle('got', i < catsFound.size); if (pop && i === catsFound.size - 1) { s.classList.remove('pop'); void s.getBoundingClientRect(); s.classList.add('pop'); } });
+      $('cats').setAttribute('aria-label', `Cats found: ${catsFound.size} of 3`);
+    }
+    function tryCat(x, y) {
+      const at = CAT_AT[state.id];
+      if (!at || catsFound.has(state.id) || state.locked) return false;
+      const r = $('feature').getBoundingClientRect();
+      let u = ((x - r.left) / r.width) * 250, v = ((y - r.top) / r.height) * 350;
+      if (state.turned) { u = 250 - u; v = 350 - v; }
+      if (Math.hypot(u - at[0], v - at[1]) > 26) return false;
+      catsFound.add(state.id); store.set('catsFound', [...catsFound]); showCats(true);
+      if (!reduce) {
+        const el = document.createElement('div');
+        el.className = 'found-cat'; el.innerHTML = CAT_SVG;
+        el.style.left = x + 'px'; el.style.top = y + 'px';
+        document.body.appendChild(el); setTimeout(() => el.remove(), 1200);
+      }
+      Snd.flick && Snd.flick();
+      const left = 3 - catsFound.size;
+      toast(left ? `Cat found. ${left === 1 ? 'One more' : 'Two more'} hiding somewhere.` : 'All three cats found. The bodega union thanks you for your service.');
+      return true;
+    }
+
     function turnCard() {
       state.base = !state.base;
       applyTurn(true);
@@ -1268,6 +1312,11 @@
       roadWidth(); addEventListener('resize', roadWidth);
     }
 
+    // The hint by the card fades once you have the hang of it.
+    let hintCount = 0;
+    function hintStep() { if (++hintCount >= 3) $('hint').classList.add('done'); }
+    if (finePointer) { $('hint').textContent = 'Read half, click for the rest, use the arrows for the next.'; document.querySelector('.tips').innerHTML = document.querySelector('.tips').innerHTML.replace('and tap them', 'and click them'); }
+
     // ---------- premium touches ----------
     // Text sharpens in from a soft blur instead of popping.
     function blurIn(els, stagger, delay) {
@@ -1382,6 +1431,7 @@
         return `<span class="sticker${got ? '' : ' empty'}${fresh && !reduce ? ' new' : ''}" style="--rot:${[-8, 5, -3, 9][i]}deg" title="${got ? `${s.name} done` : `Finish ${s.name} to earn this`}" role="img" aria-label="${got ? `${s.name} sticker` : `${s.name} sticker, not yet earned`}"><svg viewBox="-7 -7 14 14" aria-hidden="true"><path d="${pipPath[s.s]}" fill="${!got ? '#a8a294' : s.s === 'heart' || s.s === 'diamond' ? '#e2553c' : '#12151f'}"/></svg></span>`;
       }).join('');
       store.set('stickers', suits.filter((s) => suitDone(s.s)).map((s) => s.s));
+      ov.querySelector('.stickers').insertAdjacentHTML('beforeend', `<span class="sticker${catsFound.size === 3 ? '' : ' empty'}" style="--rot:-6deg" role="img" aria-label="${catsFound.size === 3 ? 'Cat sticker' : 'Cat sticker, not yet earned'}" title="${catsFound.size === 3 ? 'All three cats' : 'Find the three cats'}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z" fill="${catsFound.size === 3 ? '#f2b330' : '#a8a294'}"/></svg></span>`);
       const grid = ov.querySelector('.wall-grid');
       let n = 0;
       const tile = (item, face, lock) => {
@@ -1456,6 +1506,8 @@
     const CITY_NAME = { blr: 'Bengaluru', nyc: 'New York' };
     const guessCity = () => { try { return /^America\//.test(Intl.DateTimeFormat().resolvedOptions().timeZone) ? 'nyc' : 'blr'; } catch (e) { return 'blr'; } };
     state.city = store.get('city', guessCity());
+    (store.get('catsFound', []) || []).forEach((id) => { if (CAT_AT[id]) catsFound.add(id); });
+    showCats(false);
     state.kn = store.get('kn', false);
     const timeIn = (city) => new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', timeZone: TZ[city] }).format(new Date());
     const hourIn = (city) => Number(new Intl.DateTimeFormat('en-US', { hour: 'numeric', hourCycle: 'h23', timeZone: TZ[city] }).format(new Date())) % 24;
@@ -1525,9 +1577,6 @@
         const done = store.get('suitsDone', []);
         if (suitDone(s.s) && !done.includes(s.s)) { store.set('suitsDone', [...done, s.s]); toast(`${s.name} done. There's a sticker for you on your deck wall.`); }
       });
-      const cats = T.CATS.every((id) => turned.has(id));
-      $('cat-badge').hidden = !cats;
-      if (fresh && cats && !store.get('cats', false)) { store.set('cats', true); toast('Three cats found. The bodega union thanks you for your service.'); }
       if (fresh && jokersOpen() && !celebrated) {
         celebrated = true;
         toast('All 52 turned. The Jokers tab is open.');
@@ -1535,7 +1584,7 @@
     }
     updateProgress(false);
     $('b-reset').addEventListener('click', () => {
-      turned.clear(); saveTurned(); store.set('cats', false); store.set('suitsDone', []); store.set('stickers', []); celebrated = false;
+      turned.clear(); saveTurned(); catsFound.clear(); store.set('catsFound', []); showCats(false); store.set('suitsDone', []); store.set('stickers', []); celebrated = false;
       document.querySelectorAll('.thumb.revealed').forEach((b) => b.classList.remove('revealed'));
       revealed.clear();
       updateProgress(false);
@@ -1790,7 +1839,7 @@
         $('pp-status').textContent = 'Added. May the votes be kind.';
       } catch (err) {
         $('pp-status').textContent = err.status === 409 ? 'Three each, so everyone gets a turn. Vote for someone else\'s.'
-          : err.status === 429 ? 'Easy. Try again in a minute.' : err.status === 400 ? 'Both sides need a name, and keep it short.' : boardDown;
+          : err.status === 429 ? 'Easy. Try again in a minute.' : err.status === 400 ? 'Both sides need a name. Keep it short.' : boardDown;
       }
     });
 
@@ -1801,17 +1850,12 @@
     addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { layoutRunway(); onScroll(); if (openSuitId) arcFan(); }, 150); });
     setInterval(clockAndSky, 30000);
 
-    // A slow ticker of every pairing in the deck, twice over so it loops.
-    const tickerPairs = all.filter((x) => x.kind === 'card').map((x) => `<span>${x.pair[0]}<i>×</i>${x.pair[1]}</span>`).join('');
-    $('ticker').innerHTML = tickerPairs + tickerPairs;
-    if (reduce) $('ticker').style.animation = 'none';
-
     // Sections slide in the first time you reach them.
     if (!reduce && 'IntersectionObserver' in window) {
       const io = new IntersectionObserver((entries) => entries.forEach((en) => {
         if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
       }), { rootMargin: '0px 0px -12% 0px' });
-      document.querySelectorAll('.ticker, .system, .jokers, .pairings').forEach((el) => { el.classList.add('reveal'); io.observe(el); });
+      document.querySelectorAll('.system, .jokers, .pairings').forEach((el) => { el.classList.add('reveal'); io.observe(el); });
     }
 
     // On a computer, a small ring follows the cursor, grows over anything you can press, and says what the card does.
@@ -1851,7 +1895,7 @@
       setFeature(next.id, true);
     }
     $('b-prev').addEventListener('click', () => step(-1));
-    $('b-next').addEventListener('click', () => step(1));
+    $('b-next').addEventListener('click', () => { step(1); hintStep(); });
     document.addEventListener('keydown', (e) => {
       if (e.target.closest && e.target.closest('input, textarea')) return;
       if (e.key === 'ArrowRight') step(1);
@@ -1875,8 +1919,8 @@
       if (holding) { holding = false; hideLoupe(); swipe = null; return; }
       if (!swipe) return;
       const dx = e.clientX - swipe.x, dy = e.clientY - swipe.y; swipe = null;
-      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) { startGyro(); turnCard(); return; }
-      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5) step(dx < 0 ? 1 : -1);
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) { startGyro(); if (!tryCat(e.clientX, e.clientY)) { turnCard(); hintStep(); } return; }
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5) { step(dx < 0 ? 1 : -1); hintStep(); }
     });
 
     $('b-shuffle').addEventListener('click', () => {

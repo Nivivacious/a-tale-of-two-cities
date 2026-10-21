@@ -425,7 +425,7 @@
     pair: ['Koramangala café', 'DUMBO coworking'],
     sentence: ['Every table is a startup.', 'Every startup needs more coffee.'],
     why: 'Koramangala and DUMBO, where every chart goes up and every cup goes empty.',
-    mechanism: 'Two tables back to back. On both screens the bars keep climbing, and so does the caffeine.',
+    mechanism: 'Two tables back to back. On both screens the bars keep climbing. So does the caffeine.',
     sound: "Keyboards, an espresso machine, someone saying 'pivot' twice.",
     draw(ctx) {
       const p = ctx.id;

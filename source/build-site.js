@@ -179,7 +179,7 @@ ${keep}
         $('pp-status').textContent = 'Added. May the votes be kind.';
       } catch (err) {
         $('pp-status').textContent = err.status === 409 ? 'Three each, so everyone gets a turn. Vote for someone else\\'s.'
-          : err.status === 429 ? 'Easy. Try again in a minute.' : err.status === 400 ? 'Both sides need a name, and keep it short.' : boardDown;
+          : err.status === 429 ? 'Easy. Try again in a minute.' : err.status === 400 ? 'Both sides need a name. Keep it short.' : boardDown;
       }
     });
 
