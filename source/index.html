@@ -143,11 +143,9 @@
   .grid h3 svg { width: 16px; height: 16px; flex: none; }
   .grid p { font-size: 17px; }
   .grid .ex { font-size: 15px; color: var(--muted); font-style: italic; }
-  .specs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; margin-top: 40px; }
+  .specs { display: grid; grid-template-columns: minmax(0, 1fr); gap: 48px; margin-top: 40px; }
   .specs > div { display: grid; gap: 8px; align-content: start; min-width: 0; }
   .specs p { font-size: 17px; }
-  .hours { font-variant-numeric: tabular-nums; font-family: var(--label); font-size: 13px; letter-spacing: 0.04em; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 12px; }
-  .hours b { color: var(--ivory); font-weight: 700; }
 
   @media (max-width: 860px) {
     .stage, .jokers { grid-template-columns: minmax(0, 1fr); }
@@ -325,15 +323,6 @@
   .tile .lockmark span { background: var(--marigold); padding: 2px 6px; border-radius: 2px; }
   @keyframes tile-in { from { opacity: 0; transform: translateY(12px) scale(0.96); } }
 
-  /* Scrub the day */
-  .scrub { display: flex; gap: 16px; align-items: center; margin-top: 14px; }
-  .scrub-card { flex: none; width: 84px; padding: 0; border: 0; min-height: 0; aspect-ratio: 5 / 7; border-radius: 6% / 4.3%; overflow: hidden; background: none; box-shadow: 0 10px 22px -10px rgba(0, 0, 0, 0.85); transition: translate 0.2s; }
-  .scrub-card:hover { translate: 0 -3px; }
-  .scrub-card svg { display: block; width: 100%; height: 100%; }
-  .scrub-ctl { display: grid; gap: 8px; flex: 1; min-width: 0; }
-  .scrub input[type="range"] { accent-color: var(--marigold); border: 0; padding: 0; width: 100%; }
-  .scrub output { font-family: var(--display); font-size: 21px; line-height: 1.2; }
-  .scrub output span { color: var(--muted); font-family: var(--body); font-style: italic; font-size: 17px; }
 
   .foot { border-top: 1px solid var(--rule); padding-top: 22px; margin-top: -24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 10px 24px; }
   .foot p { font-family: var(--label); font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: var(--muted); }
@@ -442,8 +431,19 @@
   @keyframes ring { 0% { transform: scale(0.7); opacity: 0.7; } 100% { transform: scale(1.7); opacity: 0; } }
 
   /* Read a card: numbered dots, one short note each */
-  .anatomy { justify-items: start; }
-  .anat-card { position: relative; width: min(230px, 70%); aspect-ratio: 5 / 7; margin-top: 6px; }
+  .rules-row { display: grid; grid-template-columns: minmax(0, 1fr) 230px; gap: 40px; align-items: start; }
+  .rules-row .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .anatomy { display: grid; gap: 8px; justify-items: start; }
+  @media (max-width: 860px) { .rules-row { grid-template-columns: minmax(0, 1fr); } .rules-row .anat-card { width: min(230px, 70%); } }
+  /* Phones: two neat columns of suits, no piles to crowd them */
+  @media (max-width: 600px) {
+    .rules-row .grid > .suit { padding: 16px 14px; grid-template-columns: minmax(0, 1fr); }
+    .rules-row .pile { display: none; }
+    .rules-row .grid h3 { font-size: 20px; }
+    .rules-row .grid .ex { font-size: 14px; }
+  }
+  @media (max-width: 360px) { .rules-row .grid { grid-template-columns: minmax(0, 1fr); } }
+  .anat-card { position: relative; width: 100%; aspect-ratio: 5 / 7; margin-top: 6px; }
   .anat-card > svg { display: block; width: 100%; height: 100%; border-radius: 4.8% / 3.4%; box-shadow: 0 20px 40px -18px rgba(0, 0, 0, 0.8); }
   .dot { position: absolute; left: var(--x); top: var(--y); translate: -50% -50%; width: 22px; height: 22px; min-height: 0; padding: 0; border-radius: 50%; border: 0; background: var(--marigold); color: var(--table); font-family: var(--label); font-size: 11px; font-weight: 700; letter-spacing: 0; display: grid; place-items: center; box-shadow: 0 0 0 4px rgba(242, 179, 48, 0.25); cursor: pointer; }
   .dot::before { content: ""; position: absolute; inset: -11px; }
@@ -453,6 +453,11 @@
   .dot.left .note { left: auto; right: calc(100% + 14px); }
   .dot.left .note::before { right: auto; left: 100%; }
   .dot:hover .note, .dot:focus-visible .note, .dot[aria-expanded="true"] .note { opacity: 1; }
+  /* Beside the suits, the card sits on the right edge, so every note opens to the left */
+  @media (min-width: 861px) {
+    .rules-row .dot .note { left: auto; right: calc(100% + 14px); }
+    .rules-row .dot .note::before { right: auto; left: 100%; }
+  }
 
   /* Cursor ring (computers only) */
   .cursor-ring { position: fixed; left: 0; top: 0; z-index: 75; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; border: 1.5px solid rgba(244, 236, 220, 0.7); pointer-events: none; transition: width 0.25s, height 0.25s, margin 0.25s, opacity 0.25s, border-color 0.25s, background 0.25s; opacity: 0; }
@@ -592,32 +597,19 @@
       <h2>House rules</h2>
       <span class="label">Tap a suit to fan out its cards</span>
     </div>
-    <div class="grid" id="suits"></div>
+    <div class="rules-row">
+      <div class="grid" id="suits"></div>
+      <div class="anatomy">
+        <span class="label">Read a card</span>
+        <div class="anat-card" id="anat"></div>
+      </div>
+    </div>
     <div class="spread" id="spread" hidden>
       <div class="spread-head">
         <span class="label" id="spread-name"></span>
         <button type="button" id="b-all" aria-pressed="false">Turn these over</button>
       </div>
       <div class="fan-wrap" data-lenis-prevent><div class="fan" id="fan"></div></div>
-    </div>
-    <div class="specs">
-      <div>
-        <span class="label">Ranks tell time</span>
-        <p>Lay out a suit from 2 to 10 and you get a day, first coffee to last auto. Jacks hustle, Queens charm, Kings complain.</p>
-        <div class="hours" id="hours"></div>
-        <div class="scrub">
-          <button type="button" class="scrub-card" id="scrub-card" aria-label="Show this card"></button>
-          <div class="scrub-ctl">
-            <label class="label" for="scrub">Scrub the day</label>
-            <input type="range" id="scrub" min="0" max="8" step="1" value="4">
-            <output id="scrub-out" for="scrub"></output>
-          </div>
-        </div>
-      </div>
-      <div class="anatomy">
-        <span class="label">Read a card</span>
-        <div class="anat-card" id="anat"></div>
-      </div>
     </div>
   </section>
 
@@ -984,7 +976,6 @@
     };
     $('suits').innerHTML = suits.map((x) => `<button type="button" class="suit" data-suit="${x.s}" aria-expanded="false" aria-controls="spread"><span class="pile" aria-hidden="true"><span>${render('back', { static: true })}</span><span>${render('back', { static: true })}</span><span>${render('back', { static: true })}</span></span><span class="label">${x.name} · ${all.filter((c) => c.suit === x.s).length} cards</span><h3><svg viewBox="-7 -7 14 14" aria-hidden="true"><path d="${pipPath[x.s]}" fill="${x.s === 'heart' || x.s === 'diamond' ? 'var(--vermilion)' : 'var(--ivory)'}"/></svg>${x.theme}</h3><p class="ex">${x.ex}</p></button>`).join('');
     document.querySelectorAll('#suits .suit').forEach((b) => b.addEventListener('click', () => openSuit(b.dataset.suit)));
-    $('hours').innerHTML = ['2', '3', '4', '5', '6', '7', '8', '9', '10'].map((r) => `<span><b>${r}</b> ${T.HOURS[r]}</span>`).join('');
 
     $('b-sound').addEventListener('click', () => {
       const on = !Snd.enabled;
@@ -1309,7 +1300,7 @@
 
     // Read a card: five dots on one card, a few words each.
     {
-      const DOTS = [[10, 12, 'Rank tells the hour'], [90, 22, 'City and coordinates'], [50, 7.5, 'The street, the time'], [50, 49.5, 'The hidden line'], [50, 74, 'Turn it for New York']];
+      const DOTS = [[10, 12, 'Rank and suit'], [90, 22, 'City and coordinates'], [50, 7.5, 'The street, the time'], [50, 49.5, 'The hidden line'], [50, 74, 'Turn it for New York']];
       $('anat').innerHTML = render('ride', { static: true }) + DOTS.map(([x, y, note], i) =>
         `<button type="button" class="dot${x > 70 ? ' left' : ''}" style="--x:${x}%;--y:${y}%" aria-expanded="false" aria-label="${i + 1}: ${note}">${i + 1}<span class="note" aria-hidden="true">${note}</span></button>`).join('');
       $('anat').addEventListener('click', (e) => {
@@ -1437,27 +1428,6 @@
     }
     $('b-wall').addEventListener('click', openWall);
 
-    // ---------- scrub the day: ranks keep time, so dragging through the hours deals the suit's day ----------
-    const RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', '10'];
-    const HOUR_OF = { '2': 6, '3': 8, '4': 10, '5': 12, '6': 14, '7': 16, '8': 18, '9': 20, '10': 23 };
-    let scrubId = null, skyBack = null;
-    function scrubTo(i, byHand) {
-      const rank = RANKS[i], cur = all.find((x) => x.id === state.id);
-      const suit = cur && cur.kind === 'card' ? cur.suit : 'heart';
-      const card = all.find((x) => x.kind === 'card' && x.suit === suit && x.rank === rank);
-      scrubId = card.id;
-      $('scrub-card').innerHTML = render(card.id, { static: true });
-      $('scrub-card').setAttribute('aria-label', `Show ${card.title}`);
-      const out = $('scrub-out');
-      out.textContent = `${T.HOURS[rank].replace('NOON', 'Noon')} `;
-      const t = document.createElement('span'); t.textContent = card.title; out.appendChild(t);
-      if (byHand) {
-        document.documentElement.style.setProperty('--sky', skyAt(HOUR_OF[rank]));
-        clearTimeout(skyBack); skyBack = setTimeout(clockAndSky, 6000);
-      }
-    }
-    $('scrub').addEventListener('input', (e) => { scrubTo(Number(e.target.value), true); Snd.flick && Snd.flick(); });
-    $('scrub-card').addEventListener('click', () => { if (!scrubId) return; setFeature(scrubId, true, cross.on ? 0 : null); toStage(); });
 
     // ---------- personal: clocks, your city, the card for right now ----------
     const store = {
@@ -1495,15 +1465,9 @@
     setCity(state.city, false);
     $('city-blr').addEventListener('click', () => setCity('blr', true));
     $('city-nyc').addEventListener('click', () => setCity('nyc', true));
-    // Ranks keep time, so the deal follows your clock.
-    function rankForHour(h) {
-      if (h < 5 || h >= 22) return '10';
-      if (h < 6) return 'A';
-      return ['2', '2', '3', '3', '4', '4', '5', '5', '6', '6', '7', '7', '8', '8', '9', '9'][h - 6];
-    }
+    // Deal for me: any card from the deck.
     function dealNow() {
-      const rank = rankForHour(hourIn(state.city));
-      const pool = all.filter((x) => x.kind === 'card' && x.rank === rank);
+      const pool = all.filter((x) => x.kind === 'card');
       return pool[Math.floor(Math.random() * pool.length)].id;
     }
     let linkUsed = false;
@@ -1515,7 +1479,7 @@
     }
     function dealtNote(id, linked) {
       if (linked) { $('status').textContent = 'Someone sent you this one.'; return; }
-      $('status').textContent = `Dealt for ${timeIn(state.city)} in ${CITY_NAME[state.city]}.`;
+      $('status').textContent = '';
     }
 
     // ---------- collection: progress, the locked Jokers, the cat hunt ----------
@@ -1851,7 +1815,6 @@
       const follow = () => { rx += (tx - rx) * 0.2; ry += (ty - ry) * 0.2; ring.style.transform = `translate(${rx.toFixed(1)}px, ${ry.toFixed(1)}px)`; requestAnimationFrame(follow); };
       requestAnimationFrame(follow);
     }
-    { const r = rankForHour(hourIn(state.city)), i = RANKS.indexOf(r); $('scrub').value = String(i < 0 ? 4 : i); scrubTo(Number($('scrub').value), false); }
     $('feature').innerHTML = render('back', { static: true });
     if (state.view !== 'home') {
       const v = state.view; state.view = 'home'; setView(v, false);
