@@ -346,6 +346,9 @@
   .scrub output { font-family: var(--display); font-size: 21px; line-height: 1.2; }
   .scrub output span { color: var(--muted); font-family: var(--body); font-style: italic; font-size: 17px; }
 
+  .foot { border-top: 1px solid var(--rule); padding-top: 20px; margin-top: -24px; }
+  .foot p { font-family: var(--label); font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: var(--muted); }
+
   @media (prefers-reduced-motion: reduce) {
     .tile { animation: none; }
     .sky { transition: none; }
@@ -493,6 +496,10 @@
     <p class="status" id="pp-status" role="status"></p>
     <ol class="pp-list" id="pp-list"><li class="pp-empty">Nothing here yet. Silk Board × the BQE is taken, sorry.</li></ol>
   </section>
+
+  <footer class="foot">
+    <p>A personal project by Nivivacious. © 2026. All rights reserved.</p>
+  </footer>
 
 
   <dialog id="fb" aria-labelledby="fb-h">
