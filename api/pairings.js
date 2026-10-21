@@ -7,7 +7,20 @@ const { redis, overLimit, clean, validId } = require('./_redis');
 const PAIRS = 'tale:pairings';
 const votesKey = (key) => `tale:votes:${key}`;
 
+// Three to start the board, written once so the first visitor never sees an empty list.
+const SEEDS = [
+  { key: 'seed-1', blr: 'Bookworm on Church Street', nyc: 'The Strand', line: 'Nobody leaves with just one.' },
+  { key: 'seed-2', blr: 'Lalbagh flower show', nyc: "Macy's Flower Show", line: 'Same crowd, more marigolds.' },
+  { key: 'seed-3', blr: 'The Vidyarthi Bhavan queue', nyc: "The Katz's queue", line: 'Worth it. Both times.' }
+];
+async function seed() {
+  const [first] = await redis(['SET', 'tale:seeded', '1', 'NX']);
+  if (first !== 'OK') return;
+  await redis(...SEEDS.map(({ key, ...s }) => ['HSETNX', PAIRS, key, JSON.stringify({ ...s, name: 'Nivivacious', at: '2026-10-21T00:00:00.000Z', by: 'seed' })]));
+}
+
 async function list(voter) {
+  await seed();
   const flat = (await redis(['HGETALL', PAIRS]))[0] || [];
   const items = [];
   for (let i = 0; i < flat.length; i += 2) {
