@@ -39,8 +39,8 @@ swap('<meta name="claude:viewport-fit-sides" content="cover">\n', '');
 swap("    const ARTIFACT = 'https://claude.ai/artifact/UQW9ejggK1W4hsSihkDiDQ';", "    const ARTIFACT = location.origin + location.pathname;");
 // Shared links go to the card's own page, which carries that card's preview image.
 swap("    const shareUrl = () => `${ARTIFACT}#${state.id}`;", "    const shareUrl = () => `${location.origin}/card/${state.id}`;");
-swap("      $('pos').textContent = `${all.indexOf(item) + 1} / ${all.length}`;\n      reveal(id);",
-  "      $('pos').textContent = `${all.indexOf(item) + 1} / ${all.length}`;\n      if (state.view === 'home') try { history.replaceState(null, '', '#' + id); } catch (e) { /* file view */ }\n      reveal(id);");
+swap("      if (animate) blurIn([$('f-rank'), $('f-title'), document.querySelector('.pairing'), $('f-why')], 70);\n      reveal(id);",
+  "      if (animate) blurIn([$('f-rank'), $('f-title'), document.querySelector('.pairing'), $('f-why')], 70);\n      if (state.view === 'home') try { history.replaceState(null, '', '#' + id); } catch (e) { /* file view */ }\n      reveal(id);");
 swap("'Link copied. It opens straight on this card for anyone you have shared the deck with.'", "'Link copied. It opens straight on this card.'");
 
 // Downloads are ordinary downloads on the open web.

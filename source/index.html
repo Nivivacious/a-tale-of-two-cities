@@ -418,6 +418,39 @@
   .sticker.new { animation: peel 0.8s cubic-bezier(0.2, 0.7, 0.3, 1.2) backwards; animation-delay: 0.35s; }
   @keyframes peel { from { opacity: 0; transform: rotate(-30deg) scale(1.6); } }
 
+  /* Blur-in: text sharpens into place */
+  @keyframes blur-in { from { opacity: 0; filter: blur(12px); transform: translateY(10px); } to { opacity: 1; filter: blur(0); transform: none; } }
+
+  /* Paper grain over everything, barely there */
+  body::after { content: ""; position: fixed; inset: 0; z-index: 80; pointer-events: none; opacity: 0.05; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  /* Sound rings: they breathe out from behind the card while it plays */
+  .rings { position: absolute; inset: 0; z-index: -1; display: grid; place-items: center; pointer-events: none; opacity: var(--o, 0); transition: opacity 0.35s; }
+  .rings i { position: absolute; width: 100%; aspect-ratio: 1; border-radius: 50%; border: 1px solid var(--marigold); animation: ring 3.6s cubic-bezier(0.2, 0.6, 0.3, 1) infinite; opacity: 0; }
+  .rings i:nth-child(2) { animation-delay: 1.2s; }
+  .rings i:nth-child(3) { animation-delay: 2.4s; }
+  @keyframes ring { 0% { transform: scale(0.7); opacity: 0.7; } 100% { transform: scale(1.7); opacity: 0; } }
+
+  /* Read a card: numbered dots, one short note each */
+  .anatomy { justify-items: start; }
+  .anat-card { position: relative; width: min(230px, 70%); aspect-ratio: 5 / 7; margin-top: 6px; }
+  .anat-card > svg { display: block; width: 100%; height: 100%; border-radius: 4.8% / 3.4%; box-shadow: 0 20px 40px -18px rgba(0, 0, 0, 0.8); }
+  .dot { position: absolute; left: var(--x); top: var(--y); translate: -50% -50%; width: 22px; height: 22px; min-height: 0; padding: 0; border-radius: 50%; border: 0; background: var(--marigold); color: var(--table); font-family: var(--label); font-size: 11px; font-weight: 700; letter-spacing: 0; display: grid; place-items: center; box-shadow: 0 0 0 4px rgba(242, 179, 48, 0.25); cursor: pointer; }
+  .dot::before { content: ""; position: absolute; inset: -11px; }
+  .dot:hover, .dot:focus-visible, .dot[aria-expanded="true"] { box-shadow: 0 0 0 6px rgba(242, 179, 48, 0.35); z-index: 2; }
+  .dot .note { position: absolute; left: calc(100% + 14px); top: 50%; translate: 0 -50%; white-space: nowrap; font-family: var(--body); font-size: 15px; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--ivory); background: var(--panel); border: 1px solid var(--rule); padding: 5px 10px; border-radius: 3px; opacity: 0; pointer-events: none; transition: opacity 0.2s, translate 0.2s; }
+  .dot .note::before { content: ""; position: absolute; right: 100%; top: 50%; width: 14px; height: 1px; background: var(--marigold); }
+  .dot.left .note { left: auto; right: calc(100% + 14px); }
+  .dot.left .note::before { right: auto; left: 100%; }
+  .dot:hover .note, .dot:focus-visible .note, .dot[aria-expanded="true"] .note { opacity: 1; }
+
+  /* Cursor ring (computers only) */
+  .cursor-ring { position: fixed; left: 0; top: 0; z-index: 75; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; border: 1.5px solid rgba(244, 236, 220, 0.7); pointer-events: none; transition: width 0.25s, height 0.25s, margin 0.25s, opacity 0.25s, border-color 0.25s, background 0.25s; opacity: 0; }
+  .cursor-ring.on { opacity: 1; }
+  .cursor-ring.big { width: 56px; height: 56px; margin: -28px 0 0 -28px; border-color: var(--marigold); background: rgba(242, 179, 48, 0.08); }
+  .cursor-ring span { position: absolute; left: calc(100% + 10px); top: 50%; translate: 0 -50%; white-space: nowrap; font-family: var(--label); font-weight: 700; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--table); background: var(--marigold); padding: 4px 8px; border-radius: 99px; opacity: 0; transition: opacity 0.2s; }
+  .cursor-ring.label span { opacity: 1; }
+
   /* Phones: the card belongs on the first screen */
   @media (max-width: 600px) {
     .wrap { gap: 56px; }
@@ -442,6 +475,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .rings i { animation: none; }
     .road svg, .sticker.new, .qr-card { animation: none; }
     .tile { animation: none; }
     .sky { transition: none; }
@@ -487,7 +521,7 @@
       <div class="bigword" aria-hidden="true"><span id="bw"></span></div>
       <div class="bigword ink" id="ink" aria-hidden="true"><span id="bw2"></span></div>
       <p class="cross" id="cross" aria-hidden="true"><svg viewBox="-12 -12 24 24"><circle r="10.5" fill="none" stroke="currentColor" stroke-width="1.2"/><line id="hand-h" y2="-5.5" stroke="#f4ecdc" stroke-width="1.8" stroke-linecap="round"/><line id="hand-m" y2="-8.2" stroke="#f2b330" stroke-width="1.2" stroke-linecap="round"/><circle r="1.3" fill="#f4ecdc"/></svg><b id="cross-time">--:--</b><span id="cross-city"></span><span class="cross-hint" id="cross-hint">· Scroll to cross</span></p>
-      <div class="tilt" id="tilt"><div class="card" id="feature" role="button" tabindex="0" aria-label="Turn the card around"></div><span class="glint" id="glint" aria-hidden="true"></span><div class="loupe" id="loupe" aria-hidden="true" hidden><div class="lens" id="lens"></div></div></div>
+      <div class="tilt" id="tilt"><div class="rings" id="rings" aria-hidden="true" hidden><i></i><i></i><i></i></div><div class="card" id="feature" role="button" tabindex="0" aria-label="Turn the card around"></div><span class="glint" id="glint" aria-hidden="true"></span><div class="loupe" id="loupe" aria-hidden="true" hidden><div class="lens" id="lens"></div></div></div>
       <div class="stepper">
         <button type="button" class="nav" id="b-sound" aria-pressed="false" aria-label="Sound on"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3,7 H6 L10,3.5 V14.5 L6,11 H3 Z" fill="currentColor"/><path class="ico-on" d="M12.5,6.2 Q14.4,9 12.5,11.8 M14.6,4.4 Q17.6,9 14.6,13.6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path class="ico-off" d="M12.5,6.8 L16.5,11.2 M16.5,6.8 L12.5,11.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
         <span class="step-mid">
@@ -549,7 +583,7 @@
         <span class="label" id="spread-name"></span>
         <button type="button" id="b-all" aria-pressed="false">Turn these over</button>
       </div>
-      <div class="fan-wrap"><div class="fan" id="fan"></div></div>
+      <div class="fan-wrap" data-lenis-prevent><div class="fan" id="fan"></div></div>
     </div>
     <div class="specs">
       <div>
@@ -565,9 +599,9 @@
           </div>
         </div>
       </div>
-      <div>
-        <span class="label">Print it</span>
-        <p>Every card is 2.5 × 3.5 in. Print frame gets you a PDF a print shop will take.</p>
+      <div class="anatomy">
+        <span class="label">Read a card</span>
+        <div class="anat-card" id="anat"></div>
       </div>
     </div>
   </section>
@@ -722,6 +756,7 @@
       }
       $('f-title').textContent = item.title;
       $('pos').textContent = `${all.indexOf(item) + 1} / ${all.length}`;
+      if (animate) blurIn([$('f-rank'), $('f-title'), document.querySelector('.pairing'), $('f-why')], 70);
       reveal(id);
       document.querySelectorAll('.thumb').forEach((b) => b.setAttribute('aria-current', String(b.dataset.id === id)));
       $('status').textContent = '';
@@ -806,7 +841,7 @@
     // Jumping back to the card lands at the top of the runway, so your city is up.
     function toStage() {
       if (!cross.on) { $('feature').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' }); return; }
-      window.scrollTo({ top: window.scrollY + $('hold').getBoundingClientRect().top - cross.top, behavior: reduce ? 'auto' : 'smooth' });
+      goTo(window.scrollY + $('hold').getBoundingClientRect().top - cross.top);
     }
 
     // The hidden line writes itself in: one half, a breath, then the other.
@@ -1017,6 +1052,7 @@
         if (stopOrbit) stopOrbit();
         removeEventListener('keydown', onKey);
         ov.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 320, easing: 'ease-out' }).onfinish = () => ov.remove();
+        headerIn();
         setFeature(pick, true);
         note();
       };
@@ -1148,7 +1184,8 @@
       document.querySelectorAll('[data-in]').forEach((el) => { el.hidden = el.dataset.in !== v; });
       document.querySelectorAll('.tabs a').forEach((a) => (a.dataset.tab === v ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
       if (push) try { history.pushState(null, '', HASH[v] ? '#' + HASH[v] : (v === 'home' ? `#${state.id}` : location.pathname)); } catch (e) { /* file view */ }
-      window.scrollTo(0, 0);
+      goTo(0, true);
+      document.querySelectorAll(`[data-in="${v}"] h2, [data-in="${v}"] blockquote`).forEach((el, i) => blurIn([el], 0, i * 90));
       if (v === 'home') { layoutRunway(); onScroll(); if (openSuitId) arcFan(); }
     }
     document.querySelectorAll('.tabs a').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); if (a.dataset.tab !== state.view) setView(a.dataset.tab, true); }));
@@ -1193,6 +1230,47 @@
       roadWidth(); addEventListener('resize', roadWidth);
     }
 
+    // ---------- premium touches ----------
+    // Text sharpens in from a soft blur instead of popping.
+    function blurIn(els, stagger, delay) {
+      if (reduce) return;
+      els.forEach((el, i) => el && el.animate && el.animate(
+        [{ opacity: 0, filter: 'blur(12px)', transform: 'translateY(10px)' }, { opacity: 1, filter: 'blur(0px)', transform: 'none' }],
+        { duration: 760, delay: (delay || 0) + i * (stagger || 0), easing: 'cubic-bezier(0.2, 0.7, 0.3, 1)', fill: 'backwards' }));
+    }
+    function headerIn() { blurIn([document.querySelector('header .topbar'), document.querySelector('header h1'), document.querySelector('header .thesis'), document.querySelector('header .tips'), document.querySelector('header .strip')], 110); }
+
+    // Weighted scrolling on computers. Phones keep their own scrolling.
+    let lenis = null;
+    function goTo(y, instant) {
+      if (lenis) { lenis.scrollTo(y, { immediate: !!instant || reduce, duration: 1.1 }); return; }
+      window.scrollTo({ top: y, behavior: instant || reduce ? 'auto' : 'smooth' });
+    }
+    if (finePointer && !reduce) {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js';
+      s.onload = () => {
+        if (!window.Lenis) return;
+        lenis = new window.Lenis({ lerp: 0.1, smoothWheel: true });
+        const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
+        requestAnimationFrame(raf);
+      };
+      document.head.appendChild(s);
+    }
+
+    // Read a card: five dots on one card, a few words each.
+    {
+      const DOTS = [[10, 12, 'Rank tells the hour'], [90, 22, 'City and coordinates'], [50, 7.5, 'The street, the time'], [50, 49.5, 'The hidden line'], [50, 74, 'Turn it for New York']];
+      $('anat').innerHTML = render('ride', { static: true }) + DOTS.map(([x, y, note], i) =>
+        `<button type="button" class="dot${x > 70 ? ' left' : ''}" style="--x:${x}%;--y:${y}%" aria-expanded="false" aria-label="${i + 1}: ${note}">${i + 1}<span class="note" aria-hidden="true">${note}</span></button>`).join('');
+      $('anat').addEventListener('click', (e) => {
+        const d = e.target.closest('.dot'); if (!d) return;
+        const open = d.getAttribute('aria-expanded') !== 'true';
+        $('anat').querySelectorAll('.dot').forEach((x) => x.setAttribute('aria-expanded', 'false'));
+        d.setAttribute('aria-expanded', String(open));
+      });
+    }
+
     // ---------- the sound, drawn ----------
     let waveRaf = 0, waveBuf = null;
     function drawWave() {
@@ -1201,6 +1279,7 @@
       g.setTransform(dpr, 0, 0, dpr, 0, 0);
       g.clearRect(0, 0, w, hgt);
       waveBuf = Snd.wave ? Snd.wave(waveBuf) : null;
+      $('rings').style.setProperty('--o', Math.min(0.9, 0.2 + (Snd.level ? Snd.level() : 0) * 7).toFixed(2));
       if (waveBuf) {
         const step = waveBuf.length / w, mid = hgt / 2;
         g.beginPath();
@@ -1216,6 +1295,7 @@
     function showWave(on) {
       cancelAnimationFrame(waveRaf);
       $('wave').hidden = !on || reduce;
+      $('rings').hidden = !on || reduce;
       if (on && !reduce) waveRaf = requestAnimationFrame(drawWave);
       layoutRunway();
     }
@@ -1255,7 +1335,7 @@
     function openWall() {
       const back = $('b-wall');
       const ov = document.createElement('div');
-      ov.className = 'wall';
+      ov.className = 'wall'; ov.setAttribute('data-lenis-prevent', '');
       ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'Your deck');
       ov.innerHTML = `<div class="wall-head"><div class="wall-title"><span class="label">Your deck</span><h2>${turned.size} of 52 turned</h2><div class="stickers" aria-label="Stickers for finished suits"></div></div><button type="button" class="wall-x">Close</button></div><div class="wall-grid"></div>`;
       const seen = store.get('stickers', []);
@@ -1523,7 +1603,7 @@
       const item = all.find((x) => x.id === state.id), url = shareUrl();
       const q = make(0, 'M'); q.addData(url); q.make();
       const ov = document.createElement('div');
-      ov.className = 'qr-sheet'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'QR code for this card');
+      ov.className = 'qr-sheet'; ov.setAttribute('data-lenis-prevent', ''); ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'QR code for this card');
       ov.innerHTML = `<div class="qr-card"><span class="label">Scan to open</span><h2></h2><div class="qr-code">${q.createSvgTag({ cellSize: 4, margin: 2, scalable: true })}</div><p></p><button type="button">Done</button></div>`;
       ov.querySelector('h2').textContent = item.title;
       ov.querySelector('p').textContent = url.replace(/^https?:\/\//, '');
@@ -1706,23 +1786,32 @@
       document.querySelectorAll('.ticker, .system, .jokers, .pairings').forEach((el) => { el.classList.add('reveal'); io.observe(el); });
     }
 
-    // On a computer, a small chip by the cursor says what a click does.
-    if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
-      const chip = document.createElement('span');
-      chip.className = 'cursor-chip'; chip.setAttribute('aria-hidden', 'true'); chip.textContent = 'Click to turn';
-      document.body.appendChild(chip);
-      $('feature').addEventListener('pointermove', (e) => {
-        chip.style.transform = `translate(${e.clientX + 16}px, ${e.clientY + 18}px)`;
-        chip.classList.toggle('on', $('loupe').hidden);
+    // On a computer, a small ring follows the cursor, grows over anything you can press, and says what the card does.
+    if (finePointer && !reduce) {
+      const ring = document.createElement('div');
+      ring.className = 'cursor-ring'; ring.setAttribute('aria-hidden', 'true'); ring.innerHTML = '<span>Click to turn</span>';
+      document.body.appendChild(ring);
+      let tx = -100, ty = -100, rx = -100, ry = -100;
+      const pressable = 'button, a, input[type="range"], .rc, .tile, .thumb, .dot, #feature';
+      addEventListener('pointermove', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        tx = e.clientX; ty = e.clientY;
+        const t = e.target.closest ? e.target.closest(pressable) : null;
+        const onCard = !!(t && t.id === 'feature');
+        ring.classList.add('on');
+        ring.classList.toggle('big', !!t);
+        ring.classList.toggle('label', onCard && $('loupe').hidden);
+        ring.style.opacity = onCard && !$('loupe').hidden ? '0' : '';
       });
-      $('feature').addEventListener('pointerleave', () => chip.classList.remove('on'));
-      $('feature').addEventListener('pointerdown', () => chip.classList.remove('on'));
+      document.addEventListener('pointerleave', () => ring.classList.remove('on'));
+      const follow = () => { rx += (tx - rx) * 0.2; ry += (ty - ry) * 0.2; ring.style.transform = `translate(${rx.toFixed(1)}px, ${ry.toFixed(1)}px)`; requestAnimationFrame(follow); };
+      requestAnimationFrame(follow);
     }
     { const r = rankForHour(hourIn(state.city)), i = RANKS.indexOf(r); $('scrub').value = String(i < 0 ? 4 : i); scrubTo(Number($('scrub').value), false); }
     $('feature').innerHTML = render('back', { static: true });
     if (state.view !== 'home') {
       const v = state.view; state.view = 'home'; setView(v, false);
-      linkUsed = true; setFeature(dealNow(), false);
+      linkUsed = true; setFeature(dealNow(), false); headerIn();
     } else shuffle();
 
     // Flip through the deck from the stage: arrows, arrow keys or a swipe.
@@ -1764,7 +1853,7 @@
 
     $('b-shuffle').addEventListener('click', () => {
       $('b-all').setAttribute('aria-pressed', 'false');
-      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      goTo(0);
       $('feature').innerHTML = render('back', { static: true });
       shuffle();
     });
