@@ -406,6 +406,39 @@
   .tabs a:focus-visible { outline: 2px solid var(--marigold); outline-offset: 3px; }
   [data-view="jokers"] header .tips, [data-view="jokers"] header .strip, [data-view="turn"] header .tips, [data-view="turn"] header .strip { display: none; }
 
+  /* Hover Ink: the outlined word fills in marigold where the cursor is */
+  .bigword.ink { color: var(--marigold); -webkit-text-stroke: 0; opacity: 0.32; -webkit-mask-image: radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), #000 0%, transparent 70%); mask-image: radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), #000 0%, transparent 70%); }
+
+  /* QR sheet */
+  .qr-sheet { position: fixed; inset: 0; z-index: 56; display: grid; place-items: center; background: rgba(12, 14, 21, 0.86); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .qr-card { width: min(340px, 100%); background: var(--ivory); color: var(--table); border-radius: 14px; padding: 26px 24px 20px; display: grid; gap: 14px; justify-items: center; text-align: center; box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8); animation: qr-in 0.45s cubic-bezier(0.2, 0.7, 0.3, 1); }
+  .qr-card .label { color: #6b6658; }
+  .qr-card h2 { font-size: 26px; line-height: 1.1; }
+  .qr-code { width: 220px; height: 220px; }
+  .qr-code svg { display: block; width: 100%; height: 100%; }
+  .qr-card p { font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; color: #6b6658; word-break: break-all; }
+  .qr-card button { color: var(--table); border-color: rgba(18, 21, 31, 0.25); }
+  @keyframes qr-in { from { opacity: 0; transform: translateY(16px) scale(0.96); } }
+
+  /* The road: an auto and a cab pass each other on the footer line */
+  .foot { position: relative; }
+  .road { position: absolute; left: 0; right: 0; top: -31px; height: 30px; overflow: hidden; pointer-events: none; }
+  .road svg { position: absolute; bottom: 0; width: 46px; height: 30px; left: 0; }
+  .road .auto { animation: drive-r 28s linear infinite; }
+  .road .cab { animation: drive-l 28s linear infinite; }
+  @keyframes drive-r { from { transform: translateX(-60px); } to { transform: translateX(calc(var(--w, 1000px) + 14px)); } }
+  @keyframes drive-l { from { transform: translateX(calc(var(--w, 1000px) + 14px)) scaleX(-1); } to { transform: translateX(-60px) scaleX(-1); } }
+
+  /* Stickers for finished suits */
+  .wall-title { display: grid; gap: 4px; }
+  .stickers { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+  .sticker { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--ivory); border: 3px solid #fff; box-shadow: 0 6px 14px -6px rgba(0, 0, 0, 0.8); transform: rotate(var(--rot, 0deg)); }
+  .sticker svg { width: 20px; height: 20px; }
+  .sticker.empty { background: transparent; border: 1.5px dashed var(--rule); box-shadow: none; }
+  .sticker.empty svg { opacity: 0.45; }
+  .sticker.new { animation: peel 0.8s cubic-bezier(0.2, 0.7, 0.3, 1.2) backwards; animation-delay: 0.35s; }
+  @keyframes peel { from { opacity: 0; transform: rotate(-30deg) scale(1.6); } }
+
   /* Phones: the card belongs on the first screen */
   @media (max-width: 600px) {
     .wrap { gap: 56px; }
@@ -424,6 +457,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .road svg, .sticker.new, .qr-card { animation: none; }
     .tile { animation: none; }
     .sky { transition: none; }
     #feature .par { transition: none; }
@@ -466,6 +500,7 @@
     <div class="card-hold hold" id="hold">
       <div class="pin" id="pin">
       <div class="bigword" aria-hidden="true"><span id="bw"></span></div>
+      <div class="bigword ink" id="ink" aria-hidden="true"><span id="bw2"></span></div>
       <p class="cross" id="cross" aria-hidden="true"><svg viewBox="-12 -12 24 24"><circle r="10.5" fill="none" stroke="currentColor" stroke-width="1.2"/><line id="hand-h" y2="-5.5" stroke="#f4ecdc" stroke-width="1.8" stroke-linecap="round"/><line id="hand-m" y2="-8.2" stroke="#f2b330" stroke-width="1.2" stroke-linecap="round"/><circle r="1.3" fill="#f4ecdc"/></svg><b id="cross-time">--:--</b><span id="cross-city"></span><span class="cross-hint" id="cross-hint">· Scroll to cross</span></p>
       <div class="tilt" id="tilt"><div class="card" id="feature" role="button" tabindex="0" aria-label="Turn the card around"></div><span class="glint" id="glint" aria-hidden="true"></span><div class="loupe" id="loupe" aria-hidden="true" hidden><div class="lens" id="lens"></div></div></div>
       <div class="stepper">
@@ -505,6 +540,7 @@
         <button type="button" id="b-native" hidden>Send to…</button>
         <button type="button" id="b-link">Copy link</button>
         <button type="button" id="b-story">Story image</button>
+        <button type="button" id="b-qr">QR code</button>
       </div>
       <div class="controls" id="print-row" hidden>
         <button type="button" id="b-pdf-card">Save this card as PDF</button>
@@ -587,6 +623,7 @@
   </section>
 
   <footer class="foot">
+    <div class="road" id="road" aria-hidden="true"></div>
     <p class="foot-note">Made in Bengaluru, with a smooll piece of my heart still in New York.</p>
     <p>A personal project by Nivivacious. © 2026. All rights reserved.</p>
   </footer>
@@ -739,10 +776,10 @@
       if (state.locked) w = 'NOT YET';
       else if (isJoker(state.id)) w = state.turned ? 'OOPS' : (state.id === 'departure' ? 'LEAVING' : 'HOME');
       else w = (BIG[state.id] || ['BENGALURU', 'NEW YORK'])[state.turned ? 1 : 0];
-      const bw = $('bw');
+      const bw = $('bw'), bw2 = $('bw2');
       if (bw.textContent === w) return;
-      bw.textContent = w;
-      if (!reduce && bw.animate) bw.animate([{ opacity: 0, transform: 'translateY(24px)' }, { opacity: 1, transform: 'none' }], { duration: 600, easing: 'cubic-bezier(0.2, 0.7, 0.3, 1)' });
+      bw.textContent = w; bw2.textContent = w;
+      if (!reduce && bw.animate) [bw, bw2].forEach((el) => el.animate([{ opacity: 0, transform: 'translateY(24px)' }, { opacity: 1, transform: 'none' }], { duration: 600, easing: 'cubic-bezier(0.2, 0.7, 0.3, 1)' }));
     }
 
     // The little clock over the card runs from one city's time to the other's as the card turns.
@@ -1131,6 +1168,10 @@
     document.documentElement.dataset.view = state.view;
     function setView(v, push) {
       if (v === state.view && !push) return;
+      if (document.startViewTransition && !reduce && push) { document.startViewTransition(() => applyView(v, push)); return; }
+      applyView(v, push);
+    }
+    function applyView(v, push) {
       state.view = v;
       document.documentElement.dataset.view = v;
       document.querySelectorAll('[data-in]').forEach((el) => { el.hidden = el.dataset.in !== v; });
@@ -1141,6 +1182,45 @@
     }
     document.querySelectorAll('.tabs a').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); if (a.dataset.tab !== state.view) setView(a.dataset.tab, true); }));
     addEventListener('popstate', () => setView(VIEWS[(location.hash || '').slice(1)] || 'home', false));
+
+    // ---------- small motions: ink under the cursor, magnetic buttons, rolling numbers, the road ----------
+    const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (finePointer && !reduce) {
+      $('stage').addEventListener('pointermove', (e) => {
+        const r = $('ink').getBoundingClientRect();
+        $('ink').style.setProperty('--mx', `${e.clientX - r.left}px`);
+        $('ink').style.setProperty('--my', `${e.clientY - r.top}px`);
+      });
+      $('stage').addEventListener('pointerleave', () => { $('ink').style.setProperty('--mx', '-999px'); });
+      // The round buttons lean toward the cursor when it comes close.
+      const navs = [...document.querySelectorAll('.stepper .nav')];
+      $('pin').addEventListener('pointermove', (e) => navs.forEach((b) => {
+        const r = b.getBoundingClientRect(), dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2), d = Math.hypot(dx, dy);
+        b.style.translate = d < 70 ? `${(dx * 0.22).toFixed(1)}px ${(dy * 0.22).toFixed(1)}px` : '0 0';
+      }));
+      $('pin').addEventListener('pointerleave', () => navs.forEach((b) => { b.style.translate = '0 0'; }));
+    }
+    // Numbers roll up to their value.
+    function rollTo(el, n) {
+      const from = Number(el.dataset.n || 0);
+      el.dataset.n = n;
+      if (reduce || from === n) { el.textContent = n.toLocaleString('en-IN'); return; }
+      const t0 = performance.now(), dur = 1200;
+      const step = (now) => {
+        const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+        el.textContent = Math.round(from + (n - from) * e).toLocaleString('en-IN');
+        if (k < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+    // The road: the auto heads right, the cab heads left, and they pass in the middle.
+    {
+      const ctx = { still: true, a: () => '', id: 'road' };
+      const car = (cls, art) => `<svg class="${cls}" viewBox="-36 -50 72 60" overflow="visible">${art}</svg>`;
+      $('road').innerHTML = car('auto', T.kit.autoRickshaw(ctx, '')) + car('cab', T.kit.yellowCab(ctx, '', ''));
+      const roadWidth = () => $('road').style.setProperty('--w', $('road').clientWidth + 'px');
+      roadWidth(); addEventListener('resize', roadWidth);
+    }
 
     // ---------- the sound, drawn ----------
     let waveRaf = 0, waveBuf = null;
@@ -1206,7 +1286,13 @@
       const ov = document.createElement('div');
       ov.className = 'wall';
       ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'Your deck');
-      ov.innerHTML = `<div class="wall-head"><div><span class="label">Your deck</span><h2>${turned.size} of 52 turned</h2></div><button type="button" class="wall-x">Close</button></div><div class="wall-grid"></div>`;
+      ov.innerHTML = `<div class="wall-head"><div class="wall-title"><span class="label">Your deck</span><h2>${turned.size} of 52 turned</h2><div class="stickers" aria-label="Stickers for finished suits"></div></div><button type="button" class="wall-x">Close</button></div><div class="wall-grid"></div>`;
+      const seen = store.get('stickers', []);
+      ov.querySelector('.stickers').innerHTML = suits.map((s, i) => {
+        const got = suitDone(s.s), fresh = got && !seen.includes(s.s);
+        return `<span class="sticker${got ? '' : ' empty'}${fresh && !reduce ? ' new' : ''}" style="--rot:${[-8, 5, -3, 9][i]}deg" title="${got ? `${s.name} done` : `Finish ${s.name} to earn this`}" role="img" aria-label="${got ? `${s.name} sticker` : `${s.name} sticker, not yet earned`}"><svg viewBox="-7 -7 14 14" aria-hidden="true"><path d="${pipPath[s.s]}" fill="${!got ? '#a8a294' : s.s === 'heart' || s.s === 'diamond' ? '#e2553c' : '#12151f'}"/></svg></span>`;
+      }).join('');
+      store.set('stickers', suits.filter((s) => suitDone(s.s)).map((s) => s.s));
       const grid = ov.querySelector('.wall-grid');
       let n = 0;
       const tile = (item, face, lock) => {
@@ -1333,6 +1419,7 @@
     const cardIds = new Set(all.filter((x) => x.kind === 'card').map((x) => x.id));
     const turned = new Set((store.get('turned', []) || []).filter((id) => cardIds.has(id)));
     const turnedCount = () => turned.size;
+    const suitDone = (suit) => all.filter((x) => x.kind === 'card' && x.suit === suit).every((x) => turned.has(x.id));
     const jokersOpen = () => turned.size >= cardIds.size;
     let celebrated = jokersOpen();
     function saveTurned() { store.set('turned', [...turned]); logVisit(); }
@@ -1345,6 +1432,10 @@
       $('tease').hidden = jokersOpen();
       $('jring-n').textContent = String(total - n);
       $('jring-arc').setAttribute('stroke-dasharray', `${((n / total) * 100).toFixed(1)} 100`);
+      if (fresh) suits.forEach((s) => {
+        const done = store.get('suitsDone', []);
+        if (suitDone(s.s) && !done.includes(s.s)) { store.set('suitsDone', [...done, s.s]); toast(`${s.name} done. There's a sticker for you on your deck wall.`); }
+      });
       const cats = T.CATS.every((id) => turned.has(id));
       $('cat-badge').hidden = !cats;
       if (fresh && cats && !store.get('cats', false)) { store.set('cats', true); toast('Three cats found. The bodega union thanks you for your service.'); }
@@ -1355,7 +1446,7 @@
     }
     updateProgress(false);
     $('b-reset').addEventListener('click', () => {
-      turned.clear(); saveTurned(); store.set('cats', false); celebrated = false;
+      turned.clear(); saveTurned(); store.set('cats', false); store.set('suitsDone', []); store.set('stickers', []); celebrated = false;
       document.querySelectorAll('.thumb.revealed').forEach((b) => b.classList.remove('revealed'));
       revealed.clear();
       updateProgress(false);
@@ -1447,6 +1538,33 @@
       const item = all.find((x) => x.id === state.id);
       navigator.share({ title: `${item.title} · A Tale of Two Cities`, url: shareUrl() }).catch(() => {});
     });
+    // QR code: hold your phone up so someone across the table can scan the card.
+    let qrLib = null;
+    const loadQr = () => qrLib || (qrLib = new Promise((res, rej) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js';
+      s.onload = () => res(window.qrcode); s.onerror = rej;
+      document.head.appendChild(s);
+    }));
+    $('b-qr').addEventListener('click', async () => {
+      let make;
+      try { make = await loadQr(); } catch (e) { $('status').textContent = 'The QR code did not load. Copy the link instead.'; return; }
+      const item = all.find((x) => x.id === state.id), url = shareUrl();
+      const q = make(0, 'M'); q.addData(url); q.make();
+      const ov = document.createElement('div');
+      ov.className = 'qr-sheet'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'QR code for this card');
+      ov.innerHTML = `<div class="qr-card"><span class="label">Scan to open</span><h2></h2><div class="qr-code">${q.createSvgTag({ cellSize: 4, margin: 2, scalable: true })}</div><p></p><button type="button">Done</button></div>`;
+      ov.querySelector('h2').textContent = item.title;
+      ov.querySelector('p').textContent = url.replace(/^https?:\/\//, '');
+      const svg = ov.querySelector('.qr-code svg'); if (svg) { svg.querySelectorAll('rect').forEach((r, i) => { if (i === 0) r.setAttribute('fill', '#f4ecdc'); }); svg.querySelectorAll('path').forEach((pa) => pa.setAttribute('fill', '#12151f')); }
+      const close = () => { ov.remove(); removeEventListener('keydown', onKey); $('b-qr').focus({ preventScroll: true }); };
+      const onKey = (e) => { if (e.key === 'Escape') close(); };
+      ov.addEventListener('click', (e) => { if (e.target === ov) close(); });
+      ov.querySelector('button').addEventListener('click', close);
+      addEventListener('keydown', onKey);
+      document.body.appendChild(ov);
+      ov.querySelector('button').focus();
+    });
     $('b-link').addEventListener('click', () => copyText(shareUrl(), 'Link copied. It opens straight on this card.', 'status'));
     const dl = {
       save: async ({ filename, data }) => {
@@ -1523,7 +1641,7 @@
     function logVisit() { /* counted once on load */ }
     api('/api/visit', { id: anon }).then((d) => {
       if (!d.count) return;
-      $('vcount').textContent = d.count.toLocaleString('en-IN');
+      rollTo($('vcount'), d.count);
       $('vword').textContent = d.count === 1 ? 'visitor' : 'visitors';
       $('visitors').hidden = false;
     }).catch(() => {});
