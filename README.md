@@ -40,3 +40,14 @@ curl -X DELETE -H "x-admin-key: YOUR_ADMIN_KEY" "https://YOUR-SITE.vercel.app/ap
 - `sound.js`: each card's soundtrack, made live in the browser
 - `print/`: print-ready PDFs
 - `api/`: visitor count, pairings and votes, local-check notes
+- `card/<id>.html`: one page per card. Shared links point here so each card gets its own preview, then the page opens the deck on that card
+- `og/<id>.jpg`: those previews, one per card (made by `prototype/og-cards.js`)
+- `404.html`: the wrong-turn page
+
+## Link previews and your domain
+
+Previews need full addresses, so the build writes them for `https://a-tale-of-two-cities-nine.vercel.app`. If the site moves to its own domain, rebuild with that address:
+
+```
+SITE_URL=https://your-domain.com node prototype/build-site.js
+```
