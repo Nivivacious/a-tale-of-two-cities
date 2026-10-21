@@ -34,6 +34,8 @@ curl -X DELETE -H "x-admin-key: YOUR_ADMIN_KEY" "https://YOUR-SITE.vercel.app/ap
 
 ## What's where
 
+- `source/`: everything the site is built from (cards, copy, sound, build scripts, design docs). Edit there, then run `node source/build-site.js`. Vercel skips this folder (see `.vercelignore`).
+
 - `index.html`: the page
 - `cards.js`, `deck/*.js`: every card, drawn in SVG
 - `copy.js`: titles, lines and descriptions for every card

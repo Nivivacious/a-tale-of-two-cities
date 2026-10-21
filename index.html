@@ -256,6 +256,8 @@
   }
   @media (pointer: coarse) {
     button { min-height: 44px; }
+    .topbar .tabs a { padding-block: 12px; }
+    .linkish { min-height: 44px; display: inline-flex; align-items: center; }
     .controls { gap: 8px; }
   }
   @media (hover: none) {
@@ -268,18 +270,19 @@
   /* The sky over the page follows the clock in whichever city is face up */
   @property --sky { syntax: '<color>'; inherits: true; initial-value: #1d2747; }
   html, body { overflow-x: clip; }
+  @supports not (overflow-x: clip) { html { overflow-x: hidden; } }
   .sky { position: fixed; inset: 0 0 auto; height: 90vh; z-index: -1; pointer-events: none; background: radial-gradient(ellipse 120% 75% at 50% 0%, var(--sky), transparent 72%); opacity: 0.5; transition: --sky 2.4s ease; }
 
   /* A word too big for the page sits behind the card and changes when it turns */
   .card-hold { z-index: 0; }
   .card-hold { align-content: start; }
-  .pin { position: relative; display: grid; gap: 14px; align-self: start; }
+  .pin { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; align-self: start; min-width: 0; }
   .bigword { position: absolute; left: 50%; top: 34%; translate: -50% -50%; z-index: -1; pointer-events: none; white-space: nowrap; font-family: var(--display); font-weight: 600; font-size: clamp(96px, 17vw, 230px); line-height: 1; letter-spacing: -0.02em; color: transparent; -webkit-text-stroke: 1px rgba(244, 236, 220, 0.13); }
   .bigword span { display: inline-block; }
   .info { position: relative; z-index: 1; }
 
   /* Scroll to cross: the card turns and the clock runs back 9 and a half hours */
-  .cross { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0; font-family: var(--label); font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .cross { display: flex; flex-wrap: wrap; row-gap: 2px; align-items: center; justify-content: center; gap: 10px; margin: 0; font-family: var(--label); font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-variant-numeric: tabular-nums; }
   .cross svg { width: 22px; height: 22px; flex: none; }
   .cross b { color: var(--ivory); font-size: 14px; min-width: 7.2ch; text-align: right; }
   .cross-hint { color: var(--marigold); transition: opacity 0.3s; }
@@ -454,6 +457,12 @@
     .stage { margin-top: -28px; }
     .foot { flex-direction: column; }
     .tabs { order: -1; width: 100%; }
+  }
+  /* The narrowest phones: smaller round buttons, and the 1 / 54 counter steps aside */
+  @media (max-width: 330px) {
+    .nav { flex: none; width: 40px; height: 40px; }
+    .step-mid { gap: 8px; }
+    .pos { display: none; }
   }
 
   @media (prefers-reduced-motion: reduce) {

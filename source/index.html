@@ -1,0 +1,1780 @@
+<title>A Tale of Two Cities</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Archivo+Narrow:wght@500;700&family=Noto+Sans+Kannada:wght@500;700&display=swap">
+<style>
+  /* Layout: a darkened screening room. One card on the stage, the reel below, the Jokers as the closing scene. */
+  :root {
+    --table: #12151f;
+    --panel: #1a1e2b;
+    --ivory: #f4ecdc;
+    --muted: #a8a294;
+    --vermilion: #e2553c;
+    --marigold: #f2b330;
+    --rule: rgba(244, 236, 220, 0.14);
+    --display: 'Bodoni Moda', 'Bodoni 72', Didot, serif;
+    --body: 'Cormorant Garamond', Garamond, 'Times New Roman', serif;
+    --label: 'Archivo Narrow', 'Arial Narrow', sans-serif;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--table);
+    color: var(--ivory);
+    font-family: var(--body);
+    font-size: 19px;
+    line-height: 1.5;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 0 64px;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 72px; }
+  .wrap > section { min-width: 0; }
+  .label {
+    font-family: var(--label); font-weight: 700; font-size: 12px;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);
+  }
+  h1, h2, h3 { font-family: var(--display); font-weight: 500; text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+
+  header { padding-top: 48px; display: grid; gap: 14px; }
+  header h1 { font-size: clamp(42px, 7vw, 84px); line-height: 1; letter-spacing: -0.01em; }
+  header h1 em { font-style: italic; color: var(--marigold); }
+  header .thesis { font-size: 24px; font-style: italic; color: var(--muted); max-width: 40ch; }
+
+  /* Stage */
+  .stage { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 48px; align-items: start; }
+  .card-hold { perspective: 1400px; position: relative; display: grid; gap: 14px; }
+  .stepper { display: flex; justify-content: center; align-items: center; gap: 18px; }
+  .nav { width: 46px; height: 46px; padding: 0; border-radius: 50%; display: grid; place-items: center; background: var(--table); border: 1px solid var(--rule); box-shadow: 0 8px 18px -8px rgba(0, 0, 0, 0.8); }
+  .nav svg { width: 18px; height: 18px; }
+  .nav:hover { border-color: var(--marigold); }
+  .pos { min-width: 7ch; text-align: center; font-family: var(--label); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .card {
+    max-width: 100%; aspect-ratio: 5 / 7;
+    border-radius: 4.8% / 3.4%;
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(0, 0, 0, 0.3);
+    transition: transform 1.4s cubic-bezier(0.6, 0, 0.2, 1);
+  }
+  .card svg { display: block; width: 100%; height: 100%; }
+  .info { display: grid; gap: 22px; min-width: 0; }
+  .info h2 { font-size: clamp(30px, 4vw, 44px); line-height: 1.05; }
+  .pairing { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: baseline; font-size: 22px; }
+  .pairing .x { color: var(--vermilion); font-family: var(--display); font-size: 30px; line-height: 0.8; }
+  .sentence {
+    border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+    padding-block: 18px; display: grid; gap: 4px;
+  }
+  .sentence .half { font-family: var(--display); font-style: italic; font-size: 24px; line-height: 1.25; }
+  .sentence .half.b { color: var(--marigold); }
+  .sentence .note { font-size: 16px; color: var(--muted); margin-top: 6px; }
+  .info dl { display: grid; gap: 14px; margin: 0; }
+  .info dt { margin-bottom: 2px; }
+  .info dd { margin: 0; max-width: 60ch; }
+  .controls { display: flex; flex-wrap: wrap; gap: 10px; }
+  #b-sound[aria-pressed="true"] { background: var(--marigold); border-color: var(--marigold); color: var(--table); }
+  button {
+    font-family: var(--label); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ivory); background: transparent; border: 1px solid var(--rule); border-radius: 2px;
+    padding: 10px 14px; cursor: pointer;
+  }
+  button:hover { border-color: var(--ivory); }
+  button:focus-visible { outline: 2px solid var(--marigold); outline-offset: 2px; }
+  button[aria-pressed="true"] { background: var(--ivory); color: var(--table); border-color: var(--ivory); }
+  .status { font-size: 15px; color: var(--muted); min-height: 1.5em; }
+
+  /* The deck lives in House rules: tap a suit, its cards fan out */
+  .reel-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: baseline; margin-bottom: 24px; }
+  .reel-head h2 { font-size: 32px; }
+  .reel-head .controls { gap: 8px; }
+  .grid > .suit { font: inherit; color: inherit; text-align: left; text-transform: none; letter-spacing: 0; border: 0; border-radius: 0; cursor: pointer; grid-template-columns: 1fr auto; column-gap: 14px; }
+  .grid > .suit > :not(.pile) { grid-column: 1; }
+  .grid > .suit:hover, .grid > .suit[aria-expanded="true"] { background: var(--panel); }
+  .grid > .suit[aria-expanded="true"] { box-shadow: inset 0 -2px 0 var(--marigold); }
+  .pile { grid-column: 2; grid-row: 1 / span 4; position: relative; width: 46px; aspect-ratio: 5 / 7; align-self: start; }
+  .pile > span { position: absolute; inset: 0; border-radius: 6% / 4.3%; overflow: hidden; box-shadow: 0 4px 10px -4px rgba(0, 0, 0, 0.8); transition: transform 0.3s; }
+  .pile > span svg { display: block; width: 100%; height: 100%; }
+  .pile > span:nth-child(1) { transform: rotate(-9deg) translate(-3px, 2px); }
+  .pile > span:nth-child(2) { transform: rotate(5deg) translate(2px, 1px); }
+  .suit:hover .pile > span:nth-child(1) { transform: rotate(-16deg) translate(-7px, 1px); }
+  .suit:hover .pile > span:nth-child(2) { transform: rotate(11deg) translate(6px, 0); }
+  .spread { border: 1px solid var(--rule); border-top: 0; padding: 16px 20px 8px; }
+  .spread-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .fan-wrap { position: relative; overflow-x: auto; padding: 34px 8px 26px; }
+  .fan { display: flex; justify-content: center; min-width: max-content; }
+  .fan .thumb { width: 112px; margin-left: -40px; transform-origin: 50% 130%; transform: rotate(var(--r)) translateY(var(--y)); transition: transform 0.25s; animation: deal 0.45s cubic-bezier(0.3, 0, 0.2, 1) backwards; animation-delay: var(--d); }
+  .fan .thumb:first-child { margin-left: 0; }
+  .fan .thumb:hover, .fan .thumb:focus-visible { transform: rotate(var(--r)) translateY(calc(var(--y) - 18px)); z-index: 2; }
+  @keyframes deal { from { opacity: 0; transform: translateY(-50px) rotate(0deg) scale(0.6); } }
+  .thumb { padding: 0; border: 0; background: none; cursor: pointer; perspective: 700px; }
+  .flip { position: relative; display: block; aspect-ratio: 5 / 7; transform-style: preserve-3d; transition: transform 0.7s cubic-bezier(0.6, 0, 0.2, 1), translate 0.25s; }
+  .thumb:hover .flip { translate: 0 -4px; }
+  .thumb.revealed .flip { transform: rotateY(180deg); }
+  .side { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 6% / 4.3%; overflow: hidden; box-shadow: 0 6px 14px -6px rgba(0, 0, 0, 0.75); }
+  .side svg { display: block; width: 100%; height: 100%; }
+  .side.front { transform: rotateY(180deg); }
+  .thumb[aria-current="true"] .side.front { outline: 2px solid var(--marigold); outline-offset: 2px; }
+
+  /* Opening shuffle */
+  .intro { position: fixed; inset: 0; z-index: 50; background: var(--table); display: grid; place-items: center; overflow: hidden; }
+  .intro .deck { position: relative; width: min(210px, 44vw); aspect-ratio: 5 / 7; }
+  .intro .c { position: absolute; inset: 0; border-radius: 6% / 4.3%; overflow: hidden; box-shadow: 0 12px 26px -12px rgba(0, 0, 0, 0.85); will-change: transform; }
+  .intro .c svg { display: block; width: 100%; height: 100%; }
+  .intro .cap { position: absolute; left: 0; right: 0; bottom: calc(48px + env(safe-area-inset-bottom, 0px)); text-align: center; display: grid; gap: 6px; }
+  .intro .cap b { font-family: var(--display); font-weight: 500; font-size: clamp(24px, 4vw, 36px); }
+  .intro .skip { z-index: 2; position: absolute; top: calc(16px + env(safe-area-inset-top, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); }
+
+  /* Jokers */
+  .jokers { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 48px; align-items: center; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .pair .thumb { perspective: 1200px; }
+  .pair .side { border-radius: 4.8% / 3.4%; box-shadow: 0 20px 40px -18px rgba(0, 0, 0, 0.75); }
+  .jokers-text { display: grid; gap: 18px; min-width: 0; }
+  .jokers-text h2 { font-size: clamp(30px, 4vw, 44px); line-height: 1.05; }
+  .jokers-text blockquote { margin: 0; font-family: var(--display); font-style: italic; font-size: 26px; color: var(--marigold); line-height: 1.25; }
+  .jokers-text p { max-width: 60ch; }
+
+  /* System */
+  .system h2 { font-size: 32px; margin-bottom: 24px; }
+  .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+  .grid > div, .grid > .suit { background: var(--table); padding: 20px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+  .grid h3 { font-size: 24px; display: flex; gap: 10px; align-items: baseline; }
+  .grid h3 svg { width: 16px; height: 16px; flex: none; }
+  .grid p { font-size: 17px; }
+  .grid .ex { font-size: 15px; color: var(--muted); font-style: italic; }
+  .specs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; margin-top: 40px; }
+  .specs > div { display: grid; gap: 8px; align-content: start; min-width: 0; }
+  .specs p { font-size: 17px; }
+  .hours { font-variant-numeric: tabular-nums; font-family: var(--label); font-size: 13px; letter-spacing: 0.04em; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 12px; }
+  .hours b { color: var(--ivory); font-weight: 700; }
+
+  @media (max-width: 860px) {
+    .stage, .jokers { grid-template-columns: minmax(0, 1fr); }
+    .card-hold { max-width: 380px; width: 100%; margin: 0 auto; }
+    .fan { justify-content: flex-start; }
+    .fan .thumb { width: 86px; margin-left: -44px; }
+    .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .specs { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .grid { grid-template-columns: minmax(0, 1fr); }
+  }
+  [hidden] { display: none !important; }
+  #feature { touch-action: pan-y; }
+
+  /* Header strip: two clocks, where you are, how far through the deck */
+  .strip { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; margin-top: 10px; }
+  .where { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .where .label { margin-right: 6px; }
+  .city { display: grid; gap: 2px; justify-items: start; text-align: left; padding: 8px 16px; text-transform: none; letter-spacing: 0; }
+  .city > span { font-family: var(--label); font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.75; }
+  .city b { font-family: var(--display); font-weight: 500; font-size: 24px; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .seg { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .seg .label { margin-right: 4px; }
+  .seg button { text-transform: none; letter-spacing: 0.02em; font-size: 14px; }
+  .progress { display: flex; align-items: center; gap: 10px 14px; min-width: 0; flex: 1 1 260px; max-width: 460px; }
+  .deck-count { display: grid; gap: 2px; }
+  .deck-count b { font-family: var(--display); font-weight: 500; font-size: 22px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .tips { font-size: 16px; color: var(--muted); margin-top: 6px; }
+  .tips b { color: var(--ivory); font-weight: 600; }
+  .bar { flex: 1 1 80px; min-width: 60px; height: 4px; background: var(--rule); border-radius: 2px; overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: var(--marigold); transition: width 0.5s; }
+  .linkish { border: 0; padding: 4px 2px; min-height: 0; font-size: 11px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+  #cat-badge svg { width: 22px; height: 22px; display: block; }
+
+  /* The card leans toward the cursor and catches the light */
+  .tilt { position: relative; transform: perspective(1100px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform 0.25s ease-out; border-radius: 4.8% / 3.4%; }
+  .glint { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.22) 50%, transparent 62%) no-repeat; background-size: 250% 100%; background-position: var(--gx, 120%) 0; mix-blend-mode: soft-light; }
+  #feature { cursor: pointer; }
+  #feature:focus-visible { outline: 2px solid var(--marigold); outline-offset: 4px; }
+  .caption { text-align: center; font-size: 15px; color: var(--muted); font-style: italic; margin: 0; }
+  .sentence-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .chip { font-family: var(--body); text-transform: none; letter-spacing: 0; font-size: 16px; padding: 6px 12px; border-color: var(--marigold); color: var(--marigold); }
+  .chip span { font-family: 'Noto Sans Kannada', sans-serif; }
+  .chip[aria-pressed="true"] { background: var(--marigold); color: var(--table); }
+  .kn { font-family: 'Noto Sans Kannada', sans-serif; font-size: 18px; line-height: 1.5; color: var(--ivory); }
+  .lock { color: var(--marigold); font-style: italic; }
+
+  #visitors b { color: var(--ivory); font-weight: 700; }
+
+  /* Toasts */
+  .toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); translate: -50% 0; z-index: 60; background: var(--ivory); color: var(--table); font-family: var(--body); font-size: 17px; padding: 12px 18px; border-radius: 3px; box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.8); max-width: calc(100vw - 32px); }
+
+  /* Get the deck */
+  .product { display: grid; grid-template-columns: minmax(0, 1fr); max-width: 640px; border: 1px solid var(--rule); }
+  .panel { background: var(--table); padding: 28px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+  .panel h2, .pairings h2 { font-size: 32px; }
+  .panel form { display: grid; gap: 14px; }
+  .field { display: grid; gap: 6px; font-family: var(--label); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  input { font: inherit; font-family: var(--body); font-size: 18px; text-transform: none; letter-spacing: 0; color: var(--ivory); background: transparent; border: 0; border-bottom: 1px solid var(--rule); padding: 8px 2px; min-width: 0; width: 100%; }
+  input:focus-visible { outline: none; border-bottom-color: var(--marigold); }
+  input::placeholder { color: var(--muted); opacity: 0.7; }
+  .count { display: flex; align-items: center; gap: 12px; }
+  .count output { font-family: var(--display); font-size: 26px; min-width: 2ch; text-align: center; color: var(--ivory); letter-spacing: 0; }
+  .owner { font-size: 16px; color: var(--marigold); }
+
+  /* Your turn */
+  .pairings { display: grid; gap: 16px; }
+  .pp-form { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.4fr) auto; gap: 14px; align-items: end; }
+  .pp-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+  .pp-list li { background: var(--table); padding: 14px 18px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; align-items: center; }
+  .pp-pair { font-family: var(--display); font-size: 21px; }
+  .pp-pair .x { color: var(--vermilion); padding: 0 6px; }
+  .pp-meta { font-size: 15px; color: var(--muted); font-style: italic; grid-column: 1; }
+  .pp-vote { grid-column: 2; grid-row: 1 / span 2; text-transform: none; letter-spacing: 0; font-size: 15px; display: flex; gap: 8px; align-items: center; }
+  .pp-vote[aria-pressed="true"] { background: var(--vermilion); border-color: var(--vermilion); color: var(--ivory); }
+  .pp-empty { background: var(--table); padding: 18px; color: var(--muted); font-style: italic; }
+  @media (max-width: 860px) {
+    .product { grid-template-columns: minmax(0, 1fr); }
+    .pp-form { grid-template-columns: minmax(0, 1fr); }
+    .city b { font-size: 20px; }
+  }
+  @media (pointer: coarse) {
+    button { min-height: 44px; }
+    .topbar .tabs a { padding-block: 12px; }
+    .linkish { min-height: 44px; display: inline-flex; align-items: center; }
+    .controls { gap: 8px; }
+  }
+  @media (hover: none) {
+    .fan .thumb:hover { transform: rotate(var(--r)) translateY(var(--y)); }
+    .suit:hover .pile > span:nth-child(1) { transform: rotate(-9deg) translate(-3px, 2px); }
+    .suit:hover .pile > span:nth-child(2) { transform: rotate(5deg) translate(2px, 1px); }
+    .grid > .suit:hover { background: var(--table); }
+    .grid > .suit[aria-expanded="true"] { background: var(--panel); }
+  }
+  /* The sky over the page follows the clock in whichever city is face up */
+  @property --sky { syntax: '<color>'; inherits: true; initial-value: #1d2747; }
+  html, body { overflow-x: clip; }
+  @supports not (overflow-x: clip) { html { overflow-x: hidden; } }
+  .sky { position: fixed; inset: 0 0 auto; height: 90vh; z-index: -1; pointer-events: none; background: radial-gradient(ellipse 120% 75% at 50% 0%, var(--sky), transparent 72%); opacity: 0.5; transition: --sky 2.4s ease; }
+
+  /* A word too big for the page sits behind the card and changes when it turns */
+  .card-hold { z-index: 0; }
+  .card-hold { align-content: start; }
+  .pin { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; align-self: start; min-width: 0; }
+  .bigword { position: absolute; left: 50%; top: 34%; translate: -50% -50%; z-index: -1; pointer-events: none; white-space: nowrap; font-family: var(--display); font-weight: 600; font-size: clamp(96px, 17vw, 230px); line-height: 1; letter-spacing: -0.02em; color: transparent; -webkit-text-stroke: 1px rgba(244, 236, 220, 0.13); }
+  .bigword span { display: inline-block; }
+  .info { position: relative; z-index: 1; }
+
+  /* Scroll to cross: the card turns and the clock runs back 9 and a half hours */
+  .cross { display: flex; flex-wrap: wrap; row-gap: 2px; align-items: center; justify-content: center; gap: 10px; margin: 0; font-family: var(--label); font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .cross svg { width: 22px; height: 22px; flex: none; }
+  .cross b { color: var(--ivory); font-size: 14px; min-width: 7.2ch; text-align: right; }
+  .cross-hint { color: var(--marigold); transition: opacity 0.3s; }
+  .hold.runway .pin { position: sticky; top: var(--pin-top, 16px); }
+  @media (min-width: 861px) { .stage.runway .info { position: sticky; top: 24px; } }
+
+  /* The art sits behind the frame like a window and shifts when the card tilts */
+  #feature .par { transform: translate(var(--px, 0px), var(--py, 0px)) scale(1.05); transform-box: view-box; transform-origin: 125px 93.5px; transition: transform 0.25s ease-out; }
+  #feature .par.b { transform: translate(calc(var(--px, 0px) * -1), calc(var(--py, 0px) * -1)) scale(1.05); }
+
+  /* The deck in orbit: pick a card, any card */
+  .ring-stage { position: absolute; inset: 0; perspective: 1100px; display: grid; place-items: center; touch-action: none; cursor: grab; }
+  .ring-stage:active { cursor: grabbing; }
+  .ring { position: relative; width: 0; height: 0; transform-style: preserve-3d; }
+  .rc { position: absolute; left: calc(var(--w) / -2); top: calc(var(--w) * -0.7); width: var(--w); aspect-ratio: 5 / 7; padding: 0; border: 0; border-radius: 6% / 4.3%; background: none; min-height: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; cursor: pointer; }
+  .rc img { display: block; width: 100%; height: 100%; border-radius: inherit; box-shadow: 0 10px 22px -10px rgba(0, 0, 0, 0.9); pointer-events: none; }
+  .rc:hover img { outline: 2px solid var(--marigold); outline-offset: 2px; }
+  .ring-title { position: absolute; left: 50%; top: calc(50% - var(--w) * 1.4 - 34px); translate: -50% -100%; text-align: center; pointer-events: none; display: grid; gap: 8px; padding-inline: 16px; width: 100%; }
+  .ring-title b { font-family: var(--display); font-weight: 500; font-size: clamp(26px, 4.4vw, 52px); line-height: 1; }
+  .ring-title b em { color: var(--marigold); }
+
+  /* House rules: the fan is a reel. Swipe and the cards ride an arc */
+  .fan .thumb { transform: rotate(var(--r, 0deg)) translateY(var(--y, 0px)); }
+  @media (max-width: 860px) {
+    .fan-wrap { scroll-snap-type: x mandatory; padding-inline: calc(50% - 43px); scrollbar-width: none; }
+    .fan-wrap::-webkit-scrollbar { display: none; }
+    .fan .thumb { scroll-snap-align: center; transition: none; }
+  }
+
+  /* Loupe: a close look at the small print */
+  #feature { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+  .loupe { position: absolute; left: 0; top: 0; width: 150px; height: 150px; translate: -50% -50%; border-radius: 50%; overflow: hidden; pointer-events: none; z-index: 3; background: var(--ivory); box-shadow: 0 0 0 2px var(--ivory), 0 0 0 3px rgba(0, 0, 0, 0.4), 0 16px 34px -8px rgba(0, 0, 0, 0.85); }
+  .lens { position: absolute; left: 0; top: 0; }
+  .lens svg { display: block; width: 100%; height: 100%; }
+
+  /* The sound, drawn */
+  .wave { display: block; width: 100%; height: 36px; }
+
+  /* Your deck, all of it */
+  .deck-count { display: grid; gap: 2px; justify-items: start; padding: 0; border: 0; background: none; min-height: 0; text-align: left; text-transform: none; letter-spacing: 0; color: inherit; cursor: pointer; }
+  .deck-count u { text-underline-offset: 3px; }
+  .deck-count:hover u { color: var(--ivory); }
+  .wall { position: fixed; inset: 0; z-index: 55; background: var(--table); overflow-y: auto; overscroll-behavior: contain; padding-block: calc(20px + env(safe-area-inset-top, 0px)) calc(48px + env(safe-area-inset-bottom, 0px)); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .wall-head { max-width: 1120px; margin: 0 auto 8px; display: flex; justify-content: space-between; align-items: end; gap: 12px; flex-wrap: wrap; }
+  .wall-head h2 { font-size: clamp(28px, 4vw, 42px); }
+  .wall-grid { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(clamp(58px, 15vw, 82px), 1fr)); gap: 10px 8px; }
+  .wall-suit { grid-column: 1 / -1; margin-top: 18px; }
+  .tile { position: relative; padding: 0; border: 0; min-height: 0; background: none; aspect-ratio: 5 / 7; border-radius: 6% / 4.3%; overflow: hidden; box-shadow: 0 6px 14px -6px rgba(0, 0, 0, 0.8); animation: tile-in 0.4s cubic-bezier(0.2, 0.7, 0.3, 1) backwards; animation-delay: var(--d, 0ms); transition: translate 0.2s; }
+  .tile svg, .tile img { display: block; width: 100%; height: 100%; }
+  .tile:hover { translate: 0 -3px; }
+  .tile.down img { opacity: 0.7; transition: opacity 0.2s; }
+  .tile.down:hover img { opacity: 1; }
+  .tile .lockmark { position: absolute; left: 0; right: 0; bottom: 8%; text-align: center; font-family: var(--label); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--table); }
+  .tile .lockmark span { background: var(--marigold); padding: 2px 6px; border-radius: 2px; }
+  @keyframes tile-in { from { opacity: 0; transform: translateY(12px) scale(0.96); } }
+
+  /* Scrub the day */
+  .scrub { display: flex; gap: 16px; align-items: center; margin-top: 14px; }
+  .scrub-card { flex: none; width: 84px; padding: 0; border: 0; min-height: 0; aspect-ratio: 5 / 7; border-radius: 6% / 4.3%; overflow: hidden; background: none; box-shadow: 0 10px 22px -10px rgba(0, 0, 0, 0.85); transition: translate 0.2s; }
+  .scrub-card:hover { translate: 0 -3px; }
+  .scrub-card svg { display: block; width: 100%; height: 100%; }
+  .scrub-ctl { display: grid; gap: 8px; flex: 1; min-width: 0; }
+  .scrub input[type="range"] { accent-color: var(--marigold); border: 0; padding: 0; width: 100%; }
+  .scrub output { font-family: var(--display); font-size: 21px; line-height: 1.2; }
+  .scrub output span { color: var(--muted); font-family: var(--body); font-style: italic; font-size: 17px; }
+
+  .foot { border-top: 1px solid var(--rule); padding-top: 22px; margin-top: -24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 10px 24px; }
+  .foot p { font-family: var(--label); font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: var(--muted); }
+  .foot .foot-note { font-family: var(--display); font-style: italic; font-size: 19px; letter-spacing: 0; color: var(--ivory); }
+
+  /* Stage row: sound on the left edge, arrows in the middle, pause on the right edge */
+  .stepper { justify-content: space-between; }
+  .step-mid { display: flex; align-items: center; gap: 14px; }
+  /* Sound shows a cross while off; pause turns into play while paused. */
+  .nav .ico-off { display: none; }
+  #b-sound[aria-pressed="false"] .ico-on, #b-play[aria-pressed="true"] .ico-on { display: none; }
+  #b-sound[aria-pressed="false"] .ico-off, #b-play[aria-pressed="true"] .ico-off { display: inline; }
+
+  /* Split-flap clocks */
+  .city b { display: flex; align-items: baseline; perspective: 300px; }
+  .city b .d { display: inline-block; position: relative; min-width: 0.62em; text-align: center; margin-right: 1px; padding-inline: 0.05em; border-radius: 2px; background: rgba(244, 236, 220, 0.08); }
+  .city[aria-pressed="true"] b .d { background: rgba(18, 21, 31, 0.07); }
+  .city b .d::after { content: ""; position: absolute; left: 0; right: 0; top: 52%; height: 1px; background: currentColor; opacity: 0.18; }
+  .city b .c { padding-inline: 0.06em; }
+  .city b .ap { font-family: var(--label); font-weight: 700; font-size: 0.5em; letter-spacing: 0.08em; margin-left: 0.35em; align-self: center; }
+  .city b .d.flip { animation: flap 0.55s cubic-bezier(0.3, 0, 0.2, 1); transform-origin: 50% 52%; }
+  @keyframes flap { 0% { transform: rotateX(88deg); opacity: 0.3; } 100% { transform: none; opacity: 1; } }
+
+  /* Cursor chip over the card */
+  .cursor-chip { position: fixed; left: 0; top: 0; z-index: 40; pointer-events: none; font-family: var(--label); font-weight: 700; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--table); background: var(--marigold); padding: 5px 9px; border-radius: 99px; opacity: 0; transition: opacity 0.2s; }
+  .cursor-chip.on { opacity: 1; }
+
+  /* Ticker of pairs */
+  .ticker { margin-inline: calc(50% - 50vw); border-block: 1px solid var(--rule); overflow: hidden; padding-block: 13px; mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+  .ticker-track { display: flex; width: max-content; animation: tick 160s linear infinite; font-family: var(--label); font-weight: 700; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+  .ticker:hover .ticker-track { animation-play-state: paused; }
+  .ticker-track span { padding-inline: 18px; }
+  .ticker-track i { font-style: normal; color: var(--vermilion); padding-inline: 6px; }
+  @keyframes tick { to { transform: translateX(-50%); } }
+
+  /* Jokers: a peek at the pour, and a countdown */
+  .pair { position: relative; }
+  .tease { position: absolute; inset: 0; pointer-events: none; display: grid; place-items: center; }
+  .jring { position: relative; width: 74px; height: 74px; display: grid; place-items: center; align-content: center; text-align: center; }
+  .jring svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .jring b { position: relative; font-family: var(--display); font-weight: 500; font-size: 24px; line-height: 1; }
+  .jring span { position: relative; font-family: var(--label); font-weight: 700; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+
+  /* Sections arrive as you reach them */
+  .reveal { opacity: 0; translate: 0 28px; transition: opacity 0.8s ease, translate 0.8s cubic-bezier(0.2, 0.7, 0.3, 1); }
+  .reveal.in { opacity: 1; translate: 0 0; }
+  .reveal .grid > .suit { opacity: 0; translate: 0 18px; transition: opacity 0.6s ease, translate 0.6s cubic-bezier(0.2, 0.7, 0.3, 1), background 0.2s; }
+  .reveal.in .grid > .suit { opacity: 1; translate: 0 0; }
+  .reveal.in .grid > .suit:nth-child(2) { transition-delay: 0.08s; }
+  .reveal.in .grid > .suit:nth-child(3) { transition-delay: 0.16s; }
+  .reveal.in .grid > .suit:nth-child(4) { transition-delay: 0.24s; }
+
+  /* Top bar and tabs */
+  .topbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 10px 24px; }
+  .tabs { display: flex; gap: 22px; }
+  .tabs a { font-family: var(--label); font-weight: 700; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); text-decoration: none; padding-block: 4px; border-bottom: 2px solid transparent; }
+  .tabs a:hover { color: var(--ivory); }
+  .tabs a[aria-current="page"] { color: var(--ivory); border-bottom-color: var(--marigold); }
+  .tabs a:focus-visible { outline: 2px solid var(--marigold); outline-offset: 3px; }
+  [data-view="jokers"] header .tips, [data-view="jokers"] header .strip, [data-view="turn"] header .tips, [data-view="turn"] header .strip { display: none; }
+
+  /* Hover Ink: the outlined word fills in marigold where the cursor is */
+  .bigword.ink { color: var(--marigold); -webkit-text-stroke: 0; opacity: 0.32; -webkit-mask-image: radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), #000 0%, transparent 70%); mask-image: radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), #000 0%, transparent 70%); }
+
+  /* QR sheet */
+  .qr-sheet { position: fixed; inset: 0; z-index: 56; display: grid; place-items: center; background: rgba(12, 14, 21, 0.86); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .qr-card { width: min(340px, 100%); background: var(--ivory); color: var(--table); border-radius: 14px; padding: 26px 24px 20px; display: grid; gap: 14px; justify-items: center; text-align: center; box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8); animation: qr-in 0.45s cubic-bezier(0.2, 0.7, 0.3, 1); }
+  .qr-card .label { color: #6b6658; }
+  .qr-card h2 { font-size: 26px; line-height: 1.1; }
+  .qr-code { width: 220px; height: 220px; }
+  .qr-code svg { display: block; width: 100%; height: 100%; }
+  .qr-card p { font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; color: #6b6658; word-break: break-all; }
+  .qr-card button { color: var(--table); border-color: rgba(18, 21, 31, 0.25); }
+  @keyframes qr-in { from { opacity: 0; transform: translateY(16px) scale(0.96); } }
+
+  /* The road: an auto and a cab pass each other on the footer line */
+  .foot { position: relative; }
+  .road { position: absolute; left: 0; right: 0; top: -31px; height: 30px; overflow: hidden; pointer-events: none; }
+  .road svg { position: absolute; bottom: 0; width: 46px; height: 30px; left: 0; }
+  .road .auto { animation: drive-r 28s linear infinite; }
+  .road .cab { animation: drive-l 28s linear infinite; }
+  @keyframes drive-r { from { transform: translateX(-60px); } to { transform: translateX(calc(var(--w, 1000px) + 14px)); } }
+  @keyframes drive-l { from { transform: translateX(calc(var(--w, 1000px) + 14px)) scaleX(-1); } to { transform: translateX(-60px) scaleX(-1); } }
+
+  /* Stickers for finished suits */
+  .wall-title { display: grid; gap: 4px; }
+  .stickers { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+  .sticker { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--ivory); border: 3px solid #fff; box-shadow: 0 6px 14px -6px rgba(0, 0, 0, 0.8); transform: rotate(var(--rot, 0deg)); }
+  .sticker svg { width: 20px; height: 20px; }
+  .sticker.empty { background: transparent; border: 1.5px dashed var(--rule); box-shadow: none; }
+  .sticker.empty svg { opacity: 0.45; }
+  .sticker.new { animation: peel 0.8s cubic-bezier(0.2, 0.7, 0.3, 1.2) backwards; animation-delay: 0.35s; }
+  @keyframes peel { from { opacity: 0; transform: rotate(-30deg) scale(1.6); } }
+
+  /* Phones: the card belongs on the first screen */
+  @media (max-width: 600px) {
+    .wrap { gap: 56px; }
+    header { padding-top: 22px; gap: 10px; }
+    header h1 { font-size: clamp(34px, 10vw, 84px); }
+    header .thesis { font-size: 19px; }
+    .tips { font-size: 15px; margin-top: 0; }
+    .strip { gap: 10px 16px; margin-top: 2px; }
+    .city { padding: 6px 10px; }
+    .city b { font-size: 18px; }
+    .progress { flex-basis: 100%; max-width: none; }
+    .deck-count b { font-size: 18px; }
+    .stage { margin-top: -28px; }
+    .foot { flex-direction: column; }
+    .tabs { order: -1; width: 100%; }
+  }
+  /* The narrowest phones: smaller round buttons, and the 1 / 54 counter steps aside */
+  @media (max-width: 330px) {
+    .nav { flex: none; width: 40px; height: 40px; }
+    .step-mid { gap: 8px; }
+    .pos { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .road svg, .sticker.new, .qr-card { animation: none; }
+    .tile { animation: none; }
+    .sky { transition: none; }
+    #feature .par { transition: none; }
+    .card { transition: none; }
+    .flip { transition: none; }
+    .fan .thumb { animation: none; }
+  }
+</style>
+
+<div class="sky" id="sky" aria-hidden="true"></div>
+<div class="wrap">
+  <header>
+    <div class="topbar">
+      <span class="label" id="count">52 cards, 2 Jokers, one very long flight<span id="visitors" hidden> · <b id="vcount">0</b> <span id="vword">visitors</span> so far</span></span>
+      <nav class="tabs" aria-label="Sections">
+        <a href="#" data-tab="home" aria-current="page">Deck</a>
+        <a href="#jokers" data-tab="jokers">Jokers</a>
+        <a href="#your-turn" data-tab="turn">Your turn</a>
+      </nav>
+    </div>
+    <h1>A Tale of <em>Two</em> Cities</h1>
+    <p class="thesis">For anyone whose phone shows two clocks.</p>
+    <p class="tips"><b>Tap</b> to turn, <b>swipe</b> for the next one. Turn <b>all 52</b> to unlock the Jokers. Three cats are hiding.</p>
+    <div class="strip">
+      <div class="where" role="group" aria-label="Which city are you in?">
+        <span class="label">I'm in</span>
+        <button type="button" class="city" id="city-blr" aria-pressed="true"><span>Bengaluru</span><b id="clk-blr">--:--</b></button>
+        <button type="button" class="city" id="city-nyc" aria-pressed="false"><span>New York</span><b id="clk-nyc">--:--</b></button>
+      </div>
+      <div class="progress">
+        <button type="button" class="deck-count" id="b-wall" aria-haspopup="dialog"><span class="label">Your deck · <u>see all</u></span><b id="prog-label">0 / 52 turned</b></button>
+        <span class="bar" aria-hidden="true"><i id="prog-bar"></i></span>
+        <span id="cat-badge" hidden title="You found all three cats"><svg viewBox="0 0 24 24" aria-label="Cat badge"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z" fill="#f2b330"/><circle cx="10" cy="13" r="1" fill="#12151f"/><circle cx="14" cy="13" r="1" fill="#12151f"/></svg></span>
+        <button type="button" class="linkish" id="b-reset">Start over</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="stage" id="stage" aria-label="Featured card" data-in="home">
+    <div class="card-hold hold" id="hold">
+      <div class="pin" id="pin">
+      <div class="bigword" aria-hidden="true"><span id="bw"></span></div>
+      <div class="bigword ink" id="ink" aria-hidden="true"><span id="bw2"></span></div>
+      <p class="cross" id="cross" aria-hidden="true"><svg viewBox="-12 -12 24 24"><circle r="10.5" fill="none" stroke="currentColor" stroke-width="1.2"/><line id="hand-h" y2="-5.5" stroke="#f4ecdc" stroke-width="1.8" stroke-linecap="round"/><line id="hand-m" y2="-8.2" stroke="#f2b330" stroke-width="1.2" stroke-linecap="round"/><circle r="1.3" fill="#f4ecdc"/></svg><b id="cross-time">--:--</b><span id="cross-city"></span><span class="cross-hint" id="cross-hint">· Scroll to cross</span></p>
+      <div class="tilt" id="tilt"><div class="card" id="feature" role="button" tabindex="0" aria-label="Turn the card around"></div><span class="glint" id="glint" aria-hidden="true"></span><div class="loupe" id="loupe" aria-hidden="true" hidden><div class="lens" id="lens"></div></div></div>
+      <div class="stepper">
+        <button type="button" class="nav" id="b-sound" aria-pressed="false" aria-label="Sound on"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3,7 H6 L10,3.5 V14.5 L6,11 H3 Z" fill="currentColor"/><path class="ico-on" d="M12.5,6.2 Q14.4,9 12.5,11.8 M14.6,4.4 Q17.6,9 14.6,13.6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path class="ico-off" d="M12.5,6.8 L16.5,11.2 M16.5,6.8 L12.5,11.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
+        <span class="step-mid">
+        <button type="button" class="nav prev" id="b-prev" aria-label="Previous card"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M11.5,3 L5.5,9 L11.5,15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <span class="pos" id="pos" aria-live="polite"></span>
+        <button type="button" class="nav next" id="b-next" aria-label="Next card"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M6.5,3 L12.5,9 L6.5,15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </span>
+        <button type="button" class="nav" id="b-play" aria-pressed="false" aria-label="Pause the animation"><svg viewBox="0 0 18 18" aria-hidden="true"><path class="ico-on" d="M6,4 V14 M12,4 V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="ico-off" d="M6,3.8 L14,9 L6,14.2 Z" fill="currentColor"/></svg></button>
+      </div>
+      <canvas class="wave" id="wave" aria-hidden="true" hidden></canvas>
+      <p class="caption" id="caption" aria-live="polite" hidden></p>
+      </div>
+    </div>
+    <div class="info">
+      <span class="label" id="f-rank">Eight of Clubs · 6 PM</span>
+      <h2 id="f-title">The Ride Home</h2>
+      <div class="pairing"><span id="f-a">Auto-rickshaw</span><span class="x" aria-hidden="true">×</span><span id="f-b">Yellow cab</span></div>
+      <div class="sentence">
+        <div class="sentence-head"><span class="label">On the seam</span><button type="button" class="chip" id="b-kn" aria-pressed="false" aria-label="Read the line in Kannada">Read in <span lang="kn">ಕನ್ನಡ</span></button></div>
+        <span class="half" id="f-s1"></span>
+        <span class="half b" id="f-s2"></span>
+        <span class="kn" id="f-kn" lang="kn" hidden></span>
+        <span class="note" id="f-note"></span>
+      </div>
+      <dl>
+        <div><dt class="label">Why</dt><dd id="f-why"></dd></div>
+      </dl>
+      <div class="controls">
+        <button type="button" id="b-shuffle">Shuffle</button>
+        <button type="button" id="b-share" aria-expanded="false" aria-controls="share-row">Share</button>
+        <button type="button" id="b-print" aria-pressed="false">Print frame</button>
+        <button type="button" id="b-flag">Spot something off?</button>
+      </div>
+      <div class="controls" id="share-row" hidden>
+        <button type="button" id="b-native" hidden>Send to…</button>
+        <button type="button" id="b-link">Copy link</button>
+        <button type="button" id="b-story">Story image</button>
+        <button type="button" id="b-qr">QR code</button>
+      </div>
+      <div class="controls" id="print-row" hidden>
+        <button type="button" id="b-pdf-card">Save this card as PDF</button>
+        <button type="button" id="b-pdf-deck">Save the whole deck as PDF</button>
+        <button type="button" id="b-home">Print at home (9 to a page)</button>
+      </div>
+      <p class="status" id="status" role="status"></p>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true" data-in="home"><div class="ticker-track" id="ticker"></div></div>
+
+  <section class="system" aria-label="Deck system" data-in="home">
+    <div class="reel-head">
+      <h2>House rules</h2>
+      <span class="label">Tap a suit to fan out its cards</span>
+    </div>
+    <div class="grid" id="suits"></div>
+    <div class="spread" id="spread" hidden>
+      <div class="spread-head">
+        <span class="label" id="spread-name"></span>
+        <button type="button" id="b-all" aria-pressed="false">Turn these over</button>
+      </div>
+      <div class="fan-wrap"><div class="fan" id="fan"></div></div>
+    </div>
+    <div class="specs">
+      <div>
+        <span class="label">Ranks tell time</span>
+        <p>Lay out a suit from 2 to 10 and you get a day, first coffee to last auto. Jacks hustle, Queens charm, Kings complain.</p>
+        <div class="hours" id="hours"></div>
+        <div class="scrub">
+          <button type="button" class="scrub-card" id="scrub-card" aria-label="Show this card"></button>
+          <div class="scrub-ctl">
+            <label class="label" for="scrub">Scrub the day</label>
+            <input type="range" id="scrub" min="0" max="8" step="1" value="4">
+            <output id="scrub-out" for="scrub"></output>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span class="label">Print it</span>
+        <p>Every card is 2.5 × 3.5 in. Print frame gets you a PDF a print shop will take.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="jokers" aria-label="The Jokers" data-in="jokers" hidden>
+    <div class="pair">
+      <button type="button" class="thumb jflip" id="j-dep" data-id="departure" aria-label="Face-down Joker"><span class="flip"><span class="side back"></span><span class="side front"></span></span></button>
+      <button type="button" class="thumb jflip" id="j-ret" data-id="return" aria-label="Face-down Joker"><span class="flip"><span class="side back"></span><span class="side front"></span></span></button>
+      <div class="tease" id="tease" aria-hidden="true">
+        <div class="jring"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="#12151f" stroke="rgba(244,236,220,0.18)" stroke-width="3"/><circle id="jring-arc" cx="32" cy="32" r="28" fill="none" stroke="#f2b330" stroke-width="3" stroke-linecap="round" pathLength="100" stroke-dasharray="0 100" transform="rotate(-90 32 32)"/></svg><b id="jring-n">52</b><span>to go</span></div>
+      </div>
+    </div>
+    <div class="jokers-text">
+      <span class="label">No mirror</span>
+      <h2>The Departure and The Return</h2>
+      <blockquote>Funny how you can miss two places at once.</blockquote>
+      <p class="lock" id="joker-lock" role="status"></p>
+      <p>Every other card works upside down. These two can't, because coffee only pours one way.</p>
+    </div>
+  </section>
+
+
+  <section class="pairings" aria-label="Your pairings" data-in="turn" hidden>
+    <div class="reel-head">
+      <h2>Your turn</h2>
+      <span class="label">The best ones go in the expansion pack</span>
+    </div>
+    <p>Know a Bangalore thing with a New York twin we missed? Add it, then vote for the ones that make you snort.</p>
+    <form id="pp-form" class="pp-form">
+      <input id="pp-blr" required maxlength="60" placeholder="The Bangalore thing" aria-label="The Bangalore thing">
+      <input id="pp-nyc" required maxlength="60" placeholder="Its New York twin" aria-label="Its New York twin">
+      <input id="pp-line" maxlength="90" placeholder="The hidden line, if you've got one" aria-label="The hidden line">
+      <button type="submit" id="pp-go">Add it</button>
+    </form>
+    <p class="status" id="pp-status" role="status"></p>
+    <ol class="pp-list" id="pp-list"><li class="pp-empty">Nothing here yet. Silk Board × the BQE is taken, sorry.</li></ol>
+  </section>
+
+  <footer class="foot">
+    <div class="road" id="road" aria-hidden="true"></div>
+    <p class="foot-note">Made in Bengaluru, with a smooll piece of my heart still in New York.</p>
+    <p>A personal project by Nivivacious. © 2026. All rights reserved.</p>
+  </footer>
+
+
+</div>
+
+<script src="cards.js"></script>
+<script src="deck/hearts.js"></script>
+<script src="deck/diamonds.js"></script>
+<script src="deck/clubs.js"></script>
+<script src="deck/spades.js"></script>
+<script src="copy.js"></script>
+<script src="sound.js"></script>
+<script>
+  (function () {
+    const T = window.TaleCards;
+    const Snd = window.TaleSound;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const all = [...T.CARDS.map((c) => ({ ...c, kind: 'card' })), ...T.JOKERS.map((j) => ({ ...j, kind: 'joker' }))];
+    const state = { id: 'ride', still: reduce, turned: false, base: false, locked: false, paused: false };
+    let uid = 0;
+    const $ = (id) => document.getElementById(id);
+    const isJoker = (id) => id === 'departure' || id === 'return';
+    const NOTE = 'Read one half, then tap the card to read the rest.';
+
+    const jokerInfo = {
+      departure: {
+        rank: 'Joker · I', a: 'Steel tumbler', b: 'New York paper cup',
+        note: 'The line rides the coffee downhill.',
+        mech: 'The only diagonal in the deck. The stream crosses the seam and snaps it.',
+        why: 'Leaving one home for the other. Pack the filter powder.',
+        sound: 'A pour, a clink, a low hum.'
+      },
+      return: {
+        rank: 'Joker · II', a: 'New York paper cup', b: 'Steel davara',
+        note: 'This time the line swims back upstream.',
+        mech: 'The Departure, flipped. Paler coffee. Someone saved you some.',
+        why: 'Going back. Someone saved you some coffee.',
+        sound: 'Same pour, heading home, plus one extra note.'
+      }
+    };
+
+    function render(id, opts) { return T.render(id, Object.assign({ uid: '-' + (uid++) }, opts)); }
+
+    function follow() {
+      const svg = $('feature').querySelector('svg');
+      Snd.follow(state.id, () => (svg && svg.getCurrentTime ? svg.getCurrentTime() : null));
+      Snd.mute(state.still);
+    }
+
+    // Stage card turns over: edge-on, swap the face, back to flat.
+    function flipStage(html, animate) {
+      const el = $('feature');
+      if (!animate || reduce || !el.animate) { el.innerHTML = html; return; }
+      const a = el.animate([{ transform: `rotate(${angle()}deg) rotateY(0deg)` }, { transform: `rotate(${angle()}deg) rotateY(90deg)` }], { duration: 220, easing: 'ease-in' });
+      a.onfinish = () => {
+        el.innerHTML = html;
+        if (state.paused) pauseAll(true);
+        follow();
+        el.animate([{ transform: `rotate(${angle()}deg) rotateY(-90deg)` }, { transform: `rotate(${angle()}deg) rotateY(0deg)` }], { duration: 320, easing: 'cubic-bezier(0.2, 0.7, 0.3, 1)' });
+      };
+    }
+
+    // aim: where the scroll will end up, when we are about to jump back to the card.
+    function setFeature(id, animate, aim) {
+      state.id = id;
+      const item = all.find((x) => x.id === id);
+      const locked = item.kind === 'joker' && !jokersOpen() && !state.linked;
+      // Your city reads upright: New York turns every mirrored card around.
+      // Halfway down the scroll the card has already crossed, so start from the other side.
+      state.locked = locked;
+      state.base = (item.kind === 'card' && state.city === 'nyc') !== ((aim == null ? cross.p : aim) >= 0.5);
+      applyTurn(false);
+      flipStage(render(locked ? 'back' : id, { static: state.still || locked }), animate);
+      if (state.paused) pauseAll(true);
+      sweepGlint();
+      if (locked) {
+        $('f-rank').textContent = 'Joker · locked';
+        $('f-a').textContent = 'Turn all 52';
+        $('f-b').textContent = 'then come back';
+        typeLine('Not yet.', `${52 - turnedCount()} cards to go.`, true);
+        $('f-note').textContent = '';
+        $('f-why').textContent = 'No peeking.';
+        $('f-title').textContent = item.title;
+        $('f-kn').hidden = true;
+        $('pos').textContent = `${all.indexOf(item) + 1} / ${all.length}`;
+        $('caption').hidden = true;
+        document.querySelectorAll('.thumb').forEach((b) => b.setAttribute('aria-current', String(b.dataset.id === id)));
+        $('status').textContent = '';
+        follow();
+        return;
+      }
+      $('f-kn').textContent = T.KANNADA[id] || '';
+      $('f-kn').hidden = !state.kn;
+      $('caption').hidden = !Snd.enabled;
+      $('caption').textContent = Snd.enabled ? `Listening to: ${(item.kind === 'card' ? item.sound : jokerInfo[id].sound).replace(/\.$/, '')}` : '';
+      if (item.kind === 'card') {
+        $('f-rank').textContent = `${item.rankName} of ${T.SUIT_NAME[item.suit]}${T.HOURS[item.rank] ? ' · ' + T.HOURS[item.rank] : ''}`;
+        $('f-a').textContent = item.pair[0];
+        $('f-b').textContent = item.pair[1];
+        typeLine(item.sentence[0], item.sentence[1], !animate);
+        $('f-note').textContent = NOTE;
+        $('f-why').textContent = item.why;
+      } else {
+        const j = jokerInfo[id];
+        $('f-rank').textContent = j.rank;
+        $('f-a').textContent = j.a; $('f-b').textContent = j.b;
+        typeLine('Funny how you can miss', 'two places at once.', !animate);
+        $('f-note').textContent = j.note;
+        $('f-why').textContent = j.why;
+      }
+      $('f-title').textContent = item.title;
+      $('pos').textContent = `${all.indexOf(item) + 1} / ${all.length}`;
+      reveal(id);
+      document.querySelectorAll('.thumb').forEach((b) => b.setAttribute('aria-current', String(b.dataset.id === id)));
+      $('status').textContent = '';
+      follow();
+    }
+
+    // ---------- the turn: tap, city and scroll all add up to one angle ----------
+    const cross = { p: 0, on: false, runway: 0, top: 16 };
+    const angle = () => (state.base ? 180 : 0) + 180 * cross.p;
+    function applyTurn(animate) {
+      const el = $('feature');
+      el.style.transition = animate ? '' : 'none';
+      // Sideways, a card is wider than a phone, so it shrinks a little on the way round.
+      el.style.transform = `rotate(${angle()}deg) scale(${(1 - 0.28 * Math.abs(Math.sin(angle() * Math.PI / 180))).toFixed(3)})`;
+      state.turned = Math.round(angle() / 180) % 2 === 1;
+      bigWord(); clockAndSky();
+    }
+
+    // The word behind the card.
+    const BIG = { saint: ['ST. MARK\'S', 'ST MARKS'] };
+    function bigWord() {
+      let w;
+      if (state.locked) w = 'NOT YET';
+      else if (isJoker(state.id)) w = state.turned ? 'OOPS' : (state.id === 'departure' ? 'LEAVING' : 'HOME');
+      else w = (BIG[state.id] || ['BENGALURU', 'NEW YORK'])[state.turned ? 1 : 0];
+      const bw = $('bw'), bw2 = $('bw2');
+      if (bw.textContent === w) return;
+      bw.textContent = w; bw2.textContent = w;
+      if (!reduce && bw.animate) [bw, bw2].forEach((el) => el.animate([{ opacity: 0, transform: 'translateY(24px)' }, { opacity: 1, transform: 'none' }], { duration: 600, easing: 'cubic-bezier(0.2, 0.7, 0.3, 1)' }));
+    }
+
+    // The little clock over the card runs from one city's time to the other's as the card turns.
+    const minutesIn = (city) => {
+      const [hh, mm] = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', hourCycle: 'h23', timeZone: TZ[city] }).format(new Date()).split(':').map(Number);
+      return (hh % 24) * 60 + mm;
+    };
+    const SKY = [[0, '#1d2747'], [5, '#4a2f4f'], [6, '#7a3f45'], [8, '#2f4a6b'], [12, '#36557a'], [16, '#6b4a2e'], [17, '#8a4a24'], [19, '#5a2f4a'], [20, '#222c52']];
+    const skyAt = (hr) => SKY.reduce((c, [h0, col]) => (hr >= h0 ? col : c), SKY[0][1]);
+    function clockAndSky() {
+      const blr = minutesIn('blr'), nyc = minutesIn('nyc');
+      const gap = (blr - nyc + 1440) % 1440;
+      const f = (angle() / 180) % 2, mix = f <= 1 ? f : 2 - f;
+      const t = blr - gap * mix;
+      const transit = state.locked || isJoker(state.id);
+      const fmt = (m) => { m = ((Math.round(m) % 1440) + 1440) % 1440; const hr = Math.floor(m / 60), mi = m % 60; return `${hr % 12 || 12}:${String(mi).padStart(2, '0')} ${hr < 12 ? 'AM' : 'PM'}`; };
+      $('cross-time').textContent = transit ? '' : fmt(t);
+      $('cross-city').textContent = transit ? 'In transit' : (mix < 0.5 ? 'Bengaluru' : 'New York');
+      $('hand-m').setAttribute('transform', `rotate(${(t * 6).toFixed(1)})`);
+      $('hand-h').setAttribute('transform', `rotate(${(t / 2).toFixed(1)})`);
+      $('cross-hint').style.opacity = cross.on && cross.p < 0.04 ? '1' : '0';
+      const skyCity = transit ? state.city : (mix < 0.5 ? 'blr' : 'nyc');
+      const m = transit ? minutesIn(skyCity) : ((Math.round(t) % 1440) + 1440) % 1440;
+      document.documentElement.style.setProperty('--sky', skyAt(Math.floor(m / 60)));
+    }
+
+    // Scroll to cross: the card pins in place and turns once while you scroll past it.
+    function layoutRunway() {
+      const hold = $('hold'), pin = $('pin');
+      hold.style.height = '';
+      const pinH = pin.offsetHeight;
+      cross.on = !reduce && pinH < innerHeight - 24;
+      hold.classList.toggle('runway', cross.on);
+      $('stage').classList.toggle('runway', cross.on);
+      if (!cross.on) { cross.p = 0; return; }
+      cross.runway = Math.round(innerHeight * 0.7);
+      cross.top = Math.max(12, Math.round((innerHeight - pinH) / 2));
+      hold.style.setProperty('--pin-top', cross.top + 'px');
+      hold.style.height = pinH + cross.runway + 'px';
+    }
+    let scrollQueued = false;
+    function onScroll() {
+      if (!cross.on || scrollQueued) return;
+      scrollQueued = true;
+      requestAnimationFrame(() => {
+        scrollQueued = false;
+        const p = Math.min(1, Math.max(0, (cross.top - $('hold').getBoundingClientRect().top) / cross.runway));
+        if (Math.abs(p - cross.p) < 0.002) return;
+        cross.p = p;
+        applyTurn(false);
+      });
+    }
+    // Jumping back to the card lands at the top of the runway, so your city is up.
+    function toStage() {
+      if (!cross.on) { $('feature').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' }); return; }
+      window.scrollTo({ top: window.scrollY + $('hold').getBoundingClientRect().top - cross.top, behavior: reduce ? 'auto' : 'smooth' });
+    }
+
+    // The hidden line writes itself in: one half, a breath, then the other.
+    let typing = 0;
+    function typeLine(a, b, instant) {
+      const tok = ++typing, s1 = $('f-s1'), s2 = $('f-s2');
+      if (instant || reduce) { s1.textContent = a; s2.textContent = b; return; }
+      s1.textContent = ''; s2.textContent = '';
+      const run = (el, text, i, next) => {
+        if (tok !== typing) return;
+        el.textContent = text.slice(0, i);
+        if (i < text.length) setTimeout(() => run(el, text, i + 1, next), 22);
+        else if (next) setTimeout(next, 260);
+      };
+      setTimeout(() => run(s1, a, 1, () => run(s2, b, 1)), 380);
+    }
+
+    function pauseAll(p) {
+      document.querySelectorAll('svg[data-card]').forEach((s) => {
+        if (typeof s.pauseAnimations !== 'function') return;
+        p ? s.pauseAnimations() : s.unpauseAnimations();
+      });
+    }
+
+    // The deck: every card face down, one row per suit, Jokers last.
+    const pip = (suit, fill) => `<svg viewBox="-7 -7 14 14" aria-hidden="true"><path d="${pipPath[suit]}" fill="${fill}"/></svg>`;
+    const suitTheme = { heart: 'Belonging', diamond: 'Ambition', club: 'Streets', spade: 'Weather and time' };
+    const thumbs = {};
+    function label(item) { return item.kind === 'card' ? `${item.rankName} of ${T.SUIT_NAME[item.suit]}, ${item.title}` : `Joker, ${item.title}`; }
+    const revealed = new Set();
+    function reveal(id) {
+      if (!isJoker(id) && !turned.has(id)) {
+        turned.add(id);
+        saveTurned();
+        updateProgress(true);
+      }
+      revealed.add(id);
+      const b = thumbs[id];
+      if (!b || b.classList.contains('revealed')) return;
+      b.querySelector('.front').innerHTML = render(id, { static: true });
+      b.classList.add('revealed');
+      b.setAttribute('aria-label', label(all.find((x) => x.id === id)));
+    }
+    // Tap a suit in House rules: its cards fan out face down, bigger.
+    let openSuitId = null;
+    function openSuit(suit) {
+      const same = openSuitId === suit;
+      openSuitId = same ? null : suit;
+      document.querySelectorAll('#suits .suit').forEach((b) => b.setAttribute('aria-expanded', String(b.dataset.suit === openSuitId)));
+      Object.keys(thumbs).forEach((k) => delete thumbs[k]);
+      $('fan').innerHTML = '';
+      $('spread').hidden = !openSuitId;
+      $('b-all').setAttribute('aria-pressed', 'false');
+      if (!openSuitId) return;
+      Snd.riffle && Snd.riffle();
+      const items = all.filter((x) => x.suit === suit), n = items.length;
+      $('spread-name').textContent = `${T.SUIT_NAME[suit]} · ${suitTheme[suit]} · face down until you tap`;
+      items.forEach((item, i) => {
+          const b = document.createElement('button');
+        b.type = 'button'; b.className = 'thumb'; b.dataset.id = item.id;
+        b.style.setProperty('--d', `${i * 35}ms`);
+        b.setAttribute('aria-label', 'Face-down card');
+        b.innerHTML = `<span class="flip"><span class="side back">${render('back', { static: true })}</span><span class="side front"></span></span>`;
+        b.addEventListener('click', () => {
+          const fresh = !b.classList.contains('revealed');
+          reveal(item.id);
+          if (fresh) Snd.flick && Snd.flick();
+          setFeature(item.id, true, cross.on ? 0 : null);
+          toStage();
+        });
+        thumbs[item.id] = b;
+        $('fan').appendChild(b);
+        if (revealed.has(item.id)) reveal(item.id);
+      });
+      $('fan').parentNode.scrollLeft = 0;
+      arcFan();
+      $('spread').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' });
+    }
+    // Each card's lean comes from where it sits in the window, so a swipe rolls the arc along.
+    function arcFan() {
+      const wrap = $('fan').parentNode, mid = wrap.clientWidth / 2;
+      Object.values(thumbs).forEach((t) => {
+        const d = Math.max(-1.3, Math.min(1.3, (t.offsetLeft - wrap.scrollLeft + t.offsetWidth / 2 - mid) / mid));
+        t.style.setProperty('--r', `${(d * 15).toFixed(1)}deg`);
+        t.style.setProperty('--y', `${(d * d * 34).toFixed(1)}px`);
+      });
+    }
+    let fanQueued = false;
+    $('fan').parentNode.addEventListener('scroll', () => {
+      if (fanQueued) return;
+      fanQueued = true;
+      requestAnimationFrame(() => { fanQueued = false; arcFan(); });
+    }, { passive: true });
+
+    // The Jokers wait face down too. Turned over, they play.
+    ['j-dep', 'j-ret'].forEach((el) => {
+      const b = $(el), id = b.dataset.id;
+      b.querySelector('.back').innerHTML = render('back', { static: true });
+      b.addEventListener('click', () => {
+        if (b.classList.contains('revealed')) return;
+        if (!jokersOpen()) {
+          $('joker-lock').textContent = `Locked. Turn all 52 cards first. ${52 - turnedCount()} to go.`;
+          b.animate && !reduce && b.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(6px)' }, { transform: 'translateX(0)' }], { duration: 300 });
+          return;
+        }
+        b.querySelector('.front').innerHTML = render(id, { static: reduce });
+        b.classList.add('revealed');
+        $('tease').hidden = true;
+        b.setAttribute('aria-label', `Joker, ${id === 'departure' ? 'The Departure' : 'The Return'}`);
+        Snd.flick && Snd.flick();
+      });
+    });
+
+    const suits = [
+      { s: 'heart', name: 'Hearts', theme: 'Belonging', d: 'The aunty, the istriwala, the bodega cat and everyone else who knows your business.', ex: 'Cubbon Park × Central Park · Darshini × diner' },
+      { s: 'diamond', name: 'Diamonds', theme: 'Ambition', d: 'Shuttle buses, salad lines and the night shift that pays the rent.', ex: 'Night shift × Midtown stand-up · Silk Board × Cross Bronx' },
+      { s: 'club', name: 'Clubs', theme: 'Streets', d: 'Potholes with names, horns with opinions and a snack at four.', ex: 'Auto × cab · St. Mark\'s Road × St. Marks Place' },
+      { s: 'spade', name: 'Spades', theme: 'Weather and time', d: 'Monkey caps at fifteen degrees and other seasonal emergencies.', ex: 'The April storm × the first snow · Majestic × Port Authority' }
+    ];
+    const pipPath = {
+      heart: 'M0,5.6 C-1.2,4 -6,1.2 -6,-2 C-6,-5 -2.4,-6.4 0,-3.5 C2.4,-6.4 6,-5 6,-2 C6,1.2 1.2,4 0,5.6 Z',
+      diamond: 'M0,-6.2 L4.3,0 L0,6.2 L-4.3,0 Z',
+      club: 'M0,-6 A2.7,2.7 0 1 1 0.01,-6 Z M-3,-0.6 A2.7,2.7 0 1 1 -2.99,-0.6 Z M3,-0.6 A2.7,2.7 0 1 1 3.01,-0.6 Z M-0.8,0.6 L-1.9,6.2 L1.9,6.2 L0.8,0.6 Z',
+      spade: 'M0,-6.2 C1,-4 6,-1.6 6,1.6 C6,4.1 3,5 0.9,3.3 L1.9,6.2 L-1.9,6.2 L-0.9,3.3 C-3,5 -6,4.1 -6,1.6 C-6,-1.6 -1,-4 0,-6.2 Z'
+    };
+    $('suits').innerHTML = suits.map((x) => `<button type="button" class="suit" data-suit="${x.s}" aria-expanded="false" aria-controls="spread"><span class="pile" aria-hidden="true"><span>${render('back', { static: true })}</span><span>${render('back', { static: true })}</span><span>${render('back', { static: true })}</span></span><span class="label">${x.name} · ${all.filter((c) => c.suit === x.s).length} cards</span><h3><svg viewBox="-7 -7 14 14" aria-hidden="true"><path d="${pipPath[x.s]}" fill="${x.s === 'heart' || x.s === 'diamond' ? 'var(--vermilion)' : 'var(--ivory)'}"/></svg>${x.theme}</h3><p>${x.d}</p><p class="ex">${x.ex}</p></button>`).join('');
+    document.querySelectorAll('#suits .suit').forEach((b) => b.addEventListener('click', () => openSuit(b.dataset.suit)));
+    $('hours').innerHTML = ['2', '3', '4', '5', '6', '7', '8', '9', '10'].map((r) => `<span><b>${r}</b> ${T.HOURS[r]}</span>`).join('');
+
+    $('b-sound').addEventListener('click', () => {
+      const on = !Snd.enabled;
+      if (on) { Snd.enable(); follow(); } else Snd.disable();
+      showWave(on);
+      $('b-sound').setAttribute('aria-pressed', String(on));
+      $('b-sound').setAttribute('aria-label', on ? 'Sound off' : 'Sound on');
+      $('status').textContent = on
+        ? (state.still ? 'Sound plays with the moving card. Turn off the print frame.' : 'Sound on. It follows the card on stage.')
+        : '';
+    });
+    // Tap the card to turn it around, like a real one. Your city's side comes back on the next card.
+    function turnCard() {
+      state.base = !state.base;
+      applyTurn(true);
+      const nycUp = state.turned;
+      $('status').textContent = isJoker(state.id)
+        ? (state.turned ? 'Careful. That\'s coffee on the ceiling.' : 'Right way up. Coffee back in the cup.')
+        : (nycUp ? 'New York side up. Read the seam.' : 'Bengaluru side up. Read the seam.');
+    }
+    $('feature').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); turnCard(); }
+    });
+    $('b-play').addEventListener('click', () => {
+      state.paused = !state.paused;
+      pauseAll(state.paused);
+      $('b-play').setAttribute('aria-pressed', String(state.paused));
+      $('b-play').setAttribute('aria-label', state.paused ? 'Play the animation' : 'Pause the animation');
+    });
+    $('b-print').addEventListener('click', () => {
+      state.still = !state.still;
+      $('b-print').setAttribute('aria-pressed', String(state.still));
+      setFeature(state.id);
+      $('print-row').hidden = !state.still;
+      $('status').textContent = state.still ? 'The still that goes to the printer. Trim 2.5 × 3.5 in, bleed 0.125 in.' : '';
+    });
+    // Print-ready PDFs are published next to the page in print/.
+    async function savePdf(file, name) {
+      if (!dl) { $('status').textContent = 'Saving files is off in this view. The PDFs are in the repo under prototype/print.'; return; }
+      try {
+        $('status').textContent = 'Getting the PDF ready.';
+        const blob = await (await fetch('print/' + file)).blob();
+        await dl.save({ filename: name, data: blob });
+        $('status').textContent = 'Saved.';
+      } catch (e) {
+        $('status').textContent = e && e.code === 'declined' ? 'No problem. It is here whenever you want it.' : 'That did not save. The PDFs are also in the repo under prototype/print.';
+      }
+    }
+    $('b-pdf-card').addEventListener('click', () => {
+      const item = all.find((x) => x.id === state.id);
+      savePdf(`${state.id}.pdf`, `${item.title.replace(/[^A-Za-z0-9 ]/g, '').trim().replace(/ +/g, '-').toLowerCase()}.pdf`);
+    });
+    $('b-pdf-deck').addEventListener('click', () => savePdf('a-tale-of-two-cities-deck.pdf', 'a-tale-of-two-cities-deck.pdf'));
+
+    // Opening: a riffle shuffle, twice. Then the deck goes into orbit and you pick a card.
+    // A shared link skips the orbit and deals its card straight to the stage.
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    let backUrl = null;
+    const backImg = () => backUrl || (backUrl = URL.createObjectURL(new Blob([T.render('back', { standalone: true, static: true, uid: '-img' })], { type: 'image/svg+xml' })));
+    async function shuffle() {
+      const linked = linkedCard();
+      state.linked = !!linked;
+      if (reduce || !document.body.animate) { const pick = linked || dealNow(); setFeature(pick, false); dealtNote(pick, linked); return; }
+      const ov = document.createElement('div');
+      ov.className = 'intro';
+      ov.innerHTML = `<button type="button" class="skip">${linked ? 'Skip' : 'Deal for me'}</button><div class="deck"></div><div class="cap"><b>A Tale of Two Cities</b><span class="label">Shuffling</span></div>`;
+      document.body.appendChild(ov);
+      const deck = ov.querySelector('.deck');
+      const N = 14, cards = [];
+      for (let i = 0; i < N; i++) {
+        const c = document.createElement('div');
+        c.className = 'c'; c.innerHTML = render('back', { static: true });
+        c.style.transform = `translate(0, ${-i * 0.8}px)`;
+        deck.appendChild(c); cards.push(c);
+      }
+      let done = false, stopOrbit = null;
+      const finish = (pick, note) => {
+        if (done) return;
+        done = true;
+        if (stopOrbit) stopOrbit();
+        removeEventListener('keydown', onKey);
+        ov.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 320, easing: 'ease-out' }).onfinish = () => ov.remove();
+        setFeature(pick, true);
+        note();
+      };
+      const deal = () => finish(linked || dealNow(), () => dealtNote(state.id, linked));
+      const onKey = (e) => { if (e.key === 'Escape') deal(); };
+      addEventListener('keydown', onKey);
+      ov.querySelector('.skip').addEventListener('click', deal);
+      const base = (i) => `translate(0, ${-i * 0.8}px) rotate(0deg)`;
+      const split = (i) => `translate(${i % 2 ? 58 : -58}%, ${-i * 0.8 + 6}px) rotate(${i % 2 ? 8 : -8}deg)`;
+      const go = (fn, opt) => Promise.all(cards.map((c, i) => c.animate(fn(i), Object.assign({ fill: 'forwards' }, typeof opt === 'function' ? opt(i) : opt)).finished));
+      // Fly a card from where it sits to the stage.
+      const land = async (from, flip) => {
+        const to = $('feature').getBoundingClientRect();
+        const c = document.createElement('div');
+        c.className = 'c';
+        c.innerHTML = `<img src="${backImg()}" alt="" style="display:block;width:100%;height:100%">`;
+        Object.assign(c.style, { inset: 'auto', position: 'fixed', left: from.left + 'px', top: from.top + 'px', width: from.width + 'px', height: from.height + 'px' });
+        ov.appendChild(c);
+        const dx = to.left - from.left, dy = to.top - from.top, s = to.width / from.width;
+        await c.animate([{ transform: 'none', transformOrigin: '0 0' }, { transform: `translate(${dx}px, ${dy}px) scale(${s}) ${flip ? 'rotateY(360deg)' : ''}`, transformOrigin: '0 0' }], { duration: 700, easing: 'cubic-bezier(0.5, 0, 0.1, 1)', fill: 'forwards' }).finished;
+      };
+      try {
+        await sleep(250);
+        for (let r = 0; r < 2 && !done; r++) {
+          Snd.riffle && Snd.riffle();
+          await go((i) => [{ transform: base(i) }, { transform: split(i) }], { duration: 380, easing: 'cubic-bezier(0.5, 0, 0.2, 1)' });
+          if (done) return;
+          await go((i) => [{ transform: split(i) }, { transform: base(i) }], (i) => ({ duration: 300, delay: (i % 2 ? i : N - i) * 22, easing: 'cubic-bezier(0.3, 0, 0.2, 1)' }));
+          await sleep(120);
+        }
+        if (done) return;
+        if (linked) {
+          ov.querySelector('.cap').animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' });
+          const from = cards[N - 1].getBoundingClientRect();
+          cards[N - 1].style.visibility = 'hidden';
+          await land(from, false);
+          finish(linked, () => dealtNote(linked, linked));
+          return;
+        }
+        const picked = await orbit(ov, deck, (stop) => { stopOrbit = stop; });
+        if (done || !picked) return;
+        Snd.flick && Snd.flick();
+        await land(picked.rect, true);
+        finish(picked.id, () => { $('status').textContent = 'Good pick.'; });
+      } catch (e) { if (!done) deal(); }
+    }
+
+    // The deck in orbit around the title. Drag to spin, tap a card to take it.
+    function orbit(ov, deck, onStop) {
+      return new Promise((resolve) => {
+        const R = Math.round(Math.min(innerWidth * 0.4, 470));
+        const N = Math.max(18, Math.min(52, Math.round((2 * Math.PI * R) / 46)));
+        const w = Math.round(Math.max(46, Math.min(84, ((2 * Math.PI * R) / N) * 1.25)));
+        const ids = all.filter((x) => x.kind === 'card').map((x) => x.id).sort(() => Math.random() - 0.5);
+        const stage = document.createElement('div');
+        stage.className = 'ring-stage';
+        stage.style.setProperty('--w', w + 'px');
+        stage.innerHTML = `<div class="ring"></div><div class="ring-title"><b>A Tale of <em>Two</em> Cities</b><span class="label">Pick a card · drag to spin</span></div>`;
+        const ring = stage.firstChild, title = stage.lastChild;
+        const src = backImg();
+        const slots = [];
+        for (let i = 0; i < N; i++) {
+          const b = document.createElement('button');
+          b.type = 'button'; b.className = 'rc';
+          b.style.setProperty('--w', w + 'px');
+          b.setAttribute('aria-label', `Face-down card ${i + 1}`);
+          b.innerHTML = `<img src="${src}" alt="">`;
+          const a = (360 / N) * i;
+          b.style.transform = `rotateY(${a}deg) translateZ(${R}px)`;
+          b.addEventListener('click', () => { if (!dragged) take(i, b); });
+          ring.appendChild(b); slots.push(b);
+          b.animate([{ transform: `rotateY(${a}deg) translateZ(0px) scale(0.3)`, opacity: 0 }, { transform: `rotateY(${a}deg) translateZ(${R}px)`, opacity: 1 }], { duration: 800, delay: i * 14, easing: 'cubic-bezier(0.2, 0.7, 0.3, 1)', fill: 'backwards' });
+        }
+        ov.querySelector('.cap').animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250, fill: 'forwards' });
+        deck.animate([{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(0.6)' }], { duration: 300, fill: 'forwards' });
+        ov.appendChild(stage);
+        let spin = 0, vel = 0, auto = 9, last = performance.now(), raf = 0, drag = null, dragged = false, live = true;
+        const frame = (now) => {
+          const dt = Math.min(0.05, (now - last) / 1000); last = now;
+          if (!drag) { spin += (auto + vel) * dt; vel *= Math.pow(0.04, dt); }
+          ring.style.transform = `rotateX(-12deg) rotateY(${spin}deg)`;
+          if (live) raf = requestAnimationFrame(frame);
+        };
+        raf = requestAnimationFrame(frame);
+        const move = (e) => {
+          if (!drag) return;
+          const dx = e.clientX - drag.x;
+          if (Math.abs(dx) > 6) dragged = true;
+          const now = performance.now();
+          vel = Math.max(-360, Math.min(360, ((e.clientX - drag.lx) * 0.3) / Math.max(0.008, (now - drag.t) / 1000))) - auto;
+          drag.lx = e.clientX; drag.t = now;
+          spin = drag.spin + dx * 0.3;
+        };
+        const up = () => { drag = null; setTimeout(() => { dragged = false; }, 0); };
+        stage.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, lx: e.clientX, t: performance.now(), spin }; dragged = false; vel = 0; });
+        addEventListener('pointermove', move);
+        addEventListener('pointerup', up);
+        addEventListener('pointercancel', up);
+        const stop = () => {
+          live = false; cancelAnimationFrame(raf);
+          removeEventListener('pointermove', move); removeEventListener('pointerup', up); removeEventListener('pointercancel', up);
+        };
+        onStop(stop);
+        function take(i, b) {
+          const rect = b.getBoundingClientRect();
+          stop();
+          slots.forEach((s) => { if (s !== b) s.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' }); });
+          title.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' });
+          b.style.visibility = 'hidden';
+          resolve({ id: ids[i % ids.length], rect });
+        }
+      });
+    }
+
+
+    // ---------- tabs: the deck on the homepage, the Jokers and Your turn on their own ----------
+    const VIEWS = { '': 'home', jokers: 'jokers', 'your-turn': 'turn' };
+    const HASH = { home: '', jokers: 'jokers', turn: 'your-turn' };
+    state.view = VIEWS[(location.hash || '').slice(1)] || 'home';
+    document.documentElement.dataset.view = state.view;
+    function setView(v, push) {
+      if (v === state.view && !push) return;
+      if (document.startViewTransition && !reduce && push) { document.startViewTransition(() => applyView(v, push)); return; }
+      applyView(v, push);
+    }
+    function applyView(v, push) {
+      state.view = v;
+      document.documentElement.dataset.view = v;
+      document.querySelectorAll('[data-in]').forEach((el) => { el.hidden = el.dataset.in !== v; });
+      document.querySelectorAll('.tabs a').forEach((a) => (a.dataset.tab === v ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
+      if (push) try { history.pushState(null, '', HASH[v] ? '#' + HASH[v] : (v === 'home' ? `#${state.id}` : location.pathname)); } catch (e) { /* file view */ }
+      window.scrollTo(0, 0);
+      if (v === 'home') { layoutRunway(); onScroll(); if (openSuitId) arcFan(); }
+    }
+    document.querySelectorAll('.tabs a').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); if (a.dataset.tab !== state.view) setView(a.dataset.tab, true); }));
+    addEventListener('popstate', () => setView(VIEWS[(location.hash || '').slice(1)] || 'home', false));
+
+    // ---------- small motions: ink under the cursor, magnetic buttons, rolling numbers, the road ----------
+    const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
+    if (finePointer && !reduce) {
+      $('stage').addEventListener('pointermove', (e) => {
+        const r = $('ink').getBoundingClientRect();
+        $('ink').style.setProperty('--mx', `${e.clientX - r.left}px`);
+        $('ink').style.setProperty('--my', `${e.clientY - r.top}px`);
+      });
+      $('stage').addEventListener('pointerleave', () => { $('ink').style.setProperty('--mx', '-999px'); });
+      // The round buttons lean toward the cursor when it comes close.
+      const navs = [...document.querySelectorAll('.stepper .nav')];
+      $('pin').addEventListener('pointermove', (e) => navs.forEach((b) => {
+        const r = b.getBoundingClientRect(), dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2), d = Math.hypot(dx, dy);
+        b.style.translate = d < 70 ? `${(dx * 0.22).toFixed(1)}px ${(dy * 0.22).toFixed(1)}px` : '0 0';
+      }));
+      $('pin').addEventListener('pointerleave', () => navs.forEach((b) => { b.style.translate = '0 0'; }));
+    }
+    // Numbers roll up to their value.
+    function rollTo(el, n) {
+      const from = Number(el.dataset.n || 0);
+      el.dataset.n = n;
+      if (reduce || from === n) { el.textContent = n.toLocaleString('en-IN'); return; }
+      const t0 = performance.now(), dur = 1200;
+      const step = (now) => {
+        const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+        el.textContent = Math.round(from + (n - from) * e).toLocaleString('en-IN');
+        if (k < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+    // The road: the auto heads right, the cab heads left, and they pass in the middle.
+    {
+      const ctx = { still: true, a: () => '', id: 'road' };
+      const car = (cls, art) => `<svg class="${cls}" viewBox="-36 -50 72 60" overflow="visible">${art}</svg>`;
+      $('road').innerHTML = car('auto', T.kit.autoRickshaw(ctx, '')) + car('cab', T.kit.yellowCab(ctx, '', ''));
+      const roadWidth = () => $('road').style.setProperty('--w', $('road').clientWidth + 'px');
+      roadWidth(); addEventListener('resize', roadWidth);
+    }
+
+    // ---------- the sound, drawn ----------
+    let waveRaf = 0, waveBuf = null;
+    function drawWave() {
+      const c = $('wave'), g = c.getContext('2d'), dpr = devicePixelRatio || 1, w = c.clientWidth, hgt = 36;
+      if (c.width !== Math.round(w * dpr)) { c.width = Math.round(w * dpr); c.height = hgt * dpr; }
+      g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      g.clearRect(0, 0, w, hgt);
+      waveBuf = Snd.wave ? Snd.wave(waveBuf) : null;
+      if (waveBuf) {
+        const step = waveBuf.length / w, mid = hgt / 2;
+        g.beginPath();
+        for (let x = 0; x <= w; x++) {
+          const v = Math.max(-1, Math.min(1, waveBuf[Math.floor(x * step)] * 3.2));
+          const y = mid - v * (mid - 2) * Math.sin((Math.PI * x) / w);
+          x ? g.lineTo(x, y) : g.moveTo(x, y);
+        }
+        g.strokeStyle = '#f2b330'; g.lineWidth = 1.5; g.lineJoin = 'round'; g.stroke();
+      }
+      waveRaf = requestAnimationFrame(drawWave);
+    }
+    function showWave(on) {
+      cancelAnimationFrame(waveRaf);
+      $('wave').hidden = !on || reduce;
+      if (on && !reduce) waveRaf = requestAnimationFrame(drawWave);
+      layoutRunway();
+    }
+
+    // ---------- the loupe: hover on a computer, press and hold on a phone ----------
+    const ZOOM = 3, LENS = 150;
+    let lensKey = null, loupeTimer = null, holding = false;
+    function showLoupe(cx, cy, lift) {
+      const el = $('feature'), box = $('tilt').getBoundingClientRect(), W = el.offsetWidth, H = el.offsetHeight;
+      const x = cx - box.left, y = cy - box.top;
+      if (x < 0 || y < 0 || x > W || y > H) { hideLoupe(); return; }
+      const key = `${state.id}|${state.still}|${state.locked}`;
+      if (key !== lensKey) {
+        lensKey = key;
+        $('lens').innerHTML = render(state.locked ? 'back' : state.id, { static: state.still || state.locked });
+        const a = el.querySelector('svg'), b = $('lens').querySelector('svg');
+        if (a && b && a.getCurrentTime && b.setCurrentTime) { b.setCurrentTime(a.getCurrentTime()); if (state.paused) b.pauseAnimations(); }
+      }
+      const lens = $('lens');
+      lens.style.width = W * ZOOM + 'px'; lens.style.height = H * ZOOM + 'px';
+      lens.style.transform = el.style.transform;
+      lens.style.left = LENS / 2 - x * ZOOM + 'px'; lens.style.top = LENS / 2 - y * ZOOM + 'px';
+      $('loupe').style.left = x + 'px'; $('loupe').style.top = y - (lift || 0) + 'px';
+      $('loupe').hidden = false;
+    }
+    function hideLoupe() { clearTimeout(loupeTimer); $('loupe').hidden = true; }
+    $('tilt').addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') { if (holding) showLoupe(e.clientX, e.clientY, 90); return; }
+      if (!$('loupe').hidden) { showLoupe(e.clientX, e.clientY); return; }
+      clearTimeout(loupeTimer);
+      loupeTimer = setTimeout(() => showLoupe(e.clientX, e.clientY), 260);
+    });
+    $('tilt').addEventListener('pointerleave', hideLoupe);
+    $('feature').addEventListener('contextmenu', (e) => { if (holding || matchMedia('(hover: none)').matches) e.preventDefault(); });
+
+    // ---------- your deck, all of it ----------
+    function openWall() {
+      const back = $('b-wall');
+      const ov = document.createElement('div');
+      ov.className = 'wall';
+      ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'Your deck');
+      ov.innerHTML = `<div class="wall-head"><div class="wall-title"><span class="label">Your deck</span><h2>${turned.size} of 52 turned</h2><div class="stickers" aria-label="Stickers for finished suits"></div></div><button type="button" class="wall-x">Close</button></div><div class="wall-grid"></div>`;
+      const seen = store.get('stickers', []);
+      ov.querySelector('.stickers').innerHTML = suits.map((s, i) => {
+        const got = suitDone(s.s), fresh = got && !seen.includes(s.s);
+        return `<span class="sticker${got ? '' : ' empty'}${fresh && !reduce ? ' new' : ''}" style="--rot:${[-8, 5, -3, 9][i]}deg" title="${got ? `${s.name} done` : `Finish ${s.name} to earn this`}" role="img" aria-label="${got ? `${s.name} sticker` : `${s.name} sticker, not yet earned`}"><svg viewBox="-7 -7 14 14" aria-hidden="true"><path d="${pipPath[s.s]}" fill="${!got ? '#a8a294' : s.s === 'heart' || s.s === 'diamond' ? '#e2553c' : '#12151f'}"/></svg></span>`;
+      }).join('');
+      store.set('stickers', suits.filter((s) => suitDone(s.s)).map((s) => s.s));
+      const grid = ov.querySelector('.wall-grid');
+      let n = 0;
+      const tile = (item, face, lock) => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'tile' + (face ? '' : ' down');
+        b.style.setProperty('--d', `${Math.min(n++, 60) * 10}ms`);
+        b.innerHTML = face ? render(item.id, { static: true }) : `<img src="${backImg()}" alt="">${lock ? '<span class="lockmark"><span>Locked</span></span>' : ''}`;
+        b.setAttribute('aria-label', face ? label(item) : (lock ? 'Locked Joker' : 'Face-down card'));
+        b.addEventListener('click', () => {
+          if (lock) { b.animate && !reduce && b.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-5px)' }, { transform: 'translateX(5px)' }, { transform: 'translateX(0)' }], { duration: 300 }); return; }
+          close();
+          Snd.flick && Snd.flick();
+          if (state.view !== 'home') setView('home', true);
+          setFeature(item.id, true, cross.on ? 0 : null);
+          toStage();
+        });
+        grid.appendChild(b);
+      };
+      suits.forEach((s) => {
+        const items = all.filter((x) => x.kind === 'card' && x.suit === s.s);
+        const head = document.createElement('span');
+        head.className = 'label wall-suit';
+        head.textContent = `${s.name} · ${items.filter((x) => turned.has(x.id)).length} / ${items.length}`;
+        grid.appendChild(head);
+        items.forEach((item) => tile(item, turned.has(item.id)));
+      });
+      const jh = document.createElement('span'); jh.className = 'label wall-suit'; jh.textContent = 'Jokers';
+      grid.appendChild(jh);
+      all.filter((x) => x.kind === 'joker').forEach((item) => tile(item, jokersOpen(), !jokersOpen()));
+      const onKey = (e) => { if (e.key === 'Escape') close(); };
+      function close() {
+        ov.remove(); removeEventListener('keydown', onKey);
+        document.documentElement.style.overflow = '';
+        back.focus({ preventScroll: true });
+      }
+      ov.querySelector('.wall-x').addEventListener('click', close);
+      addEventListener('keydown', onKey);
+      document.documentElement.style.overflow = 'hidden';
+      document.body.appendChild(ov);
+      ov.querySelector('.wall-x').focus();
+    }
+    $('b-wall').addEventListener('click', openWall);
+
+    // ---------- scrub the day: ranks keep time, so dragging through the hours deals the suit's day ----------
+    const RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', '10'];
+    const HOUR_OF = { '2': 6, '3': 8, '4': 10, '5': 12, '6': 14, '7': 16, '8': 18, '9': 20, '10': 23 };
+    let scrubId = null, skyBack = null;
+    function scrubTo(i, byHand) {
+      const rank = RANKS[i], cur = all.find((x) => x.id === state.id);
+      const suit = cur && cur.kind === 'card' ? cur.suit : 'heart';
+      const card = all.find((x) => x.kind === 'card' && x.suit === suit && x.rank === rank);
+      scrubId = card.id;
+      $('scrub-card').innerHTML = render(card.id, { static: true });
+      $('scrub-card').setAttribute('aria-label', `Show ${card.title}`);
+      const out = $('scrub-out');
+      out.textContent = `${T.HOURS[rank].replace('NOON', 'Noon')} `;
+      const t = document.createElement('span'); t.textContent = card.title; out.appendChild(t);
+      if (byHand) {
+        document.documentElement.style.setProperty('--sky', skyAt(HOUR_OF[rank]));
+        clearTimeout(skyBack); skyBack = setTimeout(clockAndSky, 6000);
+      }
+    }
+    $('scrub').addEventListener('input', (e) => { scrubTo(Number(e.target.value), true); Snd.flick && Snd.flick(); });
+    $('scrub-card').addEventListener('click', () => { if (!scrubId) return; setFeature(scrubId, true, cross.on ? 0 : null); toStage(); });
+
+    // ---------- personal: clocks, your city, the card for right now ----------
+    const store = {
+      get(k, d) { try { const v = localStorage.getItem('tale.' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+      set(k, v) { try { localStorage.setItem('tale.' + k, JSON.stringify(v)); } catch (e) { /* storage off */ } }
+    };
+    const TZ = { blr: 'Asia/Kolkata', nyc: 'America/New_York' };
+    const CITY_NAME = { blr: 'Bengaluru', nyc: 'New York' };
+    const guessCity = () => { try { return /^America\//.test(Intl.DateTimeFormat().resolvedOptions().timeZone) ? 'nyc' : 'blr'; } catch (e) { return 'blr'; } };
+    state.city = store.get('city', guessCity());
+    state.kn = store.get('kn', false);
+    const timeIn = (city) => new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', timeZone: TZ[city] }).format(new Date());
+    const hourIn = (city) => Number(new Intl.DateTimeFormat('en-US', { hour: 'numeric', hourCycle: 'h23', timeZone: TZ[city] }).format(new Date())) % 24;
+    // Split-flap: each digit is its own tile, and only the ones that change flip.
+    function flap(el, text) {
+      const m = text.match(/^(\d+):(\d+)\s*([AP]M)$/);
+      if (!m) { el.textContent = text; return; }
+      const prev = el.dataset.t || '', chars = (m[1] + ':' + m[2]).split('');
+      el.innerHTML = chars.map((ch, i) => `<span class="${ch === ':' ? 'c' : 'd'}${prev && prev.length === chars.length && prev[i] !== ch && !reduce ? ' flip' : ''}">${ch}</span>`).join('') + `<span class="ap">${m[3]}</span>`;
+      el.dataset.t = chars.join('');
+    }
+    function tick() { flap($('clk-blr'), timeIn('blr')); flap($('clk-nyc'), timeIn('nyc')); }
+    tick(); setInterval(tick, 15000);
+    function setCity(c, announce) {
+      state.city = c; store.set('city', c);
+      $('city-blr').setAttribute('aria-pressed', String(c === 'blr'));
+      $('city-nyc').setAttribute('aria-pressed', String(c === 'nyc'));
+      if (announce && state.id) {
+        setFeature(state.id, true);
+        $('status').textContent = c === 'nyc' ? 'New York side up. Hello from the other side of the seam.' : 'Bengaluru side up. Namaskara.';
+      }
+    }
+    setCity(state.city, false);
+    $('city-blr').addEventListener('click', () => setCity('blr', true));
+    $('city-nyc').addEventListener('click', () => setCity('nyc', true));
+    // Ranks keep time, so the deal follows your clock.
+    function rankForHour(h) {
+      if (h < 5 || h >= 22) return '10';
+      if (h < 6) return 'A';
+      return ['2', '2', '3', '3', '4', '4', '5', '5', '6', '6', '7', '7', '8', '8', '9', '9'][h - 6];
+    }
+    function dealNow() {
+      const rank = rankForHour(hourIn(state.city));
+      const pool = all.filter((x) => x.kind === 'card' && x.rank === rank);
+      return pool[Math.floor(Math.random() * pool.length)].id;
+    }
+    let linkUsed = false;
+    function linkedCard() {
+      if (linkUsed) return null;
+      linkUsed = true;
+      const id = (location.hash || '').slice(1);
+      return all.some((x) => x.id === id) ? id : null;
+    }
+    function dealtNote(id, linked) {
+      if (linked) { $('status').textContent = 'Someone sent you this one.'; return; }
+      $('status').textContent = `Dealt for ${timeIn(state.city)} in ${CITY_NAME[state.city]}.`;
+    }
+
+    // ---------- collection: progress, the locked Jokers, the cat hunt ----------
+    const cardIds = new Set(all.filter((x) => x.kind === 'card').map((x) => x.id));
+    const turned = new Set((store.get('turned', []) || []).filter((id) => cardIds.has(id)));
+    const turnedCount = () => turned.size;
+    const suitDone = (suit) => all.filter((x) => x.kind === 'card' && x.suit === suit).every((x) => turned.has(x.id));
+    const jokersOpen = () => turned.size >= cardIds.size;
+    let celebrated = jokersOpen();
+    function saveTurned() { store.set('turned', [...turned]); logVisit(); }
+    function updateProgress(fresh) {
+      const n = turned.size, total = cardIds.size;
+      $('prog-label').textContent = `${n} / ${total} turned`;
+      $('prog-bar').style.width = `${(n / total) * 100}%`;
+      $('joker-lock').textContent = jokersOpen() ? '' : `Locked until you turn all ${total}.`;
+      document.querySelectorAll('.jflip').forEach((b) => b.classList.toggle('locked', !jokersOpen()));
+      $('tease').hidden = jokersOpen();
+      $('jring-n').textContent = String(total - n);
+      $('jring-arc').setAttribute('stroke-dasharray', `${((n / total) * 100).toFixed(1)} 100`);
+      if (fresh) suits.forEach((s) => {
+        const done = store.get('suitsDone', []);
+        if (suitDone(s.s) && !done.includes(s.s)) { store.set('suitsDone', [...done, s.s]); toast(`${s.name} done. There's a sticker for you on your deck wall.`); }
+      });
+      const cats = T.CATS.every((id) => turned.has(id));
+      $('cat-badge').hidden = !cats;
+      if (fresh && cats && !store.get('cats', false)) { store.set('cats', true); toast('Three cats found. The bodega union thanks you for your service.'); }
+      if (fresh && jokersOpen() && !celebrated) {
+        celebrated = true;
+        toast('All 52 turned. The Jokers tab is open.');
+      }
+    }
+    updateProgress(false);
+    $('b-reset').addEventListener('click', () => {
+      turned.clear(); saveTurned(); store.set('cats', false); store.set('suitsDone', []); store.set('stickers', []); celebrated = false;
+      document.querySelectorAll('.thumb.revealed').forEach((b) => b.classList.remove('revealed'));
+      revealed.clear();
+      updateProgress(false);
+      toast('Fresh deck. Every card is face down again.');
+    });
+    let toastTimer = null;
+    function toast(msg) {
+      let t = document.querySelector('.toast');
+      if (!t) { t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
+      t.textContent = msg; t.hidden = false;
+      clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 4200);
+    }
+    // Two words that mean something to locals.
+    let typed = '';
+    document.addEventListener('keydown', (e) => {
+      if (e.target.closest && e.target.closest('input, textarea')) return;
+      if (e.key.length !== 1) return;
+      typed = (typed + e.key.toLowerCase()).slice(-8);
+      if (typed.endsWith('macha')) toast('Enna macha, all good? Have a filter coffee on us.');
+      if (typed.endsWith('bodega')) toast('Chopped cheese is on the house. It isn\'t, but the cat says hi.');
+    });
+
+    // ---------- Kannada line ----------
+    function setKn(on) {
+      state.kn = on; store.set('kn', on);
+      $('b-kn').setAttribute('aria-pressed', String(on));
+      $('f-kn').hidden = !on || !$('f-kn').textContent;
+    }
+    setKn(state.kn);
+    $('b-kn').addEventListener('click', () => setKn(!state.kn));
+
+    // ---------- physical: tilt and glint ----------
+    const tilt = $('tilt');
+    function sweepGlint() {
+      if (reduce || !tilt.animate) return;
+      $('glint').animate([{ backgroundPosition: '120% 0' }, { backgroundPosition: '-20% 0' }], { duration: 900, easing: 'ease-out' });
+    }
+    // x and y run from -0.5 to 0.5. The card leans, the light moves, and the art slides behind the frame.
+    function setTilt(x, y) {
+      tilt.style.setProperty('--ry', `${(x * 12).toFixed(2)}deg`);
+      tilt.style.setProperty('--rx', `${(-y * 10).toFixed(2)}deg`);
+      tilt.style.setProperty('--gx', x || y ? `${(50 - x * 120).toFixed(1)}%` : '120%');
+      const s = Math.cos(angle() * Math.PI / 180) < 0 ? -1 : 1;
+      $('feature').style.setProperty('--px', `${(-x * 9 * s).toFixed(2)}px`);
+      $('feature').style.setProperty('--py', `${(-y * 9 * s).toFixed(2)}px`);
+    }
+    tilt.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse' || reduce) return;
+      const r = tilt.getBoundingClientRect();
+      setTilt((e.clientX - r.left) / r.width - 0.5, (e.clientY - r.top) / r.height - 0.5);
+    });
+    tilt.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') setTilt(0, 0); });
+    // On a phone, tilting the phone does it. iPhones ask first, so we ask on the first tap.
+    let rest = null, gyroAsked = false;
+    function onOrient(e) {
+      if (e.beta == null || e.gamma == null) return;
+      rest = rest == null ? e.beta : rest + (e.beta - rest) * 0.02;
+      const c = (v) => Math.max(-0.5, Math.min(0.5, v));
+      setTilt(c(e.gamma / 40), c((e.beta - rest) / 40));
+    }
+    function startGyro() {
+      if (gyroAsked || reduce || !window.DeviceOrientationEvent || !matchMedia('(hover: none)').matches) return;
+      gyroAsked = true;
+      const P = window.DeviceOrientationEvent.requestPermission;
+      if (typeof P === 'function') P().then((s) => { if (s === 'granted') addEventListener('deviceorientation', onOrient); }, () => {});
+      else addEventListener('deviceorientation', onOrient);
+    }
+    if (window.DeviceOrientationEvent && typeof window.DeviceOrientationEvent.requestPermission !== 'function') startGyro();
+
+    // ---------- shareable: a link per card, a story image ----------
+    const ARTIFACT = 'https://claude.ai/artifact/UQW9ejggK1W4hsSihkDiDQ';
+    const slug = (t) => t.replace(/[^A-Za-z0-9 ]/g, '').trim().replace(/ +/g, '-').toLowerCase();
+    function copyText(text, ok, el) {
+      const fail = () => {
+        const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); let done = false; try { done = document.execCommand('copy'); } catch (e) { done = false; } ta.remove();
+        $(el).textContent = done ? ok : `Copy this: ${text}`;
+      };
+      try { navigator.clipboard.writeText(text).then(() => { $(el).textContent = ok; }, fail); } catch (e) { fail(); }
+    }
+    const shareUrl = () => `${ARTIFACT}#${state.id}`;
+    $('b-share').addEventListener('click', () => {
+      const open = $('share-row').hidden;
+      $('share-row').hidden = !open;
+      $('b-share').setAttribute('aria-expanded', String(open));
+    });
+    $('b-native').hidden = !navigator.share;
+    $('b-native').addEventListener('click', () => {
+      const item = all.find((x) => x.id === state.id);
+      navigator.share({ title: `${item.title} · A Tale of Two Cities`, url: shareUrl() }).catch(() => {});
+    });
+    // QR code: hold your phone up so someone across the table can scan the card.
+    let qrLib = null;
+    const loadQr = () => qrLib || (qrLib = new Promise((res, rej) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js';
+      s.onload = () => res(window.qrcode); s.onerror = rej;
+      document.head.appendChild(s);
+    }));
+    $('b-qr').addEventListener('click', async () => {
+      let make;
+      try { make = await loadQr(); } catch (e) { $('status').textContent = 'The QR code did not load. Copy the link instead.'; return; }
+      const item = all.find((x) => x.id === state.id), url = shareUrl();
+      const q = make(0, 'M'); q.addData(url); q.make();
+      const ov = document.createElement('div');
+      ov.className = 'qr-sheet'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'QR code for this card');
+      ov.innerHTML = `<div class="qr-card"><span class="label">Scan to open</span><h2></h2><div class="qr-code">${q.createSvgTag({ cellSize: 4, margin: 2, scalable: true })}</div><p></p><button type="button">Done</button></div>`;
+      ov.querySelector('h2').textContent = item.title;
+      ov.querySelector('p').textContent = url.replace(/^https?:\/\//, '');
+      const svg = ov.querySelector('.qr-code svg'); if (svg) { svg.querySelectorAll('rect').forEach((r, i) => { if (i === 0) r.setAttribute('fill', '#f4ecdc'); }); svg.querySelectorAll('path').forEach((pa) => pa.setAttribute('fill', '#12151f')); }
+      const close = () => { ov.remove(); removeEventListener('keydown', onKey); $('b-qr').focus({ preventScroll: true }); };
+      const onKey = (e) => { if (e.key === 'Escape') close(); };
+      ov.addEventListener('click', (e) => { if (e.target === ov) close(); });
+      ov.querySelector('button').addEventListener('click', close);
+      addEventListener('keydown', onKey);
+      document.body.appendChild(ov);
+      ov.querySelector('button').focus();
+    });
+    $('b-link').addEventListener('click', () => copyText(shareUrl(), 'Link copied. It opens straight on this card for anyone you have shared the deck with.', 'status'));
+    let dl = null;
+    async function storyImage() {
+      const item = all.find((x) => x.id === state.id);
+      if (!dl) { $('status').textContent = 'Saving files is off in this view.'; return; }
+      $('status').textContent = 'Making your story image.';
+      const svg = T.render(state.id, { standalone: true, static: true, uid: '-story' });
+      const img = new Image();
+      const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
+      await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = url; });
+      const c = document.createElement('canvas'); c.width = 1080; c.height = 1920;
+      const g = c.getContext('2d');
+      g.fillStyle = '#12151f'; g.fillRect(0, 0, 1080, 1920);
+      g.strokeStyle = 'rgba(244,236,220,0.25)'; g.lineWidth = 2; g.strokeRect(40, 40, 1000, 1840);
+      g.fillStyle = '#a8a294'; g.font = '700 30px "Archivo Narrow", sans-serif'; g.textAlign = 'center';
+      g.fillText('A  TALE  OF  TWO  CITIES', 540, 140);
+      g.save(); g.shadowColor = 'rgba(0,0,0,0.6)'; g.shadowBlur = 50; g.shadowOffsetY = 24;
+      g.drawImage(img, 165, 220, 750, 1050); g.restore();
+      g.fillStyle = '#f4ecdc'; g.font = '500 76px "Bodoni Moda", serif'; g.fillText(item.title, 540, 1420);
+      const line = item.kind === 'card' ? item.sentence : ['Funny how you can miss', 'two places at once.'];
+      g.font = 'italic 500 50px "Bodoni Moda", serif'; g.fillStyle = '#f4ecdc'; g.fillText(line[0], 540, 1530);
+      g.fillStyle = '#f2b330'; g.fillText(line[1], 540, 1600);
+      g.fillStyle = '#a8a294'; g.font = 'italic 500 36px "Cormorant Garamond", serif'; g.fillText('For anyone whose phone shows two clocks.', 540, 1780);
+      URL.revokeObjectURL(url);
+      const blob = await new Promise((r) => c.toBlob(r, 'image/png'));
+      try { await dl.save({ filename: `${slug(item.title)}-story.png`, data: blob }); $('status').textContent = 'Saved. Go make your group chat jealous.'; }
+      catch (e) { $('status').textContent = e && e.code === 'declined' ? 'No problem.' : 'That did not save. Try again in a moment.'; }
+    }
+    $('b-story').addEventListener('click', () => { storyImage().catch(() => { $('status').textContent = 'The image did not come out. Try again in a moment.'; }); });
+
+    // ---------- polish: local check through comments ----------
+    let comments = null;
+    $('b-flag').addEventListener('click', async () => {
+      if (!comments) { $('status').textContent = 'Comments are off in this view.'; return; }
+      const r = await comments.openComposer({ element: $('feature') }).catch(() => ({ opened: false }));
+      $('status').textContent = r.opened ? 'Tell us what a local would say. The comment sticks to this card.' : 'Click the card once, then try again.';
+    });
+
+    // ---------- product, voting and numbers (shared data) ----------
+    let db = null, me = null, user = null, canWrite = null;
+    const noWrite = 'Only people with Contributor access can save here. Ask whoever sent you the link.';
+    async function savePdfTo(file, name, el) {
+      if (!dl) { $(el).textContent = 'Saving files is off in this view. The PDFs are in the repo under prototype/print.'; return; }
+      try {
+        $(el).textContent = 'Getting the PDF ready.';
+        const blob = await (await fetch('print/' + file)).blob();
+        await dl.save({ filename: name, data: blob });
+        $(el).textContent = 'Saved. Use the thickest card stock you can find.';
+      } catch (err) { $(el).textContent = err && err.code === 'declined' ? 'No problem. It is here whenever you want it.' : 'That did not save. Try again in a moment.'; }
+    }
+    // US Letter for anyone set to New York, A4 for everyone else.
+    $('b-home').addEventListener('click', () => {
+      const fmt = state.city === 'nyc' ? 'letter' : 'a4';
+      savePdfTo(`home-print-${fmt}.pdf`, `a-tale-of-two-cities-home-print-${fmt}.pdf`, 'status');
+    });
+
+    // Your turn: each person's pairings live in one document; votes in another.
+    let pairings = [], votes = {};
+    function renderPairings() {
+      const tally = {};
+      Object.values(votes).forEach((picks) => Object.keys(picks || {}).forEach((k) => { if (picks[k]) tally[k] = (tally[k] || 0) + 1; }));
+      const mine = (me && votes[me]) || {};
+      const rows = pairings.map((p) => ({ ...p, n: tally[p.key] || 0 })).sort((a, b) => b.n - a.n || (b.at || '').localeCompare(a.at || ''));
+      const list = $('pp-list');
+      if (!rows.length) { list.innerHTML = '<li class="pp-empty">Nothing here yet. Silk Board × the BQE is taken, sorry.</li>'; return rows; }
+      list.innerHTML = '';
+      const ids = [...new Set(rows.map((r) => r.by))];
+      const fill = (names) => rows.forEach((r) => {
+        const li = document.createElement('li');
+        const pair = document.createElement('span'); pair.className = 'pp-pair';
+        const a = document.createElement('span'); a.textContent = r.blr;
+        const x = document.createElement('span'); x.className = 'x'; x.textContent = '×';
+        const b = document.createElement('span'); b.textContent = r.nyc;
+        pair.append(a, x, b);
+        const meta = document.createElement('span'); meta.className = 'pp-meta';
+        meta.textContent = `${r.line ? `“${r.line}” · ` : ''}from ${(names[r.by] && names[r.by].name) || 'someone with taste'}`;
+        const v = document.createElement('button'); v.type = 'button'; v.className = 'pp-vote';
+        v.setAttribute('aria-pressed', String(!!mine[r.key]));
+        v.setAttribute('aria-label', `Vote for ${r.blr} and ${r.nyc}, ${r.n} votes`);
+        v.textContent = `${mine[r.key] ? 'Voted' : 'Vote'} · ${r.n}`;
+        v.addEventListener('click', () => vote(r.key));
+        li.append(pair, meta, v);
+        list.appendChild(li);
+      });
+      if (user) user.profiles(ids).then(fill, () => fill({})); else fill({});
+      return rows;
+    }
+    async function vote(key) {
+      if (!db || !me) { $('pp-status').textContent = 'Sign in to claude.ai to vote.'; return; }
+      if (canWrite === false) { $('pp-status').textContent = noWrite; return; }
+      const picks = { ...((votes[me]) || {}) };
+      picks[key] = !picks[key];
+      try { await db.doc(`votes/${me}`).set({ picks }); } catch (err) { $('pp-status').textContent = err && err.code === 'invalid_argument' ? noWrite : 'That vote did not stick. Try again.'; }
+    }
+    $('pp-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!db || !me) { $('pp-status').textContent = 'Sign in to claude.ai to add a pairing.'; return; }
+      if (canWrite === false) { $('pp-status').textContent = noWrite; return; }
+      const mineDoc = pairings.filter((p) => p.by === me).map(({ blr, nyc, line, at }) => ({ blr, nyc, line, at }));
+      if (mineDoc.length >= 3) { $('pp-status').textContent = 'Three each, so everyone gets a turn. Vote for someone else\'s.'; return; }
+      const item = { blr: $('pp-blr').value.trim().slice(0, 60), nyc: $('pp-nyc').value.trim().slice(0, 60), line: $('pp-line').value.trim().slice(0, 90), at: new Date().toISOString() };
+      if (!item.blr || !item.nyc) return;
+      try {
+        await db.doc(`pairings/${me}`).set({ items: [...mineDoc, item] });
+        $('pp-form').reset();
+        $('pp-status').textContent = 'Added. May the votes be kind.';
+      } catch (err) { $('pp-status').textContent = err && err.code === 'invalid_argument' ? noWrite : 'That did not save. Try again in a moment.'; }
+    });
+
+    // Visits: one document per person, written once per visit and when the deck moves forward.
+    let visitLogged = false, visitTimer = null;
+    function logVisit() {
+      if (!db || !me || canWrite === false) return;
+      clearTimeout(visitTimer);
+      visitTimer = setTimeout(async () => {
+        const ref = db.doc(`visits/${me}`);
+        try {
+          const snap = await ref.get();
+          const prev = snap.exists ? snap.data() : {};
+          await ref.set({ first: prev.first || new Date().toISOString(), last: new Date().toISOString(), visits: (prev.visits || 0) + (visitLogged ? 0 : 1) });
+          visitLogged = true;
+        } catch (err) { /* reads stay quiet */ }
+      }, 1500);
+    }
+
+    (async () => {
+      if (!window.claude || !window.claude.use) return;
+      window.claude.use('downloads').then((d) => { dl = d; }, () => {});
+      window.claude.use('comments').then((c) => { comments = c; }, () => {});
+      [db, user] = await Promise.all([window.claude.use('db').catch(() => null), window.claude.use('user').catch(() => null)]);
+      if (user) { me = await user.id().catch(() => null); canWrite = await user.can('data.write').catch(() => null); }
+      if (!db) return;
+      logVisit();
+      db.collection('pairings').onSnapshot((snap) => {
+        pairings = [];
+        snap.docs.forEach((d) => ((d.data() || {}).items || []).forEach((it, i) => pairings.push({ ...it, by: d.id, key: `${d.id}:${i}` })));
+        renderPairings();
+      }, () => {});
+      db.collection('votes').onSnapshot((snap) => {
+        votes = {}; snap.docs.forEach((d) => { votes[d.id] = (d.data() || {}).picks || {}; });
+        renderPairings();
+      }, () => {});
+      // One public number: how many people have visited.
+      db.collection('visits').onSnapshot((snap) => {
+        rollTo($('vcount'), snap.size);
+        $('vword').textContent = snap.size === 1 ? 'visitor' : 'visitors';
+        $('visitors').hidden = snap.size < 1;
+      }, () => {});
+    })();
+
+    if (reduce) { $('b-print').setAttribute('aria-pressed', 'true'); $('print-row').hidden = false; }
+    layoutRunway();
+    addEventListener('scroll', onScroll, { passive: true });
+    let resizeTimer = null;
+    addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { layoutRunway(); onScroll(); if (openSuitId) arcFan(); }, 150); });
+    setInterval(clockAndSky, 30000);
+
+    // A slow ticker of every pairing in the deck, twice over so it loops.
+    const tickerPairs = all.filter((x) => x.kind === 'card').map((x) => `<span>${x.pair[0]}<i>×</i>${x.pair[1]}</span>`).join('');
+    $('ticker').innerHTML = tickerPairs + tickerPairs;
+    if (reduce) $('ticker').style.animation = 'none';
+
+    // Sections slide in the first time you reach them.
+    if (!reduce && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => entries.forEach((en) => {
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      }), { rootMargin: '0px 0px -12% 0px' });
+      document.querySelectorAll('.ticker, .system, .jokers, .pairings').forEach((el) => { el.classList.add('reveal'); io.observe(el); });
+    }
+
+    // On a computer, a small chip by the cursor says what a click does.
+    if (matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      const chip = document.createElement('span');
+      chip.className = 'cursor-chip'; chip.setAttribute('aria-hidden', 'true'); chip.textContent = 'Click to turn';
+      document.body.appendChild(chip);
+      $('feature').addEventListener('pointermove', (e) => {
+        chip.style.transform = `translate(${e.clientX + 16}px, ${e.clientY + 18}px)`;
+        chip.classList.toggle('on', $('loupe').hidden);
+      });
+      $('feature').addEventListener('pointerleave', () => chip.classList.remove('on'));
+      $('feature').addEventListener('pointerdown', () => chip.classList.remove('on'));
+    }
+    { const r = rankForHour(hourIn(state.city)), i = RANKS.indexOf(r); $('scrub').value = String(i < 0 ? 4 : i); scrubTo(Number($('scrub').value), false); }
+    $('feature').innerHTML = render('back', { static: true });
+    if (state.view !== 'home') {
+      const v = state.view; state.view = 'home'; setView(v, false);
+      linkUsed = true; setFeature(dealNow(), false);
+    } else shuffle();
+
+    // Flip through the deck from the stage: arrows, arrow keys or a swipe.
+    function step(d) {
+      if (document.querySelector('.intro')) return;
+      const i = all.findIndex((x) => x.id === state.id);
+      const next = all[(i + d + all.length) % all.length];
+      Snd.flick && Snd.flick();
+      setFeature(next.id, true);
+    }
+    $('b-prev').addEventListener('click', () => step(-1));
+    $('b-next').addEventListener('click', () => step(1));
+    document.addEventListener('keydown', (e) => {
+      if (e.target.closest && e.target.closest('input, textarea')) return;
+      if (e.key === 'ArrowRight') step(1);
+      else if (e.key === 'ArrowLeft') step(-1);
+    });
+    // Swipe only when the gesture is clearly sideways, so scrolling never flips a card.
+    let swipe = null;
+    $('feature').addEventListener('pointerdown', (e) => {
+      swipe = { x: e.clientX, y: e.clientY };
+      if (e.pointerType !== 'mouse') {
+        clearTimeout(loupeTimer);
+        loupeTimer = setTimeout(() => { if (swipe) { holding = true; showLoupe(swipe.x, swipe.y, 90); } }, 450);
+      }
+    });
+    $('feature').addEventListener('pointercancel', () => { swipe = null; holding = false; hideLoupe(); });
+    $('feature').addEventListener('pointermove', (e) => {
+      if (swipe && !holding && Math.hypot(e.clientX - swipe.x, e.clientY - swipe.y) > 8) clearTimeout(loupeTimer);
+    });
+    $('feature').addEventListener('pointerup', (e) => {
+      if (e.pointerType !== 'mouse') clearTimeout(loupeTimer);
+      if (holding) { holding = false; hideLoupe(); swipe = null; return; }
+      if (!swipe) return;
+      const dx = e.clientX - swipe.x, dy = e.clientY - swipe.y; swipe = null;
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) { startGyro(); turnCard(); return; }
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5) step(dx < 0 ? 1 : -1);
+    });
+
+    $('b-shuffle').addEventListener('click', () => {
+      $('b-all').setAttribute('aria-pressed', 'false');
+      window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      $('feature').innerHTML = render('back', { static: true });
+      shuffle();
+    });
+    $('b-all').addEventListener('click', () => {
+      const on = $('b-all').getAttribute('aria-pressed') !== 'true';
+      $('b-all').setAttribute('aria-pressed', String(on));
+      Object.keys(thumbs).forEach((id, i) => {
+        if (on) setTimeout(() => reveal(id), reduce ? 0 : i * 40);
+        else if (id !== state.id) { thumbs[id].classList.remove('revealed'); revealed.delete(id); }
+      });
+    });
+  })();
+</script>
