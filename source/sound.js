@@ -600,6 +600,34 @@
     setTimeout(() => { c.nodes.forEach((n) => { try { n.stop(); } catch (e) { /* already stopped */ } }); c.bus.disconnect(); }, 900);
   }
 
+  // Spoken Kannada on the Bangalore side of a few cards, made by source/sarvam.js.
+  // [time in the loop, file, pan]. Missing files are skipped quietly.
+  const VOICES = {
+    'c-4': [[1.6, 'c4-adjust', -0.3]],
+    'c-6': [[1.4, 'c6-soppu', -0.4]],
+    'c-j': [[2.2, 'cj-right', -0.3]],
+    ride: [[8, 'ride-barlla', -0.35]],
+    usual: [[2.4, 'usual-bytwo', -0.3]]
+  };
+  const voiceBufs = {};
+  function voiceBuf(name) {
+    if (!voiceBufs[name]) voiceBufs[name] = fetch(`audio/voice/${name}.mp3`).then((r) => (r.ok ? r.arrayBuffer() : Promise.reject())).then((b) => ac.decodeAudioData(b)).catch(() => null);
+    return voiceBufs[name];
+  }
+  function addVoices(id, scene, bus) {
+    (VOICES[id] || []).forEach(([time, name, pan]) => {
+      const p = voiceBuf(name);
+      scene.events.push([time, (at) => p.then((buf) => {
+        if (!buf || !current || current.bus !== bus) return;
+        const s = ac.createBufferSource(); s.buffer = buf;
+        const g = ac.createGain(); g.gain.value = 0.9;
+        const pn = ac.createStereoPanner ? ac.createStereoPanner() : null;
+        if (pn) { pn.pan.value = pan; s.connect(g); g.connect(pn); pn.connect(bus); } else { s.connect(g); g.connect(bus); }
+        s.start(Math.max(at, ac.currentTime));
+      })]);
+    });
+  }
+
   function startScene(id, clock) {
     stopCurrent();
     const bus = ac.createGain(); bus.gain.value = 0; bus.connect(master);
@@ -607,6 +635,8 @@
     const S = kit(bus, nodes);
     const suit = { h: 'heart', d: 'diamond', c: 'club', s: 'spade' }[id[0]];
     const scene = SCENES[id] ? SCENES[id](S) : RECIPES[id] ? recipeScene(S, RECIPES[id]) : cityScene(S, suit);
+    scene.events = (scene.events || []).slice();
+    addVoices(id, scene, bus);
     current = { id, clock, bus, nodes, scene, last: null, prevP: null, idle: 0 };
   }
 

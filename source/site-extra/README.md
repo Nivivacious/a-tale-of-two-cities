@@ -46,6 +46,16 @@ curl -X DELETE -H "x-admin-key: YOUR_ADMIN_KEY" "https://YOUR-SITE.vercel.app/ap
 - `og/<id>.jpg`: those previews, one per card (made by `prototype/og-cards.js`)
 - `404.html`: the wrong-turn page
 
+## Kannada audio (Sarvam)
+
+The speaker button by "Read in ಕನ್ನಡ" and the Kannada street voices in a few soundtracks play files made with Sarvam. With a key from dashboard.sarvam.ai:
+
+```
+SARVAM_API_KEY=your_key node source/sarvam.js
+```
+
+It writes `audio/` (54 line readings, 5 street voices) and `source/docs/kannada-check.md` (each Kannada line translated back to English, plus Sarvam's spoken-Kannada version, for the native-speaker check). The key is only used on your machine; it never goes in the site. Until the files exist, the button stays hidden and the soundtracks play as before.
+
 ## Link previews and your domain
 
 Previews need full addresses, so the build writes them for `https://a-tale-of-two-cities-nine.vercel.app`. If the site moves to its own domain, rebuild with that address:

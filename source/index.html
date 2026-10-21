@@ -202,6 +202,10 @@
   .sentence-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
   .chip { font-family: var(--body); text-transform: none; letter-spacing: 0; font-size: 16px; padding: 6px 12px; border-color: var(--marigold); color: var(--marigold); }
   .chip span { font-family: 'Noto Sans Kannada', sans-serif; }
+  .kn-tools { display: inline-flex; gap: 8px; align-items: center; }
+  .chip.say { padding: 6px 10px; display: inline-grid; place-items: center; }
+  .chip.say svg { width: 16px; height: 16px; display: block; }
+  .chip.say.playing { background: var(--marigold); color: var(--table); }
   .chip[aria-pressed="true"] { background: var(--marigold); color: var(--table); }
   .kn { font-family: 'Noto Sans Kannada', sans-serif; font-size: 18px; line-height: 1.5; color: var(--ivory); }
   .lock { color: var(--marigold); font-style: italic; }
@@ -576,7 +580,7 @@
       <h2 id="f-title">The Ride Home</h2>
       <div class="pairing"><span id="f-a">Auto-rickshaw</span><span class="x" aria-hidden="true">×</span><span id="f-b">Yellow cab</span></div>
       <div class="sentence">
-        <div class="sentence-head"><span class="label">On the seam</span><button type="button" class="chip" id="b-kn" aria-pressed="false" aria-label="Read the line in Kannada">Read in <span lang="kn">ಕನ್ನಡ</span></button></div>
+        <div class="sentence-head"><span class="label">On the seam</span><span class="kn-tools"><button type="button" class="chip say" id="b-say" aria-label="Hear the line in Kannada" hidden><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3,7 H6 L10,3.5 V14.5 L6,11 H3 Z" fill="currentColor"/><path d="M12.5,6.2 Q14.4,9 12.5,11.8 M14.6,4.4 Q17.6,9 14.6,13.6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button><button type="button" class="chip" id="b-kn" aria-pressed="false" aria-label="Read the line in Kannada">Read in <span lang="kn">ಕನ್ನಡ</span></button></span></div>
         <span class="half" id="f-s1"></span>
         <span class="half b" id="f-s2"></span>
         <span class="kn" id="f-kn" lang="kn" hidden></span>
@@ -749,6 +753,7 @@
         $('f-why').textContent = 'No peeking.';
         $('f-title').textContent = item.title;
         $('f-kn').hidden = true;
+        $('b-say').hidden = true;
         $('pos').textContent = `${all.indexOf(item) + 1} / ${all.length}`;
         $('caption').hidden = true;
         document.querySelectorAll('.thumb').forEach((b) => b.setAttribute('aria-current', String(b.dataset.id === id)));
@@ -757,6 +762,8 @@
         return;
       }
       $('f-kn').textContent = T.KANNADA[id] || '';
+      try { if (knAudio) knAudio.pause(); } catch (e) { /* not set up yet */ }
+      if (typeof showSay === 'function') showSay();
       $('f-kn').hidden = !state.kn;
       $('caption').hidden = !Snd.enabled;
       $('caption').textContent = Snd.enabled ? `Listening to: ${(item.kind === 'card' ? item.sound : jokerInfo[id].sound).replace(/\.$/, '')}` : '';
@@ -1562,6 +1569,20 @@
       typed = (typed + e.key.toLowerCase()).slice(-8);
       if (typed.endsWith('macha')) toast('Enna macha, all good? Have a filter coffee on us.');
       if (typed.endsWith('bodega')) toast('Chopped cheese is on the house. It isn\'t, but the cat says hi.');
+    });
+
+    // ---------- Kannada line, read aloud (files made by source/sarvam.js) ----------
+    let knAudio = null, knFiles = null;
+    fetch('audio/manifest.json').then((r) => (r.ok ? r.json() : null)).then((m) => { knFiles = m && m.kn ? new Set(m.kn) : null; showSay(); }).catch(() => {});
+    function showSay() { $('b-say').hidden = !knFiles || !knFiles.has(state.id) || state.locked; }
+    $('b-say').addEventListener('click', () => {
+      if (knAudio && !knAudio.paused) { knAudio.pause(); return; }
+      knAudio = new Audio(`audio/kn/${state.id}.mp3`);
+      $('b-say').classList.add('playing');
+      const done = () => $('b-say').classList.remove('playing');
+      knAudio.onended = done; knAudio.onpause = done; knAudio.onerror = done;
+      knAudio.play().catch(done);
+      if (!state.kn) setKn(true);
     });
 
     // ---------- Kannada line ----------
