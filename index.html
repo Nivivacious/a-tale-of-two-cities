@@ -309,7 +309,45 @@
     .fan .thumb { scroll-snap-align: center; transition: none; }
   }
 
+  /* Loupe: a close look at the small print */
+  #feature { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+  .loupe { position: absolute; left: 0; top: 0; width: 150px; height: 150px; translate: -50% -50%; border-radius: 50%; overflow: hidden; pointer-events: none; z-index: 3; background: var(--ivory); box-shadow: 0 0 0 2px var(--ivory), 0 0 0 3px rgba(0, 0, 0, 0.4), 0 16px 34px -8px rgba(0, 0, 0, 0.85); }
+  .lens { position: absolute; left: 0; top: 0; }
+  .lens svg { display: block; width: 100%; height: 100%; }
+
+  /* The sound, drawn */
+  .wave { display: block; width: 100%; height: 36px; }
+
+  /* Your deck, all of it */
+  .deck-count { display: grid; gap: 2px; justify-items: start; padding: 0; border: 0; background: none; min-height: 0; text-align: left; text-transform: none; letter-spacing: 0; color: inherit; cursor: pointer; }
+  .deck-count u { text-underline-offset: 3px; }
+  .deck-count:hover u { color: var(--ivory); }
+  .wall { position: fixed; inset: 0; z-index: 55; background: var(--table); overflow-y: auto; overscroll-behavior: contain; padding-block: calc(20px + env(safe-area-inset-top, 0px)) calc(48px + env(safe-area-inset-bottom, 0px)); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .wall-head { max-width: 1120px; margin: 0 auto 8px; display: flex; justify-content: space-between; align-items: end; gap: 12px; flex-wrap: wrap; }
+  .wall-head h2 { font-size: clamp(28px, 4vw, 42px); }
+  .wall-grid { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(clamp(58px, 15vw, 82px), 1fr)); gap: 10px 8px; }
+  .wall-suit { grid-column: 1 / -1; margin-top: 18px; }
+  .tile { position: relative; padding: 0; border: 0; min-height: 0; background: none; aspect-ratio: 5 / 7; border-radius: 6% / 4.3%; overflow: hidden; box-shadow: 0 6px 14px -6px rgba(0, 0, 0, 0.8); animation: tile-in 0.4s cubic-bezier(0.2, 0.7, 0.3, 1) backwards; animation-delay: var(--d, 0ms); transition: translate 0.2s; }
+  .tile svg, .tile img { display: block; width: 100%; height: 100%; }
+  .tile:hover { translate: 0 -3px; }
+  .tile.down img { opacity: 0.7; transition: opacity 0.2s; }
+  .tile.down:hover img { opacity: 1; }
+  .tile .lockmark { position: absolute; left: 0; right: 0; bottom: 8%; text-align: center; font-family: var(--label); font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--table); }
+  .tile .lockmark span { background: var(--marigold); padding: 2px 6px; border-radius: 2px; }
+  @keyframes tile-in { from { opacity: 0; transform: translateY(12px) scale(0.96); } }
+
+  /* Scrub the day */
+  .scrub { display: flex; gap: 16px; align-items: center; margin-top: 14px; }
+  .scrub-card { flex: none; width: 84px; padding: 0; border: 0; min-height: 0; aspect-ratio: 5 / 7; border-radius: 6% / 4.3%; overflow: hidden; background: none; box-shadow: 0 10px 22px -10px rgba(0, 0, 0, 0.85); transition: translate 0.2s; }
+  .scrub-card:hover { translate: 0 -3px; }
+  .scrub-card svg { display: block; width: 100%; height: 100%; }
+  .scrub-ctl { display: grid; gap: 8px; flex: 1; min-width: 0; }
+  .scrub input[type="range"] { accent-color: var(--marigold); border: 0; padding: 0; width: 100%; }
+  .scrub output { font-family: var(--display); font-size: 21px; line-height: 1.2; }
+  .scrub output span { color: var(--muted); font-family: var(--body); font-style: italic; font-size: 17px; }
+
   @media (prefers-reduced-motion: reduce) {
+    .tile { animation: none; }
     .sky { transition: none; }
     #feature .par { transition: none; }
     .card { transition: none; }
@@ -332,7 +370,7 @@
         <button type="button" class="city" id="city-nyc" aria-pressed="false"><span>New York</span><b id="clk-nyc">--:--</b></button>
       </div>
       <div class="progress">
-        <span class="deck-count"><span class="label">Your deck</span><b id="prog-label">0 / 52 turned</b></span>
+        <button type="button" class="deck-count" id="b-wall" aria-haspopup="dialog"><span class="label">Your deck · <u>see all</u></span><b id="prog-label">0 / 52 turned</b></button>
         <span class="bar" aria-hidden="true"><i id="prog-bar"></i></span>
         <span id="cat-badge" hidden title="You found all three cats"><svg viewBox="0 0 24 24" aria-label="Cat badge"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z" fill="#f2b330"/><circle cx="10" cy="13" r="1" fill="#12151f"/><circle cx="14" cy="13" r="1" fill="#12151f"/></svg></span>
         <button type="button" class="linkish" id="b-reset">Start over</button>
@@ -345,12 +383,13 @@
       <div class="pin" id="pin">
       <div class="bigword" aria-hidden="true"><span id="bw"></span></div>
       <p class="cross" id="cross" aria-hidden="true"><svg viewBox="-12 -12 24 24"><circle r="10.5" fill="none" stroke="currentColor" stroke-width="1.2"/><line id="hand-h" y2="-5.5" stroke="#f4ecdc" stroke-width="1.8" stroke-linecap="round"/><line id="hand-m" y2="-8.2" stroke="#f2b330" stroke-width="1.2" stroke-linecap="round"/><circle r="1.3" fill="#f4ecdc"/></svg><b id="cross-time">--:--</b><span id="cross-city"></span><span class="cross-hint" id="cross-hint">· Scroll to cross</span></p>
-      <div class="tilt" id="tilt"><div class="card" id="feature" role="button" tabindex="0" aria-label="Turn the card around"></div><span class="glint" id="glint" aria-hidden="true"></span></div>
+      <div class="tilt" id="tilt"><div class="card" id="feature" role="button" tabindex="0" aria-label="Turn the card around"></div><span class="glint" id="glint" aria-hidden="true"></span><div class="loupe" id="loupe" aria-hidden="true" hidden><div class="lens" id="lens"></div></div></div>
       <div class="stepper">
         <button type="button" class="nav prev" id="b-prev" aria-label="Previous card"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M11.5,3 L5.5,9 L11.5,15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <span class="pos" id="pos" aria-live="polite"></span>
         <button type="button" class="nav next" id="b-next" aria-label="Next card"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M6.5,3 L12.5,9 L6.5,15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </div>
+      <canvas class="wave" id="wave" aria-hidden="true" hidden></canvas>
       <p class="caption" id="caption" aria-live="polite" hidden></p>
       </div>
     </div>
@@ -407,6 +446,14 @@
         <span class="label">Ranks tell time</span>
         <p>Lay out a suit from 2 to 10 and you get a day, first coffee to last auto. Jacks hustle, Queens charm, Kings complain.</p>
         <div class="hours" id="hours"></div>
+        <div class="scrub">
+          <button type="button" class="scrub-card" id="scrub-card" aria-label="Show this card"></button>
+          <div class="scrub-ctl">
+            <label class="label" for="scrub">Scrub the day</label>
+            <input type="range" id="scrub" min="0" max="8" step="1" value="4">
+            <output id="scrub-out" for="scrub"></output>
+          </div>
+        </div>
       </div>
       <div>
         <span class="label">Print it</span>
@@ -536,8 +583,7 @@
         $('f-rank').textContent = 'Joker · locked';
         $('f-a').textContent = 'Turn all 52';
         $('f-b').textContent = 'then come back';
-        $('f-s1').textContent = 'Not yet.';
-        $('f-s2').textContent = `${52 - turnedCount()} cards to go.`;
+        typeLine('Not yet.', `${52 - turnedCount()} cards to go.`, true);
         $('f-note').textContent = '';
         $('f-why').textContent = 'No peeking.';
         $('f-title').textContent = item.title;
@@ -557,16 +603,14 @@
         $('f-rank').textContent = `${item.rankName} of ${T.SUIT_NAME[item.suit]}${T.HOURS[item.rank] ? ' · ' + T.HOURS[item.rank] : ''}`;
         $('f-a').textContent = item.pair[0];
         $('f-b').textContent = item.pair[1];
-        $('f-s1').textContent = item.sentence[0];
-        $('f-s2').textContent = item.sentence[1];
+        typeLine(item.sentence[0], item.sentence[1], !animate);
         $('f-note').textContent = NOTE;
         $('f-why').textContent = item.why;
       } else {
         const j = jokerInfo[id];
         $('f-rank').textContent = j.rank;
         $('f-a').textContent = j.a; $('f-b').textContent = j.b;
-        $('f-s1').textContent = 'Funny how you can miss';
-        $('f-s2').textContent = 'two places at once.';
+        typeLine('Funny how you can miss', 'two places at once.', !animate);
         $('f-note').textContent = j.note;
         $('f-why').textContent = j.why;
       }
@@ -658,6 +702,21 @@
     function toStage() {
       if (!cross.on) { $('feature').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' }); return; }
       window.scrollTo({ top: window.scrollY + $('hold').getBoundingClientRect().top - cross.top, behavior: reduce ? 'auto' : 'smooth' });
+    }
+
+    // The hidden line writes itself in: one half, a breath, then the other.
+    let typing = 0;
+    function typeLine(a, b, instant) {
+      const tok = ++typing, s1 = $('f-s1'), s2 = $('f-s2');
+      if (instant || reduce) { s1.textContent = a; s2.textContent = b; return; }
+      s1.textContent = ''; s2.textContent = '';
+      const run = (el, text, i, next) => {
+        if (tok !== typing) return;
+        el.textContent = text.slice(0, i);
+        if (i < text.length) setTimeout(() => run(el, text, i + 1, next), 22);
+        else if (next) setTimeout(next, 260);
+      };
+      setTimeout(() => run(s1, a, 1, () => run(s2, b, 1)), 380);
     }
 
     function pauseAll(p) {
@@ -774,6 +833,7 @@
     $('b-sound').addEventListener('click', () => {
       const on = !Snd.enabled;
       if (on) { Snd.enable(); follow(); } else Snd.disable();
+      showWave(on);
       $('b-sound').setAttribute('aria-pressed', String(on));
       $('b-sound').textContent = on ? 'Sound off' : 'Sound on';
       $('status').textContent = on
@@ -978,6 +1038,135 @@
       });
     }
 
+
+    // ---------- the sound, drawn ----------
+    let waveRaf = 0, waveBuf = null;
+    function drawWave() {
+      const c = $('wave'), g = c.getContext('2d'), dpr = devicePixelRatio || 1, w = c.clientWidth, hgt = 36;
+      if (c.width !== Math.round(w * dpr)) { c.width = Math.round(w * dpr); c.height = hgt * dpr; }
+      g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      g.clearRect(0, 0, w, hgt);
+      waveBuf = Snd.wave ? Snd.wave(waveBuf) : null;
+      if (waveBuf) {
+        const step = waveBuf.length / w, mid = hgt / 2;
+        g.beginPath();
+        for (let x = 0; x <= w; x++) {
+          const v = Math.max(-1, Math.min(1, waveBuf[Math.floor(x * step)] * 3.2));
+          const y = mid - v * (mid - 2) * Math.sin((Math.PI * x) / w);
+          x ? g.lineTo(x, y) : g.moveTo(x, y);
+        }
+        g.strokeStyle = '#f2b330'; g.lineWidth = 1.5; g.lineJoin = 'round'; g.stroke();
+      }
+      waveRaf = requestAnimationFrame(drawWave);
+    }
+    function showWave(on) {
+      cancelAnimationFrame(waveRaf);
+      $('wave').hidden = !on || reduce;
+      if (on && !reduce) waveRaf = requestAnimationFrame(drawWave);
+      layoutRunway();
+    }
+
+    // ---------- the loupe: hover on a computer, press and hold on a phone ----------
+    const ZOOM = 3, LENS = 150;
+    let lensKey = null, loupeTimer = null, holding = false;
+    function showLoupe(cx, cy, lift) {
+      const el = $('feature'), box = $('tilt').getBoundingClientRect(), W = el.offsetWidth, H = el.offsetHeight;
+      const x = cx - box.left, y = cy - box.top;
+      if (x < 0 || y < 0 || x > W || y > H) { hideLoupe(); return; }
+      const key = `${state.id}|${state.still}|${state.locked}`;
+      if (key !== lensKey) {
+        lensKey = key;
+        $('lens').innerHTML = render(state.locked ? 'back' : state.id, { static: state.still || state.locked });
+        const a = el.querySelector('svg'), b = $('lens').querySelector('svg');
+        if (a && b && a.getCurrentTime && b.setCurrentTime) { b.setCurrentTime(a.getCurrentTime()); if (state.paused) b.pauseAnimations(); }
+      }
+      const lens = $('lens');
+      lens.style.width = W * ZOOM + 'px'; lens.style.height = H * ZOOM + 'px';
+      lens.style.transform = el.style.transform;
+      lens.style.left = LENS / 2 - x * ZOOM + 'px'; lens.style.top = LENS / 2 - y * ZOOM + 'px';
+      $('loupe').style.left = x + 'px'; $('loupe').style.top = y - (lift || 0) + 'px';
+      $('loupe').hidden = false;
+    }
+    function hideLoupe() { clearTimeout(loupeTimer); $('loupe').hidden = true; }
+    $('tilt').addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') { if (holding) showLoupe(e.clientX, e.clientY, 90); return; }
+      if (!$('loupe').hidden) { showLoupe(e.clientX, e.clientY); return; }
+      clearTimeout(loupeTimer);
+      loupeTimer = setTimeout(() => showLoupe(e.clientX, e.clientY), 260);
+    });
+    $('tilt').addEventListener('pointerleave', hideLoupe);
+    $('feature').addEventListener('contextmenu', (e) => { if (holding || matchMedia('(hover: none)').matches) e.preventDefault(); });
+
+    // ---------- your deck, all of it ----------
+    function openWall() {
+      const back = $('b-wall');
+      const ov = document.createElement('div');
+      ov.className = 'wall';
+      ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'Your deck');
+      ov.innerHTML = `<div class="wall-head"><div><span class="label">Your deck</span><h2>${turned.size} of 52 turned</h2></div><button type="button" class="wall-x">Close</button></div><div class="wall-grid"></div>`;
+      const grid = ov.querySelector('.wall-grid');
+      let n = 0;
+      const tile = (item, face, lock) => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'tile' + (face ? '' : ' down');
+        b.style.setProperty('--d', `${Math.min(n++, 60) * 10}ms`);
+        b.innerHTML = face ? render(item.id, { static: true }) : `<img src="${backImg()}" alt="">${lock ? '<span class="lockmark"><span>Locked</span></span>' : ''}`;
+        b.setAttribute('aria-label', face ? label(item) : (lock ? 'Locked Joker' : 'Face-down card'));
+        b.addEventListener('click', () => {
+          if (lock) { b.animate && !reduce && b.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-5px)' }, { transform: 'translateX(5px)' }, { transform: 'translateX(0)' }], { duration: 300 }); return; }
+          close();
+          Snd.flick && Snd.flick();
+          setFeature(item.id, true, cross.on ? 0 : null);
+          toStage();
+        });
+        grid.appendChild(b);
+      };
+      suits.forEach((s) => {
+        const items = all.filter((x) => x.kind === 'card' && x.suit === s.s);
+        const head = document.createElement('span');
+        head.className = 'label wall-suit';
+        head.textContent = `${s.name} · ${items.filter((x) => turned.has(x.id)).length} / ${items.length}`;
+        grid.appendChild(head);
+        items.forEach((item) => tile(item, turned.has(item.id)));
+      });
+      const jh = document.createElement('span'); jh.className = 'label wall-suit'; jh.textContent = 'Jokers';
+      grid.appendChild(jh);
+      all.filter((x) => x.kind === 'joker').forEach((item) => tile(item, jokersOpen(), !jokersOpen()));
+      const onKey = (e) => { if (e.key === 'Escape') close(); };
+      function close() {
+        ov.remove(); removeEventListener('keydown', onKey);
+        document.documentElement.style.overflow = '';
+        back.focus({ preventScroll: true });
+      }
+      ov.querySelector('.wall-x').addEventListener('click', close);
+      addEventListener('keydown', onKey);
+      document.documentElement.style.overflow = 'hidden';
+      document.body.appendChild(ov);
+      ov.querySelector('.wall-x').focus();
+    }
+    $('b-wall').addEventListener('click', openWall);
+
+    // ---------- scrub the day: ranks keep time, so dragging through the hours deals the suit's day ----------
+    const RANKS = ['2', '3', '4', '5', '6', '7', '8', '9', '10'];
+    const HOUR_OF = { '2': 6, '3': 8, '4': 10, '5': 12, '6': 14, '7': 16, '8': 18, '9': 20, '10': 23 };
+    let scrubId = null, skyBack = null;
+    function scrubTo(i, byHand) {
+      const rank = RANKS[i], cur = all.find((x) => x.id === state.id);
+      const suit = cur && cur.kind === 'card' ? cur.suit : 'heart';
+      const card = all.find((x) => x.kind === 'card' && x.suit === suit && x.rank === rank);
+      scrubId = card.id;
+      $('scrub-card').innerHTML = render(card.id, { static: true });
+      $('scrub-card').setAttribute('aria-label', `Show ${card.title}`);
+      const out = $('scrub-out');
+      out.textContent = `${T.HOURS[rank].replace('NOON', 'Noon')} `;
+      const t = document.createElement('span'); t.textContent = card.title; out.appendChild(t);
+      if (byHand) {
+        document.documentElement.style.setProperty('--sky', skyAt(HOUR_OF[rank]));
+        clearTimeout(skyBack); skyBack = setTimeout(clockAndSky, 6000);
+      }
+    }
+    $('scrub').addEventListener('input', (e) => { scrubTo(Number(e.target.value), true); Snd.flick && Snd.flick(); });
+    $('scrub-card').addEventListener('click', () => { if (!scrubId) return; setFeature(scrubId, true, cross.on ? 0 : null); toStage(); });
 
     // ---------- personal: clocks, your city, the card for right now ----------
     const store = {
@@ -1278,6 +1467,7 @@
     let resizeTimer = null;
     addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { layoutRunway(); onScroll(); if (openSuitId) arcFan(); }, 150); });
     setInterval(clockAndSky, 30000);
+    { const r = rankForHour(hourIn(state.city)), i = RANKS.indexOf(r); $('scrub').value = String(i < 0 ? 4 : i); scrubTo(Number($('scrub').value), false); }
     $('feature').innerHTML = render('back', { static: true });
     shuffle();
 
@@ -1298,9 +1488,20 @@
     });
     // Swipe only when the gesture is clearly sideways, so scrolling never flips a card.
     let swipe = null;
-    $('feature').addEventListener('pointerdown', (e) => { swipe = { x: e.clientX, y: e.clientY }; });
-    $('feature').addEventListener('pointercancel', () => { swipe = null; });
+    $('feature').addEventListener('pointerdown', (e) => {
+      swipe = { x: e.clientX, y: e.clientY };
+      if (e.pointerType !== 'mouse') {
+        clearTimeout(loupeTimer);
+        loupeTimer = setTimeout(() => { if (swipe) { holding = true; showLoupe(swipe.x, swipe.y, 90); } }, 450);
+      }
+    });
+    $('feature').addEventListener('pointercancel', () => { swipe = null; holding = false; hideLoupe(); });
+    $('feature').addEventListener('pointermove', (e) => {
+      if (swipe && !holding && Math.hypot(e.clientX - swipe.x, e.clientY - swipe.y) > 8) clearTimeout(loupeTimer);
+    });
     $('feature').addEventListener('pointerup', (e) => {
+      if (e.pointerType !== 'mouse') clearTimeout(loupeTimer);
+      if (holding) { holding = false; hideLoupe(); swipe = null; return; }
       if (!swipe) return;
       const dx = e.clientX - swipe.x, dy = e.clientY - swipe.y; swipe = null;
       if (Math.abs(dx) < 8 && Math.abs(dy) < 8) { startGyro(); turnCard(); return; }

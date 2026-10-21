@@ -663,6 +663,13 @@
       let sum = 0; for (let i = 0; i < d.length; i++) sum += d[i] * d[i];
       return Math.sqrt(sum / d.length);
     },
+    // The waveform right now, -1 to 1, for drawing. Fills and returns buf.
+    wave(buf) {
+      if (!analyser || !enabled) return null;
+      if (!buf || buf.length !== analyser.fftSize) buf = new Float32Array(analyser.fftSize);
+      analyser.getFloatTimeDomainData(buf);
+      return buf;
+    },
     // A riffle for the shuffle and a flick for turning a card over.
     riffle() {
       if (!ac || !enabled) return;
