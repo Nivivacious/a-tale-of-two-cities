@@ -287,7 +287,7 @@
   }
 
   // One half in its own upright frame: index, coordinates, caption, art, clause.
-  function half(ctx, def, side) {
+  function half(ctx, def, side, layer) {
     const p = ctx.id, k = INK.ink;
     const city = CITY[side.city];
     const hour = side.hour || HOURS[def.rank] || '';
@@ -300,7 +300,7 @@
       ${pip(def.suit, 25, 51, 0.85)}
       <text x="25" y="63" text-anchor="middle" font-family="${FONT.micro}" font-size="4.4" font-weight="700" letter-spacing="0.9" fill="${k}">${city.code}</text>
       <text transform="translate(225 ${WIN.y + 4}) rotate(90)" font-family="${FONT.micro}" font-size="4.1" font-weight="600" letter-spacing="0.75" fill="${k}" opacity="0.72">${city.name} · ${city.coords}</text>
-      <g clip-path="url(#${p}-win)">${side.art}</g>
+      <g clip-path="url(#${p}-win)"><g class="${layer}">${side.art}</g></g>
       <path d="M${WIN.x},${WIN.b} V${WIN.y + 6} Q${WIN.x},${WIN.y} ${WIN.x + 6},${WIN.y} H${WIN.r - 6} Q${WIN.r},${WIN.y} ${WIN.r},${WIN.y + 6} V${WIN.b}" fill="none" stroke="${k}" stroke-width="0.6"/>
       <g transform="translate(${CX} ${WIN.y + 7.5})">
         <rect x="${-(capText.length * 1.62 + 7)}" y="-4.6" width="${capText.length * 3.24 + 14}" height="7.6" rx="1" fill="${INK.paper}" stroke="${k}" stroke-width="0.35"/>
@@ -333,8 +333,8 @@
     const art = def.draw(ctx);
     return svgOpen(p, Object.assign({ title: `${def.rankName} of ${SUIT_NAME[def.suit]}: ${def.title}`, desc: `${def.pair[0]} in Bengaluru and ${def.pair[1]} in New York. ${def.mechanism || ''} Hidden line: ${def.sentence.join(' ')}` }, opts)) +
       defs(p) + frame() +
-      `<g>${half(ctx, def, art.top)}</g>` +
-      `<g transform="rotate(180 ${CX} ${CY})">${half(ctx, def, art.bottom)}</g>` +
+      `<g>${half(ctx, def, art.top, 'par')}</g>` +
+      `<g transform="rotate(180 ${CX} ${CY})">${half(ctx, def, art.bottom, 'par b')}</g>` +
       seamLine() + (art.over || '') + '</svg>';
   }
 

@@ -73,7 +73,6 @@
     transition: transform 1.4s cubic-bezier(0.6, 0, 0.2, 1);
   }
   .card svg { display: block; width: 100%; height: 100%; }
-  .card.turned { transform: rotate(180deg); }
   .info { display: grid; gap: 22px; min-width: 0; }
   .info h2 { font-size: clamp(30px, 4vw, 44px); line-height: 1.05; }
   .pairing { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: baseline; font-size: 22px; }
@@ -117,7 +116,7 @@
   .suit:hover .pile > span:nth-child(2) { transform: rotate(11deg) translate(6px, 0); }
   .spread { border: 1px solid var(--rule); border-top: 0; padding: 16px 20px 8px; }
   .spread-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .fan-wrap { overflow-x: auto; padding: 34px 8px 26px; }
+  .fan-wrap { position: relative; overflow-x: auto; padding: 34px 8px 26px; }
   .fan { display: flex; justify-content: center; min-width: max-content; }
   .fan .thumb { width: 112px; margin-left: -40px; transform-origin: 50% 130%; transform: rotate(var(--r)) translateY(var(--y)); transition: transform 0.25s; animation: deal 0.45s cubic-bezier(0.3, 0, 0.2, 1) backwards; animation-delay: var(--d); }
   .fan .thumb:first-child { margin-left: 0; }
@@ -139,7 +138,7 @@
   .intro .c svg { display: block; width: 100%; height: 100%; }
   .intro .cap { position: absolute; left: 0; right: 0; bottom: calc(48px + env(safe-area-inset-bottom, 0px)); text-align: center; display: grid; gap: 6px; }
   .intro .cap b { font-family: var(--display); font-weight: 500; font-size: clamp(24px, 4vw, 36px); }
-  .intro .skip { position: absolute; top: calc(16px + env(safe-area-inset-top, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); }
+  .intro .skip { z-index: 2; position: absolute; top: calc(16px + env(safe-area-inset-top, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); }
 
   /* Jokers */
   .jokers { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 48px; align-items: center; }
@@ -266,13 +265,60 @@
     .grid > .suit:hover { background: var(--table); }
     .grid > .suit[aria-expanded="true"] { background: var(--panel); }
   }
+  /* The sky over the page follows the clock in whichever city is face up */
+  @property --sky { syntax: '<color>'; inherits: true; initial-value: #1d2747; }
+  html, body { overflow-x: clip; }
+  .sky { position: fixed; inset: 0 0 auto; height: 90vh; z-index: -1; pointer-events: none; background: radial-gradient(ellipse 120% 75% at 50% 0%, var(--sky), transparent 72%); opacity: 0.5; transition: --sky 2.4s ease; }
+
+  /* A word too big for the page sits behind the card and changes when it turns */
+  .card-hold { z-index: 0; }
+  .card-hold { align-content: start; }
+  .pin { position: relative; display: grid; gap: 14px; align-self: start; }
+  .bigword { position: absolute; left: 50%; top: 34%; translate: -50% -50%; z-index: -1; pointer-events: none; white-space: nowrap; font-family: var(--display); font-weight: 600; font-size: clamp(96px, 17vw, 230px); line-height: 1; letter-spacing: -0.02em; color: transparent; -webkit-text-stroke: 1px rgba(244, 236, 220, 0.13); }
+  .bigword span { display: inline-block; }
+  .info { position: relative; z-index: 1; }
+
+  /* Scroll to cross: the card turns and the clock runs back 9 and a half hours */
+  .cross { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0; font-family: var(--label); font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .cross svg { width: 22px; height: 22px; flex: none; }
+  .cross b { color: var(--ivory); font-size: 14px; min-width: 7.2ch; text-align: right; }
+  .cross-hint { color: var(--marigold); transition: opacity 0.3s; }
+  .hold.runway .pin { position: sticky; top: var(--pin-top, 16px); }
+  @media (min-width: 861px) { .stage.runway .info { position: sticky; top: 24px; } }
+
+  /* The art sits behind the frame like a window and shifts when the card tilts */
+  #feature .par { transform: translate(var(--px, 0px), var(--py, 0px)) scale(1.05); transform-box: view-box; transform-origin: 125px 93.5px; transition: transform 0.25s ease-out; }
+  #feature .par.b { transform: translate(calc(var(--px, 0px) * -1), calc(var(--py, 0px) * -1)) scale(1.05); }
+
+  /* The deck in orbit: pick a card, any card */
+  .ring-stage { position: absolute; inset: 0; perspective: 1100px; display: grid; place-items: center; touch-action: none; cursor: grab; }
+  .ring-stage:active { cursor: grabbing; }
+  .ring { position: relative; width: 0; height: 0; transform-style: preserve-3d; }
+  .rc { position: absolute; left: calc(var(--w) / -2); top: calc(var(--w) * -0.7); width: var(--w); aspect-ratio: 5 / 7; padding: 0; border: 0; border-radius: 6% / 4.3%; background: none; min-height: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; cursor: pointer; }
+  .rc img { display: block; width: 100%; height: 100%; border-radius: inherit; box-shadow: 0 10px 22px -10px rgba(0, 0, 0, 0.9); pointer-events: none; }
+  .rc:hover img { outline: 2px solid var(--marigold); outline-offset: 2px; }
+  .ring-title { position: absolute; left: 50%; top: calc(50% - var(--w) * 1.4 - 34px); translate: -50% -100%; text-align: center; pointer-events: none; display: grid; gap: 8px; padding-inline: 16px; width: 100%; }
+  .ring-title b { font-family: var(--display); font-weight: 500; font-size: clamp(26px, 4.4vw, 52px); line-height: 1; }
+  .ring-title b em { color: var(--marigold); }
+
+  /* House rules: the fan is a reel. Swipe and the cards ride an arc */
+  .fan .thumb { transform: rotate(var(--r, 0deg)) translateY(var(--y, 0px)); }
+  @media (max-width: 860px) {
+    .fan-wrap { scroll-snap-type: x mandatory; padding-inline: calc(50% - 43px); scrollbar-width: none; }
+    .fan-wrap::-webkit-scrollbar { display: none; }
+    .fan .thumb { scroll-snap-align: center; transition: none; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
+    .sky { transition: none; }
+    #feature .par { transition: none; }
     .card { transition: none; }
     .flip { transition: none; }
     .fan .thumb { animation: none; }
   }
 </style>
 
+<div class="sky" id="sky" aria-hidden="true"></div>
 <div class="wrap">
   <header>
     <span class="label" id="count">52 cards, 2 Jokers, one very long flight<span id="visitors" hidden> · <b id="vcount">0</b> <span id="vword">visitors</span> so far</span></span>
@@ -294,8 +340,11 @@
     </div>
   </header>
 
-  <section class="stage" aria-label="Featured card">
-    <div class="card-hold">
+  <section class="stage" id="stage" aria-label="Featured card">
+    <div class="card-hold hold" id="hold">
+      <div class="pin" id="pin">
+      <div class="bigword" aria-hidden="true"><span id="bw"></span></div>
+      <p class="cross" id="cross" aria-hidden="true"><svg viewBox="-12 -12 24 24"><circle r="10.5" fill="none" stroke="currentColor" stroke-width="1.2"/><line id="hand-h" y2="-5.5" stroke="#f4ecdc" stroke-width="1.8" stroke-linecap="round"/><line id="hand-m" y2="-8.2" stroke="#f2b330" stroke-width="1.2" stroke-linecap="round"/><circle r="1.3" fill="#f4ecdc"/></svg><b id="cross-time">--:--</b><span id="cross-city"></span><span class="cross-hint" id="cross-hint">· Scroll to cross</span></p>
       <div class="tilt" id="tilt"><div class="card" id="feature" role="button" tabindex="0" aria-label="Turn the card around"></div><span class="glint" id="glint" aria-hidden="true"></span></div>
       <div class="stepper">
         <button type="button" class="nav prev" id="b-prev" aria-label="Previous card"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M11.5,3 L5.5,9 L11.5,15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -303,6 +352,7 @@
         <button type="button" class="nav next" id="b-next" aria-label="Next card"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M6.5,3 L12.5,9 L6.5,15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </div>
       <p class="caption" id="caption" aria-live="polite" hidden></p>
+      </div>
     </div>
     <div class="info">
       <span class="label" id="f-rank">Eight of Clubs · 6 PM</span>
@@ -425,7 +475,7 @@
     const Snd = window.TaleSound;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const all = [...T.CARDS.map((c) => ({ ...c, kind: 'card' })), ...T.JOKERS.map((j) => ({ ...j, kind: 'joker' }))];
-    const state = { id: 'ride', still: reduce, turned: false, paused: false };
+    const state = { id: 'ride', still: reduce, turned: false, base: false, locked: false, paused: false };
     let uid = 0;
     const $ = (id) => document.getElementById(id);
     const isJoker = (id) => id === 'departure' || id === 'return';
@@ -460,22 +510,25 @@
     function flipStage(html, animate) {
       const el = $('feature');
       if (!animate || reduce || !el.animate) { el.innerHTML = html; return; }
-      const a = el.animate([{ transform: `${state.turned ? 'rotate(180deg) ' : ''}rotateY(0deg)` }, { transform: `${state.turned ? 'rotate(180deg) ' : ''}rotateY(90deg)` }], { duration: 220, easing: 'ease-in' });
+      const a = el.animate([{ transform: `rotate(${angle()}deg) rotateY(0deg)` }, { transform: `rotate(${angle()}deg) rotateY(90deg)` }], { duration: 220, easing: 'ease-in' });
       a.onfinish = () => {
         el.innerHTML = html;
         if (state.paused) pauseAll(true);
         follow();
-        el.animate([{ transform: `${state.turned ? 'rotate(180deg) ' : ''}rotateY(-90deg)` }, { transform: `${state.turned ? 'rotate(180deg) ' : ''}rotateY(0deg)` }], { duration: 320, easing: 'cubic-bezier(0.2, 0.7, 0.3, 1)' });
+        el.animate([{ transform: `rotate(${angle()}deg) rotateY(-90deg)` }, { transform: `rotate(${angle()}deg) rotateY(0deg)` }], { duration: 320, easing: 'cubic-bezier(0.2, 0.7, 0.3, 1)' });
       };
     }
 
-    function setFeature(id, animate) {
+    // aim: where the scroll will end up, when we are about to jump back to the card.
+    function setFeature(id, animate, aim) {
       state.id = id;
       const item = all.find((x) => x.id === id);
       const locked = item.kind === 'joker' && !jokersOpen() && !state.linked;
       // Your city reads upright: New York turns every mirrored card around.
-      state.turned = item.kind === 'card' && state.city === 'nyc';
-      $('feature').classList.toggle('turned', state.turned);
+      // Halfway down the scroll the card has already crossed, so start from the other side.
+      state.locked = locked;
+      state.base = (item.kind === 'card' && state.city === 'nyc') !== ((aim == null ? cross.p : aim) >= 0.5);
+      applyTurn(false);
       flipStage(render(locked ? 'back' : id, { static: state.still || locked }), animate);
       if (state.paused) pauseAll(true);
       sweepGlint();
@@ -526,6 +579,87 @@
       follow();
     }
 
+    // ---------- the turn: tap, city and scroll all add up to one angle ----------
+    const cross = { p: 0, on: false, runway: 0, top: 16 };
+    const angle = () => (state.base ? 180 : 0) + 180 * cross.p;
+    function applyTurn(animate) {
+      const el = $('feature');
+      el.style.transition = animate ? '' : 'none';
+      // Sideways, a card is wider than a phone, so it shrinks a little on the way round.
+      el.style.transform = `rotate(${angle()}deg) scale(${(1 - 0.28 * Math.abs(Math.sin(angle() * Math.PI / 180))).toFixed(3)})`;
+      state.turned = Math.round(angle() / 180) % 2 === 1;
+      bigWord(); clockAndSky();
+    }
+
+    // The word behind the card.
+    const BIG = { saint: ['ST. MARK\'S', 'ST MARKS'] };
+    function bigWord() {
+      let w;
+      if (state.locked) w = 'NOT YET';
+      else if (isJoker(state.id)) w = state.turned ? 'OOPS' : (state.id === 'departure' ? 'LEAVING' : 'HOME');
+      else w = (BIG[state.id] || ['BENGALURU', 'NEW YORK'])[state.turned ? 1 : 0];
+      const bw = $('bw');
+      if (bw.textContent === w) return;
+      bw.textContent = w;
+      if (!reduce && bw.animate) bw.animate([{ opacity: 0, transform: 'translateY(24px)' }, { opacity: 1, transform: 'none' }], { duration: 600, easing: 'cubic-bezier(0.2, 0.7, 0.3, 1)' });
+    }
+
+    // The little clock over the card runs from one city's time to the other's as the card turns.
+    const minutesIn = (city) => {
+      const [hh, mm] = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: 'numeric', hourCycle: 'h23', timeZone: TZ[city] }).format(new Date()).split(':').map(Number);
+      return (hh % 24) * 60 + mm;
+    };
+    const SKY = [[0, '#1d2747'], [5, '#4a2f4f'], [6, '#7a3f45'], [8, '#2f4a6b'], [12, '#36557a'], [16, '#6b4a2e'], [17, '#8a4a24'], [19, '#5a2f4a'], [20, '#222c52']];
+    const skyAt = (hr) => SKY.reduce((c, [h0, col]) => (hr >= h0 ? col : c), SKY[0][1]);
+    function clockAndSky() {
+      const blr = minutesIn('blr'), nyc = minutesIn('nyc');
+      const gap = (blr - nyc + 1440) % 1440;
+      const f = (angle() / 180) % 2, mix = f <= 1 ? f : 2 - f;
+      const t = blr - gap * mix;
+      const transit = state.locked || isJoker(state.id);
+      const fmt = (m) => { m = ((Math.round(m) % 1440) + 1440) % 1440; const hr = Math.floor(m / 60), mi = m % 60; return `${hr % 12 || 12}:${String(mi).padStart(2, '0')} ${hr < 12 ? 'AM' : 'PM'}`; };
+      $('cross-time').textContent = transit ? '' : fmt(t);
+      $('cross-city').textContent = transit ? 'In transit' : (mix < 0.5 ? 'Bengaluru' : 'New York');
+      $('hand-m').setAttribute('transform', `rotate(${(t * 6).toFixed(1)})`);
+      $('hand-h').setAttribute('transform', `rotate(${(t / 2).toFixed(1)})`);
+      $('cross-hint').style.opacity = cross.on && cross.p < 0.04 ? '1' : '0';
+      const skyCity = transit ? state.city : (mix < 0.5 ? 'blr' : 'nyc');
+      const m = transit ? minutesIn(skyCity) : ((Math.round(t) % 1440) + 1440) % 1440;
+      document.documentElement.style.setProperty('--sky', skyAt(Math.floor(m / 60)));
+    }
+
+    // Scroll to cross: the card pins in place and turns once while you scroll past it.
+    function layoutRunway() {
+      const hold = $('hold'), pin = $('pin');
+      hold.style.height = '';
+      const pinH = pin.offsetHeight;
+      cross.on = !reduce && pinH < innerHeight - 24;
+      hold.classList.toggle('runway', cross.on);
+      $('stage').classList.toggle('runway', cross.on);
+      if (!cross.on) { cross.p = 0; return; }
+      cross.runway = Math.round(innerHeight * 0.7);
+      cross.top = Math.max(12, Math.round((innerHeight - pinH) / 2));
+      hold.style.setProperty('--pin-top', cross.top + 'px');
+      hold.style.height = pinH + cross.runway + 'px';
+    }
+    let scrollQueued = false;
+    function onScroll() {
+      if (!cross.on || scrollQueued) return;
+      scrollQueued = true;
+      requestAnimationFrame(() => {
+        scrollQueued = false;
+        const p = Math.min(1, Math.max(0, (cross.top - $('hold').getBoundingClientRect().top) / cross.runway));
+        if (Math.abs(p - cross.p) < 0.002) return;
+        cross.p = p;
+        applyTurn(false);
+      });
+    }
+    // Jumping back to the card lands at the top of the runway, so your city is up.
+    function toStage() {
+      if (!cross.on) { $('feature').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' }); return; }
+      window.scrollTo({ top: window.scrollY + $('hold').getBoundingClientRect().top - cross.top, behavior: reduce ? 'auto' : 'smooth' });
+    }
+
     function pauseAll(p) {
       document.querySelectorAll('svg[data-card]').forEach((s) => {
         if (typeof s.pauseAnimations !== 'function') return;
@@ -567,11 +701,8 @@
       const items = all.filter((x) => x.suit === suit), n = items.length;
       $('spread-name').textContent = `${T.SUIT_NAME[suit]} · ${suitTheme[suit]} · face down until you tap`;
       items.forEach((item, i) => {
-        const u = n > 1 ? i / (n - 1) - 0.5 : 0;
-        const b = document.createElement('button');
+          const b = document.createElement('button');
         b.type = 'button'; b.className = 'thumb'; b.dataset.id = item.id;
-        b.style.setProperty('--r', `${(u * 28).toFixed(1)}deg`);
-        b.style.setProperty('--y', `${(u * u * 46).toFixed(1)}px`);
         b.style.setProperty('--d', `${i * 35}ms`);
         b.setAttribute('aria-label', 'Face-down card');
         b.innerHTML = `<span class="flip"><span class="side back">${render('back', { static: true })}</span><span class="side front"></span></span>`;
@@ -579,15 +710,32 @@
           const fresh = !b.classList.contains('revealed');
           reveal(item.id);
           if (fresh) Snd.flick && Snd.flick();
-          setFeature(item.id, true);
-          $('feature').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+          setFeature(item.id, true, cross.on ? 0 : null);
+          toStage();
         });
         thumbs[item.id] = b;
         $('fan').appendChild(b);
         if (revealed.has(item.id)) reveal(item.id);
       });
+      $('fan').parentNode.scrollLeft = 0;
+      arcFan();
       $('spread').scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' });
     }
+    // Each card's lean comes from where it sits in the window, so a swipe rolls the arc along.
+    function arcFan() {
+      const wrap = $('fan').parentNode, mid = wrap.clientWidth / 2;
+      Object.values(thumbs).forEach((t) => {
+        const d = Math.max(-1.3, Math.min(1.3, (t.offsetLeft - wrap.scrollLeft + t.offsetWidth / 2 - mid) / mid));
+        t.style.setProperty('--r', `${(d * 15).toFixed(1)}deg`);
+        t.style.setProperty('--y', `${(d * d * 34).toFixed(1)}px`);
+      });
+    }
+    let fanQueued = false;
+    $('fan').parentNode.addEventListener('scroll', () => {
+      if (fanQueued) return;
+      fanQueued = true;
+      requestAnimationFrame(() => { fanQueued = false; arcFan(); });
+    }, { passive: true });
 
     // The Jokers wait face down too. Turned over, they play.
     ['j-dep', 'j-ret'].forEach((el) => {
@@ -634,8 +782,8 @@
     });
     // Tap the card to turn it around, like a real one. Your city's side comes back on the next card.
     function turnCard() {
-      state.turned = !state.turned;
-      $('feature').classList.toggle('turned', state.turned);
+      state.base = !state.base;
+      applyTurn(true);
       const nycUp = state.turned;
       $('status').textContent = isJoker(state.id)
         ? (state.turned ? 'Careful. That\'s coffee on the ceiling.' : 'Right way up. Coffee back in the cup.')
@@ -688,16 +836,18 @@
       try { navigator.clipboard.writeText(svg).then(done, fallback); } catch (e) { fallback(); }
     });
 
-    // Opening: a riffle shuffle, twice, then the top card lands on the stage.
+    // Opening: a riffle shuffle, twice. Then the deck goes into orbit and you pick a card.
+    // A shared link skips the orbit and deals its card straight to the stage.
     const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    let backUrl = null;
+    const backImg = () => backUrl || (backUrl = URL.createObjectURL(new Blob([T.render('back', { standalone: true, static: true, uid: '-img' })], { type: 'image/svg+xml' })));
     async function shuffle() {
       const linked = linkedCard();
-      const pick = linked || dealNow();
       state.linked = !!linked;
-      if (reduce || !document.body.animate) { setFeature(pick, false); dealtNote(pick, linked); return; }
+      if (reduce || !document.body.animate) { const pick = linked || dealNow(); setFeature(pick, false); dealtNote(pick, linked); return; }
       const ov = document.createElement('div');
       ov.className = 'intro';
-      ov.innerHTML = `<button type="button" class="skip">Skip</button><div class="deck"></div><div class="cap"><b>A Tale of Two Cities</b><span class="label">Shuffling</span></div>`;
+      ov.innerHTML = `<button type="button" class="skip">${linked ? 'Skip' : 'Deal for me'}</button><div class="deck"></div><div class="cap"><b>A Tale of Two Cities</b><span class="label">Shuffling</span></div>`;
       document.body.appendChild(ov);
       const deck = ov.querySelector('.deck');
       const N = 14, cards = [];
@@ -707,33 +857,125 @@
         c.style.transform = `translate(0, ${-i * 0.8}px)`;
         deck.appendChild(c); cards.push(c);
       }
-      let skipped = false;
-      const finish = () => {
-        if (!ov.isConnected) return;
+      let done = false, stopOrbit = null;
+      const finish = (pick, note) => {
+        if (done) return;
+        done = true;
+        if (stopOrbit) stopOrbit();
+        removeEventListener('keydown', onKey);
         ov.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 320, easing: 'ease-out' }).onfinish = () => ov.remove();
         setFeature(pick, true);
-        dealtNote(pick, linked);
+        note();
       };
-      ov.querySelector('.skip').addEventListener('click', () => { skipped = true; finish(); });
+      const deal = () => finish(linked || dealNow(), () => dealtNote(state.id, linked));
+      const onKey = (e) => { if (e.key === 'Escape') deal(); };
+      addEventListener('keydown', onKey);
+      ov.querySelector('.skip').addEventListener('click', deal);
       const base = (i) => `translate(0, ${-i * 0.8}px) rotate(0deg)`;
       const split = (i) => `translate(${i % 2 ? 58 : -58}%, ${-i * 0.8 + 6}px) rotate(${i % 2 ? 8 : -8}deg)`;
       const go = (fn, opt) => Promise.all(cards.map((c, i) => c.animate(fn(i), Object.assign({ fill: 'forwards' }, typeof opt === 'function' ? opt(i) : opt)).finished));
+      // Fly a card from where it sits to the stage.
+      const land = async (from, flip) => {
+        const to = $('feature').getBoundingClientRect();
+        const c = document.createElement('div');
+        c.className = 'c';
+        c.innerHTML = `<img src="${backImg()}" alt="" style="display:block;width:100%;height:100%">`;
+        Object.assign(c.style, { inset: 'auto', position: 'fixed', left: from.left + 'px', top: from.top + 'px', width: from.width + 'px', height: from.height + 'px' });
+        ov.appendChild(c);
+        const dx = to.left - from.left, dy = to.top - from.top, s = to.width / from.width;
+        await c.animate([{ transform: 'none', transformOrigin: '0 0' }, { transform: `translate(${dx}px, ${dy}px) scale(${s}) ${flip ? 'rotateY(360deg)' : ''}`, transformOrigin: '0 0' }], { duration: 700, easing: 'cubic-bezier(0.5, 0, 0.1, 1)', fill: 'forwards' }).finished;
+      };
       try {
         await sleep(250);
-        for (let r = 0; r < 2 && !skipped; r++) {
+        for (let r = 0; r < 2 && !done; r++) {
           Snd.riffle && Snd.riffle();
           await go((i) => [{ transform: base(i) }, { transform: split(i) }], { duration: 380, easing: 'cubic-bezier(0.5, 0, 0.2, 1)' });
-          if (skipped) break;
+          if (done) return;
           await go((i) => [{ transform: split(i) }, { transform: base(i) }], (i) => ({ duration: 300, delay: (i % 2 ? i : N - i) * 22, easing: 'cubic-bezier(0.3, 0, 0.2, 1)' }));
           await sleep(120);
         }
-        if (skipped) return;
-        const top = cards[N - 1], from = deck.getBoundingClientRect(), to = $('feature').getBoundingClientRect();
-        const dx = to.left + to.width / 2 - (from.left + from.width / 2), dy = to.top + to.height / 2 - (from.top + from.height / 2);
-        ov.querySelector('.cap').animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' });
-        await top.animate([{ transform: base(N - 1) }, { transform: `translate(${dx}px, ${dy}px) scale(${to.width / from.width}) rotate(0deg)` }], { duration: 650, easing: 'cubic-bezier(0.5, 0, 0.1, 1)', fill: 'forwards' }).finished;
-      } catch (e) { /* animation cancelled */ }
-      finish();
+        if (done) return;
+        if (linked) {
+          ov.querySelector('.cap').animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' });
+          const from = cards[N - 1].getBoundingClientRect();
+          cards[N - 1].style.visibility = 'hidden';
+          await land(from, false);
+          finish(linked, () => dealtNote(linked, linked));
+          return;
+        }
+        const picked = await orbit(ov, deck, (stop) => { stopOrbit = stop; });
+        if (done || !picked) return;
+        Snd.flick && Snd.flick();
+        await land(picked.rect, true);
+        finish(picked.id, () => { $('status').textContent = 'Good pick.'; });
+      } catch (e) { if (!done) deal(); }
+    }
+
+    // The deck in orbit around the title. Drag to spin, tap a card to take it.
+    function orbit(ov, deck, onStop) {
+      return new Promise((resolve) => {
+        const R = Math.round(Math.min(innerWidth * 0.4, 470));
+        const N = Math.max(18, Math.min(52, Math.round((2 * Math.PI * R) / 46)));
+        const w = Math.round(Math.max(46, Math.min(84, ((2 * Math.PI * R) / N) * 1.25)));
+        const ids = all.filter((x) => x.kind === 'card').map((x) => x.id).sort(() => Math.random() - 0.5);
+        const stage = document.createElement('div');
+        stage.className = 'ring-stage';
+        stage.style.setProperty('--w', w + 'px');
+        stage.innerHTML = `<div class="ring"></div><div class="ring-title"><b>A Tale of <em>Two</em> Cities</b><span class="label">Pick a card · drag to spin</span></div>`;
+        const ring = stage.firstChild, title = stage.lastChild;
+        const src = backImg();
+        const slots = [];
+        for (let i = 0; i < N; i++) {
+          const b = document.createElement('button');
+          b.type = 'button'; b.className = 'rc';
+          b.style.setProperty('--w', w + 'px');
+          b.setAttribute('aria-label', `Face-down card ${i + 1}`);
+          b.innerHTML = `<img src="${src}" alt="">`;
+          const a = (360 / N) * i;
+          b.style.transform = `rotateY(${a}deg) translateZ(${R}px)`;
+          b.addEventListener('click', () => { if (!dragged) take(i, b); });
+          ring.appendChild(b); slots.push(b);
+          b.animate([{ transform: `rotateY(${a}deg) translateZ(0px) scale(0.3)`, opacity: 0 }, { transform: `rotateY(${a}deg) translateZ(${R}px)`, opacity: 1 }], { duration: 800, delay: i * 14, easing: 'cubic-bezier(0.2, 0.7, 0.3, 1)', fill: 'backwards' });
+        }
+        ov.querySelector('.cap').animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250, fill: 'forwards' });
+        deck.animate([{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(0.6)' }], { duration: 300, fill: 'forwards' });
+        ov.appendChild(stage);
+        let spin = 0, vel = 0, auto = 9, last = performance.now(), raf = 0, drag = null, dragged = false, live = true;
+        const frame = (now) => {
+          const dt = Math.min(0.05, (now - last) / 1000); last = now;
+          if (!drag) { spin += (auto + vel) * dt; vel *= Math.pow(0.04, dt); }
+          ring.style.transform = `rotateX(-12deg) rotateY(${spin}deg)`;
+          if (live) raf = requestAnimationFrame(frame);
+        };
+        raf = requestAnimationFrame(frame);
+        const move = (e) => {
+          if (!drag) return;
+          const dx = e.clientX - drag.x;
+          if (Math.abs(dx) > 6) dragged = true;
+          const now = performance.now();
+          vel = Math.max(-360, Math.min(360, ((e.clientX - drag.lx) * 0.3) / Math.max(0.008, (now - drag.t) / 1000))) - auto;
+          drag.lx = e.clientX; drag.t = now;
+          spin = drag.spin + dx * 0.3;
+        };
+        const up = () => { drag = null; setTimeout(() => { dragged = false; }, 0); };
+        stage.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, lx: e.clientX, t: performance.now(), spin }; dragged = false; vel = 0; });
+        addEventListener('pointermove', move);
+        addEventListener('pointerup', up);
+        addEventListener('pointercancel', up);
+        const stop = () => {
+          live = false; cancelAnimationFrame(raf);
+          removeEventListener('pointermove', move); removeEventListener('pointerup', up); removeEventListener('pointercancel', up);
+        };
+        onStop(stop);
+        function take(i, b) {
+          const rect = b.getBoundingClientRect();
+          stop();
+          slots.forEach((s) => { if (s !== b) s.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' }); });
+          title.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' });
+          b.style.visibility = 'hidden';
+          resolve({ id: ids[i % ids.length], rect });
+        }
+      });
     }
 
 
@@ -847,15 +1089,37 @@
       if (reduce || !tilt.animate) return;
       $('glint').animate([{ backgroundPosition: '120% 0' }, { backgroundPosition: '-20% 0' }], { duration: 900, easing: 'ease-out' });
     }
+    // x and y run from -0.5 to 0.5. The card leans, the light moves, and the art slides behind the frame.
+    function setTilt(x, y) {
+      tilt.style.setProperty('--ry', `${(x * 12).toFixed(2)}deg`);
+      tilt.style.setProperty('--rx', `${(-y * 10).toFixed(2)}deg`);
+      tilt.style.setProperty('--gx', x || y ? `${(50 - x * 120).toFixed(1)}%` : '120%');
+      const s = Math.cos(angle() * Math.PI / 180) < 0 ? -1 : 1;
+      $('feature').style.setProperty('--px', `${(-x * 9 * s).toFixed(2)}px`);
+      $('feature').style.setProperty('--py', `${(-y * 9 * s).toFixed(2)}px`);
+    }
     tilt.addEventListener('pointermove', (e) => {
       if (e.pointerType !== 'mouse' || reduce) return;
       const r = tilt.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
-      tilt.style.setProperty('--ry', `${(x * 12).toFixed(2)}deg`);
-      tilt.style.setProperty('--rx', `${(-y * 10).toFixed(2)}deg`);
-      tilt.style.setProperty('--gx', `${(50 - x * 120).toFixed(1)}%`);
+      setTilt((e.clientX - r.left) / r.width - 0.5, (e.clientY - r.top) / r.height - 0.5);
     });
-    tilt.addEventListener('pointerleave', () => { tilt.style.setProperty('--rx', '0deg'); tilt.style.setProperty('--ry', '0deg'); tilt.style.setProperty('--gx', '120%'); });
+    tilt.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') setTilt(0, 0); });
+    // On a phone, tilting the phone does it. iPhones ask first, so we ask on the first tap.
+    let rest = null, gyroAsked = false;
+    function onOrient(e) {
+      if (e.beta == null || e.gamma == null) return;
+      rest = rest == null ? e.beta : rest + (e.beta - rest) * 0.02;
+      const c = (v) => Math.max(-0.5, Math.min(0.5, v));
+      setTilt(c(e.gamma / 40), c((e.beta - rest) / 40));
+    }
+    function startGyro() {
+      if (gyroAsked || reduce || !window.DeviceOrientationEvent || !matchMedia('(hover: none)').matches) return;
+      gyroAsked = true;
+      const P = window.DeviceOrientationEvent.requestPermission;
+      if (typeof P === 'function') P().then((s) => { if (s === 'granted') addEventListener('deviceorientation', onOrient); }, () => {});
+      else addEventListener('deviceorientation', onOrient);
+    }
+    if (window.DeviceOrientationEvent && typeof window.DeviceOrientationEvent.requestPermission !== 'function') startGyro();
 
     // ---------- shareable: a link per card, a story image ----------
     const ARTIFACT = location.origin + location.pathname;
@@ -1009,6 +1273,11 @@
     });
 
     if (reduce) { $('b-print').setAttribute('aria-pressed', 'true'); $('print-row').hidden = false; }
+    layoutRunway();
+    addEventListener('scroll', onScroll, { passive: true });
+    let resizeTimer = null;
+    addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(() => { layoutRunway(); onScroll(); if (openSuitId) arcFan(); }, 150); });
+    setInterval(clockAndSky, 30000);
     $('feature').innerHTML = render('back', { static: true });
     shuffle();
 
@@ -1034,7 +1303,7 @@
     $('feature').addEventListener('pointerup', (e) => {
       if (!swipe) return;
       const dx = e.clientX - swipe.x, dy = e.clientY - swipe.y; swipe = null;
-      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) { turnCard(); return; }
+      if (Math.abs(dx) < 8 && Math.abs(dy) < 8) { startGyro(); turnCard(); return; }
       if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5) step(dx < 0 ? 1 : -1);
     });
 
