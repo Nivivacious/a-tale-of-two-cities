@@ -10,8 +10,9 @@ const T = require('./cards.js');
 for (const f of ['hearts', 'diamonds', 'clubs', 'spades']) require(`./deck/${f}.js`);
 require('./copy.js');
 
-const KEY = process.env.SARVAM_API_KEY;
-if (!KEY) { console.error('Set SARVAM_API_KEY first.'); process.exit(1); }
+// The key comes from SARVAM_API_KEY, or from a network secret that adds the
+// api-subscription-key header on the way out (then there is nothing to read here).
+const KEY = process.env.SARVAM_API_KEY || '';
 const force = process.argv.includes('--force');
 const root = path.join(__dirname, '..');
 const dirKn = path.join(root, 'audio', 'kn'), dirVoice = path.join(root, 'audio', 'voice');
@@ -30,10 +31,11 @@ const VOICES = {
 
 async function call(endpoint, body) {
   for (let attempt = 0; attempt < 4; attempt++) {
-    const r = await fetch(`https://api.sarvam.ai/${endpoint}`, { method: 'POST', headers: { 'api-subscription-key': KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const r = await fetch(`https://api.sarvam.ai/${endpoint}`, { method: 'POST', headers: Object.assign({ 'Content-Type': 'application/json' }, KEY ? { 'api-subscription-key': KEY } : {}), body: JSON.stringify(body) });
     if (r.ok) return r.json();
     const t = await r.text();
     if (r.status === 429 || r.status >= 500) { await new Promise((s) => setTimeout(s, 1500 * (attempt + 1))); continue; }
+    if (r.status === 401 || r.status === 403) throw new Error(`${endpoint}: Sarvam did not accept the key. Set SARVAM_API_KEY, or a network secret for api.sarvam.ai with header api-subscription-key.`);
     throw new Error(`${endpoint} ${r.status}: ${t.slice(0, 200)}`);
   }
   throw new Error(`${endpoint}: gave up after retries`);
