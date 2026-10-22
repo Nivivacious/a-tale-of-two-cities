@@ -659,14 +659,13 @@
         <span class="note" id="f-note"></span>
       </div>
       <div class="controls">
-        <button type="button" id="b-send" class="send">Send to someone in New York</button>
         <button type="button" id="b-shuffle">Shuffle</button>
         <button type="button" id="b-share" aria-expanded="false" aria-controls="share-row">Share</button>
         <button type="button" id="b-print" aria-pressed="false">Print frame</button>
         <button type="button" id="b-flag">Spot something off?</button>
       </div>
       <div class="controls" id="share-row" hidden>
-        <button type="button" id="b-native" hidden>Send to…</button>
+        <button type="button" id="b-send" class="send">Send to someone in New York</button>
         <button type="button" id="b-link">Copy link</button>
         <button type="button" id="b-story">Story image</button>
         <button type="button" id="b-qr">QR code</button>
@@ -1814,11 +1813,6 @@
       const open = $('share-row').hidden;
       $('share-row').hidden = !open;
       $('b-share').setAttribute('aria-expanded', String(open));
-    });
-    $('b-native').hidden = !navigator.share;
-    $('b-native').addEventListener('click', () => {
-      const item = all.find((x) => x.id === state.id);
-      navigator.share({ title: `${item.title} · A Tale of Two Cities`, url: shareUrl() }).catch(() => {});
     });
     // Send the card to one person in the other city, with the line written out.
     function sendTo(text, url, statusEl) {
