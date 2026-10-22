@@ -63,7 +63,7 @@
   header { padding-top: 48px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
   header h1 { font-size: clamp(40px, 6.4vw, 76px); line-height: 1; letter-spacing: -0.01em; }
   header h1 em { font-style: italic; color: var(--marigold); }
-  header .thesis { font-size: 21px; font-style: italic; color: var(--muted); max-width: 40ch; }
+  header .thesis { font-size: 17px; margin-top: -4px; font-style: italic; color: var(--muted); max-width: 40ch; }
 
   /* Stage */
   .stage { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 48px; align-items: start; }
@@ -197,8 +197,8 @@
   .seg button { text-transform: none; letter-spacing: 0.02em; font-size: 14px; }
   .progress { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; min-width: 0; flex: 1 1 260px; max-width: 460px; }
   .deck-count { display: grid; gap: 2px; }
-  .deck-count b { font-family: var(--display); font-weight: 500; font-size: 20px; font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .tips { font-size: 15px; color: var(--muted); margin-top: 6px; }
+  .deck-count b { font-family: var(--display); font-weight: 500; font-size: 18px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .tips { font-size: 14px; color: var(--muted); opacity: 0.8; margin-top: 10px; }
   .tips b { color: var(--ivory); font-weight: 600; }
   .bar { flex: 1 1 80px; min-width: 60px; height: 4px; background: var(--rule); border-radius: 2px; overflow: hidden; }
   .bar i { display: block; height: 100%; width: 0; background: var(--marigold); transition: width 0.5s; }
@@ -540,13 +540,13 @@
     .wrap { gap: 56px; }
     header { padding-top: 22px; gap: 10px; }
     header h1 { font-size: clamp(34px, 10vw, 76px); }
-    header .thesis { font-size: 18px; }
-    .tips { font-size: 14px; margin-top: 0; }
+    header .thesis { font-size: 15px; margin-top: -2px; }
+    .tips { font-size: 13px; margin-top: 4px; }
     .strip { gap: 10px 16px; margin-top: 2px; }
     .city { padding: 6px 10px; }
     .city b { font-size: 18px; }
     .progress { flex-basis: 100%; max-width: none; }
-    .deck-count b { font-size: 18px; }
+    .deck-count b { font-size: 16px; }
     .stage { margin-top: -28px; }
     .foot { flex-direction: column; }
     .tabs { order: -1; width: 100%; }
