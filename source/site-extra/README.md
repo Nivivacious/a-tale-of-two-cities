@@ -26,6 +26,12 @@ Read the latest notes:
 curl -H "x-admin-key: YOUR_ADMIN_KEY" https://YOUR-SITE.vercel.app/api/feedback
 ```
 
+See who wants the printed deck (the waitlist appears on the site once Redis is connected):
+
+```
+curl -H "x-admin-key: YOUR_ADMIN_KEY" https://YOUR-SITE.vercel.app/api/waitlist
+```
+
 Remove a pairing (the `key` is in the `/api/pairings` list):
 
 ```
@@ -41,7 +47,7 @@ curl -X DELETE -H "x-admin-key: YOUR_ADMIN_KEY" "https://YOUR-SITE.vercel.app/ap
 - `copy.js`: titles, lines and descriptions for every card
 - `sound.js`: each card's soundtrack, made live in the browser
 - `print/`: print-ready PDFs
-- `api/`: visitor count, pairings and votes, local-check notes
+- `api/`: visitor count, pairings and votes, local-check notes, the printed-deck waitlist
 - `card/<id>.html`: one page per card. Shared links point here so each card gets its own preview, then the page opens the deck on that card
 - `og/<id>.jpg`: those previews, one per card (made by `prototype/og-cards.js`)
 - `404.html`: the wrong-turn page

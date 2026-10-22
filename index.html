@@ -95,6 +95,8 @@
   .info dt { margin-bottom: 2px; }
   .info dd { margin: 0; max-width: 60ch; }
   .controls { display: flex; flex-wrap: wrap; gap: 10px; }
+  .controls .send { border-color: var(--marigold); color: var(--marigold); }
+  .controls .send:hover { background: var(--marigold); color: var(--table); }
   #b-sound[aria-pressed="true"] { background: var(--marigold); border-color: var(--marigold); color: var(--table); }
   button {
     font-family: var(--label); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
@@ -185,8 +187,6 @@
 
   /* Header strip: two clocks, where you are, how far through the deck */
   .strip { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px 28px; align-items: center; margin-top: 10px; }
-  .strip .progress { margin-left: auto; justify-content: flex-end; }
-  @media (max-width: 600px) { .strip .progress { margin-left: 0; justify-content: flex-start; } }
   .where { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
   .where .label { margin-right: 6px; }
   .city { display: grid; gap: 2px; justify-items: start; text-align: left; padding: 8px 16px; text-transform: none; letter-spacing: 0; }
@@ -349,6 +349,37 @@
   .deck-count:hover u { color: var(--ivory); }
   .wall { position: fixed; inset: 0; z-index: 55; background: var(--table); overflow-y: auto; overscroll-behavior: contain; padding-block: calc(20px + env(safe-area-inset-top, 0px)) calc(48px + env(safe-area-inset-bottom, 0px)); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
   .wall-head { max-width: 1120px; margin: 0 auto 8px; display: flex; justify-content: space-between; align-items: end; gap: 12px; flex-wrap: wrap; }
+  .wall-acts { display: flex; gap: 10px; }
+  /* Waitlist for the printed deck */
+  .waitlist { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 420px); gap: 20px 48px; align-items: end; border-top: 1px solid var(--rule); padding-top: 40px; }
+  .wl-text { display: grid; gap: 10px; }
+  .wl-text h2 { font-size: 28px; }
+  .wl-text p { color: var(--muted); max-width: 52ch; }
+  .wl-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; }
+  .wl-form .status { grid-column: 1 / -1; min-height: 1.5em; }
+  @media (max-width: 760px) { .waitlist { grid-template-columns: minmax(0, 1fr); } }
+  /* Sound on the opening screen */
+  .intro .sound-in { z-index: 2; position: absolute; top: calc(16px + env(safe-area-inset-top, 0px)); left: max(16px, env(safe-area-inset-left, 0px)); display: inline-flex; gap: 8px; align-items: center; }
+  .intro .sound-in svg { width: 16px; height: 16px; }
+  .intro .sound-in[aria-pressed="true"] { background: var(--marigold); border-color: var(--marigold); color: var(--table); }
+  .wall-acts .send { border-color: var(--marigold); color: var(--marigold); }
+  /* The ending */
+  .ending { position: fixed; inset: 0; z-index: 70; background: var(--table); display: grid; place-items: center; overflow-y: auto; padding: calc(24px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) calc(24px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); animation: end-fade 0.6s ease both; }
+  .end-in { display: grid; gap: 14px; justify-items: center; text-align: center; max-width: 520px; }
+  .end-jokers { display: flex; justify-content: center; margin-bottom: 12px; }
+  .ej { width: min(150px, 34vw); aspect-ratio: 5 / 7; border-radius: 4.8% / 3.4%; overflow: hidden; box-shadow: 0 24px 50px -20px rgba(0, 0, 0, 0.9); }
+  .ej svg { display: block; width: 100%; height: 100%; }
+  .ej.l { animation: end-l 1.4s 0.2s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+  .ej.r { animation: end-r 1.4s 0.2s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+  .ending h2 { font-size: clamp(28px, 3.6vw, 40px); }
+  .end-clocks { color: var(--muted); font-size: 15px; }
+  .end-clocks b { font-weight: 400; color: var(--ivory); font-variant-numeric: tabular-nums; }
+  .end-line { color: var(--marigold); font-size: 19px; }
+  .ending .controls { justify-content: center; margin-top: 8px; }
+  @keyframes end-fade { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes end-l { from { transform: translateX(-70px) rotate(-10deg); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes end-r { from { transform: translateX(70px) rotate(10deg); opacity: 0; } to { transform: none; opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .ending, .ej.l, .ej.r { animation: none; } }
   .wall-head h2 { font-size: clamp(28px, 4vw, 42px); }
   .wall-grid { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(var(--tile, 82px), 42vw), 1fr)); gap: 10px 8px; }
   .wall-suit { grid-column: 1 / -1; margin-top: 18px; }
@@ -468,7 +499,9 @@
   @keyframes ring { 0% { transform: scale(0.7); opacity: 0.7; } 100% { transform: scale(1.7); opacity: 0; } }
 
   /* Read a card: numbered dots, one short note each */
-  .suits-tip { margin: 0 0 16px; }
+  .suits-head { display: flex; flex-direction: column; gap: 18px; margin-bottom: 16px; }
+  .suits-head .progress { flex: none; max-width: 520px; }
+  .suits-tip { margin: 0; }
   .newhere { margin: -6px 0 0; text-align: center; font-size: 14px; font-style: italic; }
   .newhere a { color: var(--muted); text-underline-offset: 3px; }
   .newhere a:hover { color: var(--ivory); }
@@ -590,13 +623,6 @@
         <button type="button" class="city" id="city-blr" aria-pressed="true"><span>Bengaluru</span><b id="clk-blr">--:--</b></button>
         <button type="button" class="city" id="city-nyc" aria-pressed="false"><span>New York</span><b id="clk-nyc">--:--</b></button>
       </div>
-      <div class="progress">
-        <button type="button" class="deck-count" id="b-wall" aria-haspopup="dialog"><span class="label">Your deck · <u>see all</u></span><b id="prog-label">0 / 52 turned</b></button>
-        <span class="bar" aria-hidden="true"><i id="prog-bar"></i></span>
-        <span class="cats" id="cats" role="img" aria-label="Cats found: 0 of 3"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z"/></svg></span>
-        <span id="cat-badge" hidden title="You found all three cats"><svg viewBox="0 0 24 24" aria-label="Cat badge"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z" fill="#f2b330"/><circle cx="10" cy="13" r="1" fill="#12151f"/><circle cx="14" cy="13" r="1" fill="#12151f"/></svg></span>
-        <button type="button" class="linkish" id="b-reset">Put the deck back</button>
-      </div>
     </div>
   </header>
 
@@ -625,7 +651,7 @@
     <div class="info">
       <span class="label" id="f-rank">Eight of Clubs · 6 PM</span>
       <h2 id="f-title">The Ride Home</h2>
-      <div class="pairing"><span id="f-a">Auto-rickshaw</span><span class="x" aria-hidden="true">×</span><span id="f-b">Yellow cab</span></div>
+      <div class="pairing"><span id="f-a">Auto rickshaw</span><span class="x" aria-hidden="true">×</span><span id="f-b">Yellow cab</span></div>
       <div class="sentence">
         <div class="sentence-head"><span class="label">On the seam</span><span class="kn-tools"><button type="button" class="chip say" id="b-say" aria-label="Hear the line in Kannada" hidden><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3,7 H6 L10,3.5 V14.5 L6,11 H3 Z" fill="currentColor"/><path d="M12.5,6.2 Q14.4,9 12.5,11.8 M14.6,4.4 Q17.6,9 14.6,13.6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button><button type="button" class="chip" id="b-kn" aria-pressed="false" aria-label="Read the line in Kannada">Read in <span lang="kn">ಕನ್ನಡ</span></button></span></div>
         <span class="half" id="f-s1"></span>
@@ -637,6 +663,7 @@
         <div><dt class="label">Why</dt><dd id="f-why"></dd></div>
       </dl>
       <div class="controls">
+        <button type="button" id="b-send" class="send">Send to someone in New York</button>
         <button type="button" id="b-shuffle">Shuffle</button>
         <button type="button" id="b-share" aria-expanded="false" aria-controls="share-row">Share</button>
         <button type="button" id="b-print" aria-pressed="false">Print frame</button>
@@ -658,7 +685,16 @@
   </section>
 
   <section class="system" aria-label="Deck system" data-in="home">
-    <p class="label suits-tip" id="rules-tip">Tap a suit to fan out its cards. Three cats are hiding in the deck, so tap them when you spot them.</p>
+    <div class="suits-head">
+      <div class="progress">
+        <button type="button" class="deck-count" id="b-wall" aria-haspopup="dialog"><span class="label">Your deck · <u>see all</u></span><b id="prog-label">0 / 52 turned</b></button>
+        <span class="bar" aria-hidden="true"><i id="prog-bar"></i></span>
+        <span class="cats" id="cats" role="img" aria-label="Cats found: 0 of 3"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z"/></svg></span>
+        <span id="cat-badge" hidden title="You found all three cats"><svg viewBox="0 0 24 24" aria-label="Cat badge"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z" fill="#f2b330"/><circle cx="10" cy="13" r="1" fill="#12151f"/><circle cx="14" cy="13" r="1" fill="#12151f"/></svg></span>
+        <button type="button" class="linkish" id="b-reset">Put the deck back</button>
+      </div>
+      <p class="label suits-tip" id="rules-tip">Tap a suit to fan out its cards. Three cats are hiding in the deck, so tap them when you spot them.</p>
+    </div>
     <div class="rules-row">
       <div class="grid" id="suits"></div>
     </div>
@@ -723,6 +759,19 @@
     </form>
     <p class="status" id="pp-status" role="status"></p>
     <ol class="pp-list" id="pp-list"><li class="pp-empty">Nothing here yet. Silk Board × the BQE is taken, sorry.</li></ol>
+  </section>
+
+  <section class="waitlist" id="waitlist" aria-labelledby="wl-h" hidden>
+    <div class="wl-text">
+      <span class="label">The printed deck</span>
+      <h2 id="wl-h">Want the real deck?</h2>
+      <p>52 cards and 2 Jokers on card stock. Leave your email and you'll hear from me once, when it's ready.</p>
+    </div>
+    <form id="wl-form" class="wl-form">
+      <input id="wl-email" type="email" required maxlength="254" placeholder="Your email" aria-label="Your email" autocomplete="email">
+      <button type="submit" id="wl-go">Count me in</button>
+      <p class="status" id="wl-status" role="status"></p>
+    </form>
   </section>
 
   <footer class="foot">
@@ -840,7 +889,7 @@
       $('caption').hidden = !Snd.enabled;
       $('caption').textContent = Snd.enabled ? `Listening to: ${(item.kind === 'card' ? item.sound : jokerInfo[id].sound).replace(/\.$/, '')}` : '';
       if (item.kind === 'card') {
-        $('f-rank').textContent = `${item.rankName} of ${T.SUIT_NAME[item.suit]}${T.HOURS[item.rank] ? ' · ' + T.HOURS[item.rank] : ''}`;
+        $('f-rank').textContent = `${item.rankName} of ${T.SUIT_NAME[item.suit]}`;
         $('f-a').textContent = item.pair[0];
         $('f-b').textContent = item.pair[1];
         typeLine(item.sentence[0], item.sentence[1], !animate);
@@ -1058,7 +1107,7 @@
 
     const suits = [
       { s: 'heart', name: 'Hearts', theme: 'Belonging', d: 'The aunty, the istriwala, the bodega cat and everyone else who knows your business.', ex: 'Cubbon Park × Central Park · Darshini × diner' },
-      { s: 'diamond', name: 'Diamonds', theme: 'Ambition', d: 'Shuttle buses, salad lines and the night shift that pays the rent.', ex: 'Night shift × Midtown stand-up · Silk Board × Cross Bronx' },
+      { s: 'diamond', name: 'Diamonds', theme: 'Ambition', d: 'Shuttle buses, salad lines and the night shift that pays the rent.', ex: 'Night shift × Midtown standup · Silk Board × Cross Bronx' },
       { s: 'club', name: 'Clubs', theme: 'Streets', d: 'Potholes with names, horns with opinions and a snack at four.', ex: 'Auto × cab · St. Mark\'s Road × St. Marks Place' },
       { s: 'spade', name: 'Spades', theme: 'Weather and time', d: 'Monkey caps at fifteen degrees and other seasonal emergencies.', ex: 'The April storm × the first snow · Majestic × Port Authority' }
     ];
@@ -1164,7 +1213,7 @@
       if (reduce || !document.body.animate) { const pick = linked || dealNow(); setFeature(pick, false); dealtNote(pick, linked); return; }
       const ov = document.createElement('div');
       ov.className = 'intro';
-      ov.innerHTML = `<button type="button" class="skip">${linked ? 'Skip' : 'Deal for me'}</button><div class="deck"></div><div class="cap"><b>A Tale of Two Cities</b><span class="label">Shuffling</span></div>`;
+      ov.innerHTML = `<button type="button" class="sound-in" aria-pressed="${Snd.enabled}"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3,7 H6 L10,3.5 V14.5 L6,11 H3 Z" fill="currentColor"/><path d="M12.5,6.2 Q14.4,9 12.5,11.8 M14.6,4.4 Q17.6,9 14.6,13.6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg><span>${Snd.enabled ? 'Sound on' : 'Best with sound'}</span></button><button type="button" class="skip">${linked ? 'Skip' : 'Deal for me'}</button><div class="deck"></div><div class="cap"><b>A Tale of Two Cities</b><span class="label">Shuffling</span></div>`;
       document.body.appendChild(ov);
       const deck = ov.querySelector('.deck');
       const N = 14, cards = [];
@@ -1189,6 +1238,12 @@
       const onKey = (e) => { if (e.key === 'Escape') deal(); };
       addEventListener('keydown', onKey);
       ov.querySelector('.skip').addEventListener('click', deal);
+      const sIn = ov.querySelector('.sound-in');
+      sIn.addEventListener('click', () => {
+        $('b-sound').click();
+        sIn.setAttribute('aria-pressed', String(Snd.enabled));
+        sIn.querySelector('span').textContent = Snd.enabled ? 'Sound on' : 'Best with sound';
+      });
       const base = (i) => `translate(0, ${-i * 0.8}px) rotate(0deg)`;
       const split = (i) => `translate(${i % 2 ? 58 : -58}%, ${-i * 0.8 + 6}px) rotate(${i % 2 ? 8 : -8}deg)`;
       const go = (fn, opt) => Promise.all(cards.map((c, i) => c.animate(fn(i), Object.assign({ fill: 'forwards' }, typeof opt === 'function' ? opt(i) : opt)).finished));
@@ -1479,7 +1534,7 @@
       const ov = document.createElement('div');
       ov.className = 'wall'; ov.setAttribute('data-lenis-prevent', '');
       ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-label', 'Your deck');
-      ov.innerHTML = `<div class="wall-head"><div class="wall-title"><span class="label">Your deck</span><h2>${turned.size} of 52 turned</h2><div class="stickers" aria-label="Stickers for finished suits"></div></div><button type="button" class="wall-x">Close</button></div><div class="wall-tools"><input type="search" class="wall-q" placeholder="Search the cards you've turned" aria-label="Search the deck"><button type="button" class="wall-z" data-z="-1" aria-label="Smaller cards">−</button><button type="button" class="wall-z" data-z="1" aria-label="Bigger cards">+</button></div><div class="wall-grid"></div>`;
+      ov.innerHTML = `<div class="wall-head"><div class="wall-title"><span class="label">Your deck</span><h2>${turned.size} of 52 turned</h2><div class="stickers" aria-label="Stickers for finished suits"></div></div><span class="wall-acts">${turned.size === cardIds.size ? '<button type="button" class="wall-end send">See the ending</button>' : ''}<button type="button" class="wall-x">Close</button></span></div><div class="wall-tools"><input type="search" class="wall-q" placeholder="Search the cards you've turned" aria-label="Search the deck"><button type="button" class="wall-z" data-z="-1" aria-label="Smaller cards">−</button><button type="button" class="wall-z" data-z="1" aria-label="Bigger cards">+</button></div><div class="wall-grid"></div>`;
       const seen = store.get('stickers', []);
       ov.querySelector('.stickers').innerHTML = suits.map((s, i) => {
         const got = suitDone(s.s), fresh = got && !seen.includes(s.s);
@@ -1525,6 +1580,8 @@
         back.focus({ preventScroll: true });
       }
       ov.querySelector('.wall-x').addEventListener('click', close);
+      const endB = ov.querySelector('.wall-end');
+      if (endB) endB.addEventListener('click', () => { close(); showEnding(); });
       // Search narrows the wall; suits with nothing left fold away.
       const q = ov.querySelector('.wall-q');
       q.addEventListener('input', () => {
@@ -1555,6 +1612,7 @@
     };
     const TZ = { blr: 'Asia/Kolkata', nyc: 'America/New_York' };
     const CITY_NAME = { blr: 'Bengaluru', nyc: 'New York' };
+    const otherCity = () => CITY_NAME[state.city === 'nyc' ? 'blr' : 'nyc'];
     const guessCity = () => { try { return /^America\//.test(Intl.DateTimeFormat().resolvedOptions().timeZone) ? 'nyc' : 'blr'; } catch (e) { return 'blr'; } };
     state.city = store.get('city', guessCity());
     (store.get('catsFound', []) || []).forEach((id) => { if (CAT_AT[id]) catsFound.add(id); });
@@ -1576,6 +1634,7 @@
       state.city = c; store.set('city', c);
       $('city-blr').setAttribute('aria-pressed', String(c === 'blr'));
       $('city-nyc').setAttribute('aria-pressed', String(c === 'nyc'));
+      $('b-send').textContent = `Send to someone in ${otherCity()}`;
       if (announce && state.id) {
         setFeature(state.id, true);
         $('status').textContent = c === 'nyc' ? 'New York side up. Hello from the other side of the seam.' : 'Bengaluru side up. Namaskara.';
@@ -1625,19 +1684,48 @@
         const done = store.get('suitsDone', []);
         if (suitDone(s.s) && !done.includes(s.s)) { store.set('suitsDone', [...done, s.s]); toast(`${s.name} done. There's a sticker for you on your deck wall.`); }
       });
-      if (fresh && jokersOpen() && !celebrated) {
+      if (fresh && n === total && !store.get('finished', false)) {
+        store.set('finished', true);
+        setTimeout(showEnding, 900);
+      }
+      if (fresh && jokersOpen() && !celebrated && n < total) {
         celebrated = true;
         toast(`${JOKER_AT} turned. The Jokers are open under How to read the cards.`);
       }
     }
     updateProgress(false);
     $('b-reset').addEventListener('click', () => {
-      turned.clear(); saveTurned(); catsFound.clear(); store.set('catsFound', []); showCats(false); store.set('suitsDone', []); store.set('stickers', []); celebrated = false;
+      turned.clear(); saveTurned(); catsFound.clear(); store.set('catsFound', []); showCats(false); store.set('suitsDone', []); store.set('stickers', []); store.set('finished', false); celebrated = false;
       document.querySelectorAll('.thumb.revealed').forEach((b) => b.classList.remove('revealed'));
       revealed.clear();
       updateProgress(false);
       toast('Fresh deck. Every card is face down again.');
     });
+    // The ending: every card turned, the two Jokers meet in the middle.
+    function showEnding() {
+      if (document.querySelector('.ending')) return;
+      const back = document.activeElement;
+      const ov = document.createElement('div');
+      ov.className = 'ending'; ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true'); ov.setAttribute('aria-labelledby', 'end-h');
+      ov.innerHTML = `<div class="end-in">
+        <div class="end-jokers" aria-hidden="true"><div class="ej l">${render('departure', { static: reduce })}</div><div class="ej r">${render('return', { static: reduce })}</div></div>
+        <span class="label">${cardIds.size} of ${cardIds.size}</span>
+        <h2 id="end-h">That's the whole deck.</h2>
+        <p class="end-clocks"><b>${timeIn('blr')}</b> in Bengaluru, <b>${timeIn('nyc')}</b> in New York.</p>
+        <p class="end-line">Funny how you can miss two places at once.</p>
+        <div class="controls"><button type="button" class="send end-send">Send it to someone in ${otherCity()}</button><button type="button" class="end-x">Stay a while</button></div>
+        <p class="status" role="status"></p>
+      </div>`;
+      const close = () => { ov.remove(); removeEventListener('keydown', onKey); document.documentElement.style.overflow = ''; if (back && back.focus) back.focus({ preventScroll: true }); };
+      const onKey = (e) => { if (e.key === 'Escape') close(); };
+      ov.querySelector('.end-x').addEventListener('click', close);
+      ov.querySelector('.end-send').addEventListener('click', () => sendTo(`I turned every card in A Tale of Two Cities and thought of you.`, ARTIFACT, ov.querySelector('.status')));
+      addEventListener('keydown', onKey);
+      document.documentElement.style.overflow = 'hidden';
+      document.body.appendChild(ov);
+      ov.querySelector('.end-send').focus({ preventScroll: true });
+      Snd.flick && Snd.flick();
+    }
     let toastTimer = null;
     function toast(msg) {
       let t = document.querySelector('.toast');
@@ -1739,6 +1827,17 @@
       const item = all.find((x) => x.id === state.id);
       navigator.share({ title: `${item.title} · A Tale of Two Cities`, url: shareUrl() }).catch(() => {});
     });
+    // Send the card to one person in the other city, with the line written out.
+    function sendTo(text, url, statusEl) {
+      if (navigator.share && !finePointer) { navigator.share({ text, url }).catch(() => {}); return; }
+      window.open(`https://wa.me/?text=${encodeURIComponent(`${text}\n\n${url}`)}`, '_blank', 'noopener');
+      if (statusEl) statusEl.textContent = 'Opening WhatsApp.';
+    }
+    $('b-send').addEventListener('click', () => {
+      const item = all.find((x) => x.id === state.id);
+      const line = item.kind === 'card' ? item.sentence : ['Funny how you can miss', 'two places at once.'];
+      sendTo(`This one made me think of you.\n\n${item.title}\n"${line[0]} ${line[1]}"`, shareUrl(), $('status'));
+    });
     // QR code: hold your phone up so someone across the table can scan the card.
     let qrLib = null;
     const loadQr = () => qrLib || (qrLib = new Promise((res, rej) => {
@@ -1821,7 +1920,7 @@
         await api('/api/feedback', { card: state.id, text: $('fb-text').value, contact: $('fb-contact').value });
         $('fb-form').reset();
         fb.close ? fb.close() : fb.removeAttribute('open');
-        toast('Thanks. A local fact-checker owes you a filter coffee.');
+        toast('Thanks. A local fact checker owes you a filter coffee.');
       } catch (err) {
         $('fb-status').textContent = err.status === 429 ? 'Easy, tiger. Try again in a few minutes.' : 'That did not send. Try again in a moment.';
       }
@@ -1888,6 +1987,20 @@
       });
     }
     const boardDown = 'The pairing board is taking a nap. Try again later.';
+    // The printed-deck waitlist shows only once its database answers.
+    api('/api/waitlist').then(() => { $('waitlist').hidden = false; }).catch(() => {});
+    $('wl-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      $('wl-go').disabled = true;
+      try {
+        await api('/api/waitlist', { email: $('wl-email').value.trim() });
+        $('wl-status').textContent = "You're on the list. One email, when it's ready.";
+        $('wl-email').value = '';
+      } catch (err) {
+        $('wl-status').textContent = err.status === 400 ? 'That email looks off. Try again?' : err.status === 429 ? 'Got it already. Give it a minute.' : 'That did not go through. Try again in a bit.';
+      }
+      $('wl-go').disabled = false;
+    });
     // While the board's database is not connected, hide the tab rather than show a broken one.
     api('/api/pairings?voter=' + encodeURIComponent(anon)).then((d) => { pairs = d.items || []; renderPairings(); }).catch(() => {
       $('pp-status').textContent = boardDown;

@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-12.5 -12.5 275 375" width="2.75in" height="3.75in" role="img" aria-labelledby="h-k-t" data-card="h-k"><style>@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..700&amp;family=Cormorant+Garamond:wght@500;600;700&amp;family=Archivo+Narrow:wght@500;700&amp;family=Noto+Sans+Kannada:wght@500;700&amp;display=swap');</style><title id="h-k-t">King of Hearts: Super Vision</title><rect x="-12.5" y="-12.5" width="275" height="375" fill="#F4ECDC"/><defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-12.5 -12.5 275 375" width="2.75in" height="3.75in" role="img" aria-labelledby="h-k-t h-k-d" data-card="h-k"><style>@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..700&amp;family=Cormorant+Garamond:wght@500;600;700&amp;family=Archivo+Narrow:wght@500;700&amp;family=Noto+Sans+Kannada:wght@500;700&amp;display=swap');</style><title id="h-k-t">King of Hearts: Super Vision</title><desc id="h-k-d">The balcony aunty in Bengaluru and The building super in New York. A balcony above, a basement door below. She watches the street. He holds every key to it. Hidden line: Knows your business better than your mother does.</desc><rect x="-12.5" y="-12.5" width="275" height="375" fill="#F4ECDC"/><defs>
       <clipPath id="h-k-win"><path d="M38,167 V26 Q38,20 44,20 H206 Q212,20 212,26 V167 Z"/></clipPath>
       <clipPath id="h-k-full"><rect x="38" y="20" width="174" height="310" rx="6"/></clipPath>
       <pattern id="h-k-hatch" width="2.2" height="2.2" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0,0 V2.2" stroke="#1E2233" stroke-width="0.35"/></pattern>
@@ -13,7 +13,7 @@
       <path d="M0,5.6 C-1.2,4 -6,1.2 -6,-2 C-6,-5 -2.4,-6.4 0,-3.5 C2.4,-6.4 6,-5 6,-2 C6,1.2 1.2,4 0,5.6 Z" transform="translate(25 51) scale(0.85)" fill="#D9412B"/>
       <text x="25" y="63" text-anchor="middle" font-family="'Cormorant Garamond', Garamond, 'Times New Roman', serif" font-size="4.4" font-weight="700" letter-spacing="0.9" fill="#1E2233">BLR</text>
       <text transform="translate(225 24) rotate(90)" font-family="'Cormorant Garamond', Garamond, 'Times New Roman', serif" font-size="4.1" font-weight="600" letter-spacing="0.75" fill="#1E2233" opacity="0.72">BENGALURU · 12°58′N · 77°35′E</text>
-      <g clip-path="url(#h-k-win)">
+      <g clip-path="url(#h-k-win)"><g class="par">
         <rect width="250" height="350" fill="#F2B330" opacity="0.15"/>
         <path d="M30,44 Q90,60 150,46 T230,54 M30,52 Q100,66 160,52" fill="none" stroke="#1E2233" stroke-width="0.35"/>
         <path d="M48,167 V36 M42,42 H54" stroke="#1E2233" stroke-width="1.6"/>
@@ -38,7 +38,7 @@
         <rect x="104" y="142" width="42" height="25" fill="none" stroke="#1E2233" stroke-width="0.7"/>
         <path d="M108,142 V167 M112,142 V167 M116,142 V167 M120,142 V167 M124,142 V167 M128,142 V167 M132,142 V167 M136,142 V167 M140,142 V167 M144,142 V167 M104,150 H146" stroke="#1E2233" stroke-width="0.4"/>
         <rect x="150" y="136" width="10" height="8" fill="#F2B330" stroke="#1E2233" stroke-width="0.4"/>
-        </g>
+        </g></g>
       <path d="M38,167 V26 Q38,20 44,20 H206 Q212,20 212,26 V167" fill="none" stroke="#1E2233" stroke-width="0.6"/>
       <g transform="translate(125 27.5)">
         <rect x="-24.82" y="-4.6" width="49.64" height="7.6" rx="1" fill="#F4ECDC" stroke="#1E2233" stroke-width="0.35"/>
@@ -50,7 +50,7 @@
       <path d="M0,5.6 C-1.2,4 -6,1.2 -6,-2 C-6,-5 -2.4,-6.4 0,-3.5 C2.4,-6.4 6,-5 6,-2 C6,1.2 1.2,4 0,5.6 Z" transform="translate(25 51) scale(0.85)" fill="#D9412B"/>
       <text x="25" y="63" text-anchor="middle" font-family="'Cormorant Garamond', Garamond, 'Times New Roman', serif" font-size="4.4" font-weight="700" letter-spacing="0.9" fill="#1E2233">NYC</text>
       <text transform="translate(225 24) rotate(90)" font-family="'Cormorant Garamond', Garamond, 'Times New Roman', serif" font-size="4.1" font-weight="600" letter-spacing="0.75" fill="#1E2233" opacity="0.72">NEW YORK · 40°42′N · 74°00′W</text>
-      <g clip-path="url(#h-k-win)">
+      <g clip-path="url(#h-k-win)"><g class="par b">
         <rect width="250" height="350" fill="#3B6EA8" opacity="0.1"/>
         <rect x="38" y="20" width="174" height="147" fill="#D9412B" opacity="0.35"/>
         <rect x="38" y="20" width="174" height="147" fill="url(#h-k-brick)"/>
@@ -69,7 +69,7 @@
         <path d="M92,150 H106 M144,150 H158 M92,150 V167 M158,150 V167 M96,150 V167 M100,150 V167 M150,150 V167 M154,150 V167" stroke="#1E2233" stroke-width="0.8"/>
         <g transform="translate(76 167)"><rect x="-7" y="-18" width="14" height="18" fill="#1E2233" fill-opacity="0.3" stroke="#1E2233" stroke-width="0.5"/><rect x="-8" y="-20" width="16" height="2.6" rx="1" fill="#1E2233" fill-opacity="0.55"/><path d="M-3,-15 V-3 M0,-15 V-3 M3,-15 V-3" stroke="#1E2233" stroke-width="0.35"/></g>
         <g transform="translate(174 167)"><path d="M-7,0 L-8,-11 H8 L7,0 Z" fill="#F2B330" stroke="#1E2233" stroke-width="0.5"/><path d="M0,-11 L4,-34" stroke="#7A4528" stroke-width="1.2"/><path d="M-3,-11 q3,-5 7,0" fill="#F4ECDC" stroke="#1E2233" stroke-width="0.35"/></g>
-        </g>
+        </g></g>
       <path d="M38,167 V26 Q38,20 44,20 H206 Q212,20 212,26 V167" fill="none" stroke="#1E2233" stroke-width="0.6"/>
       <g transform="translate(125 27.5)">
         <rect x="-21.580000000000002" y="-4.6" width="43.160000000000004" height="7.6" rx="1" fill="#F4ECDC" stroke="#1E2233" stroke-width="0.35"/>

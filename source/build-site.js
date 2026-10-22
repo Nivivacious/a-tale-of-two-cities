@@ -112,7 +112,7 @@ page = page.slice(0, start) + `    // ---------- local check: a private note to 
         await api('/api/feedback', { card: state.id, text: $('fb-text').value, contact: $('fb-contact').value });
         $('fb-form').reset();
         fb.close ? fb.close() : fb.removeAttribute('open');
-        toast('Thanks. A local fact-checker owes you a filter coffee.');
+        toast('Thanks. A local fact checker owes you a filter coffee.');
       } catch (err) {
         $('fb-status').textContent = err.status === 429 ? 'Easy, tiger. Try again in a few minutes.' : 'That did not send. Try again in a moment.';
       }
@@ -164,6 +164,20 @@ ${keep}
       });
     }
     const boardDown = 'The pairing board is taking a nap. Try again later.';
+    // The printed-deck waitlist shows only once its database answers.
+    api('/api/waitlist').then(() => { $('waitlist').hidden = false; }).catch(() => {});
+    $('wl-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      $('wl-go').disabled = true;
+      try {
+        await api('/api/waitlist', { email: $('wl-email').value.trim() });
+        $('wl-status').textContent = "You're on the list. One email, when it's ready.";
+        $('wl-email').value = '';
+      } catch (err) {
+        $('wl-status').textContent = err.status === 400 ? 'That email looks off. Try again?' : err.status === 429 ? 'Got it already. Give it a minute.' : 'That did not go through. Try again in a bit.';
+      }
+      $('wl-go').disabled = false;
+    });
     // While the board's database is not connected, hide the tab rather than show a broken one.
     api('/api/pairings?voter=' + encodeURIComponent(anon)).then((d) => { pairs = d.items || []; renderPairings(); }).catch(() => {
       $('pp-status').textContent = boardDown;

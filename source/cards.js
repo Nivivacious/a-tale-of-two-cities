@@ -39,10 +39,6 @@
   const WIN = { x: 38, y: 20, r: 212, b: 167 };
   const BAND_B = 183;
 
-  // Rank to hour of day: each suit, laid out 2 to 10, is one day.
-  const HOURS = { 'A': 'DAWN', '2': '6 AM', '3': '8 AM', '4': '10 AM', '5': 'NOON',
-    '6': '2 PM', '7': '4 PM', '8': '6 PM', '9': '8 PM', '10': '11 PM' };
-
   const CITY = {
     blr: { code: 'BLR', name: 'BENGALURU', coords: '12°58′N · 77°35′E' },
     nyc: { code: 'NYC', name: 'NEW YORK', coords: '40°42′N · 74°00′W' }
@@ -290,7 +286,7 @@
   function half(ctx, def, side, layer) {
     const p = ctx.id, k = INK.ink;
     const city = CITY[side.city];
-    const hour = side.hour || HOURS[def.rank] || '';
+    const hour = side.hour || '';
     const capText = side.caption + (hour ? ' · ' + hour : '');
     const clauseLen = side.clause.length * 3.75;
     let dots = '';
@@ -344,7 +340,7 @@
   const CYCLE = { ride: 12, park: 24, usual: 12, weather: 12, saint: 12, departure: 8, return: 8 };
 
   // ======================================================================
-  // 8 of Clubs: The Ride Home. Auto-rickshaw x yellow cab, 6 PM, rain.
+  // 8 of Clubs: The Ride Home. Auto rickshaw x yellow cab, 6 PM, rain.
   // The auto and the cab share one road. Because the New York half is the
   // Bangalore half turned around, they always pass going the other way.
   // ======================================================================
@@ -881,7 +877,7 @@
   // ---------- registry ----------
   const CARDS = [
     { id: 'ride', rank: '8', rankName: 'Eight', suit: 'club', title: 'The Ride Home', draw: drawRide,
-      pair: ['Auto-rickshaw', 'Yellow cab'],
+      pair: ['Auto rickshaw', 'Yellow cab'],
       sentence: ['The minute it rains,', 'everyone is going the other way.'],
       why: 'Six o\'clock, first drop of rain, and every driver in both cities remembers somewhere else to be.',
       mechanism: 'One road, two lanes. They always pass going opposite ways. Rain arrives, the cab\'s light goes off. Classic.',
@@ -994,7 +990,7 @@
     autoRickshaw, yellowCab, nightCar, tumbler, paperCup, davara
   };
 
-  const api = { INK, FONT, HOURS, CARDS, JOKERS, SUIT_NAME, SUIT_ORDER, RANK_ORDER, CYCLE, render, register, kit, size: { w: W, h: H } };
+  const api = { INK, FONT, CARDS, JOKERS, SUIT_NAME, SUIT_ORDER, RANK_ORDER, CYCLE, render, register, kit, size: { w: W, h: H } };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.TaleCards = api;
 })(typeof window !== 'undefined' ? window : globalThis);
