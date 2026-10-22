@@ -861,7 +861,7 @@
   }
   T.register({
     id: 'd-9', rank: '9', suit: 'diamond', title: 'Night Shift',
-    pair: ['Night-shift support desk', 'Midtown office'],
+    pair: ['Night shift support desk', 'Midtown office'],
     sentence: ['Your morning', 'is my night shift.'],
     why: 'Bengaluru picks up the phone just as New York starts its day.',
     mechanism: "Two desks back to back. Each wall clock keeps the other city's time.",
@@ -1060,8 +1060,8 @@
     pair: ['Delivery rider', 'Deliverista'],
     sentence: ["Everyone's dinner", "is somebody's shift."],
     why: "Rain or shine, someone is riding across town so you don't have to.",
-    mechanism: 'One wet road. The scooter and the e-bike pass each other, both already late.',
-    sound: 'Rain, a scooter buzz, an e-bike whine, a phone ping.',
+    mechanism: 'One wet road. The scooter and the electric bike pass each other, both already late.',
+    sound: 'Rain, a scooter buzz, an electric bike whine, a phone ping.',
     draw(ctx) {
       const p = ctx.id;
       const ride = (inner) => `<g transform="translate(${CX} ${167})">${inner}${ctx.a(move('-200 0;200 0', '12s', ' begin="-6s"'))}</g>`;
@@ -1114,7 +1114,7 @@
   });
 
   // ======================================================================
-  // Queen: So, Rent? A TO-LET board on a Bangalore gate x a FOR RENT sign
+  // Queen: So, Rent? A TO LET board on a Bangalore gate x a FOR RENT sign
   // on a brownstone railing. The party upstairs gets there eventually.
   // ======================================================================
   function partyLights(ctx, x0, y0, w) {
@@ -1128,10 +1128,10 @@
   }
   T.register({
     id: 'd-q', rank: 'Q', suit: 'diamond', title: 'So, Rent?',
-    pair: ['TO-LET board', 'FOR RENT sign'],
+    pair: ['TO LET board', 'FOR RENT sign'],
     sentence: ['Every party gets there eventually.', "So, what's your rent?"],
     why: 'Every conversation in both cities ends at rent, usually before the second drink.',
-    mechanism: 'A TO-LET board and a FOR RENT sign hang back to back, swinging on the same breeze.',
+    mechanism: 'A TO LET board and a FOR RENT sign hang back to back, swinging on the same breeze.',
     sound: 'Party music through a window, a gate creak, pigeons.',
     draw(ctx) {
       const p = ctx.id;
@@ -1166,7 +1166,7 @@
         ${fallingLeaf(ctx, 62, 122, 40, INK.pink, '6s', '0s')}${fallingLeaf(ctx, 80, 120, 44, INK.pink, '6s', '-3s')}
         ${swing(`<path d="M118,127 L111,134 M132,127 L139,134" stroke="${k}" stroke-width="0.4"/>
           <rect x="108" y="133" width="34" height="19" fill="${INK.paper}" stroke="${k}" stroke-width="0.7"/>
-          <text x="125" y="143.4" text-anchor="middle" font-family="${FONT.sans}" font-size="8" font-weight="700" letter-spacing="0.4" fill="${INK.red}">TO-LET</text>
+          <text x="125" y="143.4" text-anchor="middle" font-family="${FONT.sans}" font-size="8" font-weight="700" letter-spacing="0.4" fill="${INK.red}">TO LET</text>
           <text x="125" y="149.6" text-anchor="middle" font-family="${FONT.sans}" font-size="3.8" font-weight="700" letter-spacing="0.4" fill="${k}">2 BHK · CALL</text>`)}`;
 
       let rail = '';

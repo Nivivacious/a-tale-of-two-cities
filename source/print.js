@@ -3,7 +3,7 @@
 // Usage: node prototype/print.js   (needs Playwright with Chromium)
 const fs = require('fs');
 const path = require('path');
-const { chromium } = require('/opt/node-tools/node_modules/playwright');
+const { chromium } = (() => { try { return require('/opt/node-tools/node_modules/playwright'); } catch (e) { return require('playwright'); } })();
 const T = require('./cards.js');
 for (const f of fs.readdirSync(path.join(__dirname, 'deck')).filter((n) => n.endsWith('.js') && n !== 'render.js').sort()) require(path.join(__dirname, 'deck', f));
 

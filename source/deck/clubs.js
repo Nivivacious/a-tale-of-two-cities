@@ -299,7 +299,7 @@
     sentence: ['The loudest vehicle on the street', 'is the one taking kids to school.'],
     why: 'Eight kids, eight bags, one horn. Every school run sounds like a small parade.',
     mechanism: 'Auto and bus back to back. Bags swing off one, red lights flash on the other.',
-    sound: 'Kids shrieking, a two-stroke putter, a horn, a bus door hiss.',
+    sound: 'Kids shrieking, a two stroke putter, a horn, a bus door hiss.',
     draw(ctx) {
       const p = ctx.id;
       const kids = [[-24, -28, INK.red], [-17, -31, INK.blue], [-10, -28, INK.green], [-3, -31, INK.pink], [-20, -22, INK.yellow]];
@@ -563,7 +563,7 @@
   }
   T.register({
     id: 'c-6', rank: '6', suit: 'club', title: 'Heard Before Seen',
-    pair: ['Soppu cart', 'Soft-serve truck'],
+    pair: ['Soppu cart', 'Soft serve truck'],
     sentence: ['You never hear them coming.', 'Only leaving.'],
     why: 'By the time you find your purse, the cart is two streets away and still singing.',
     mechanism: 'Greens cart and ice cream truck, parked nose to tail across the seam, both calling down the block.',
@@ -668,7 +668,7 @@
   T.register({
     id: 'c-7', rank: '7', suit: 'club', title: "Snack O'Clock",
     pair: ['Pani puri cart', 'Hot dog cart'],
-    sentence: ['Four o\'clock', 'is a street-food time zone.'],
+    sentence: ['Four o\'clock', 'is a street food time zone.'],
     why: 'Lunch was hours ago. Dinner is hours away. A cart on the corner knows exactly why.',
     mechanism: 'Two carts at the same kerb, back to back. One dunks puris, the other dunks franks.',
     sound: 'A crisp crack, "one more, anna", steam, a pretzel bell, traffic.',
@@ -761,7 +761,7 @@
 
       return {
         top: { city: 'blr', caption: 'VV PURAM', clause: 'Four o\'clock', art: top },
-        bottom: { city: 'nyc', caption: 'COLUMBUS CIRCLE', clause: 'is a street-food time zone.', art: bottom }
+        bottom: { city: 'nyc', caption: 'COLUMBUS CIRCLE', clause: 'is a street food time zone.', art: bottom }
       };
     }
   });
@@ -860,7 +860,7 @@
     sentence: ['One whistle, one chime,', 'then nobody waits.'],
     why: 'They give you exactly one warning. Every runner on the platform knows it.',
     mechanism: 'Two conductors at the dead centre, leaning out the same way. One whistles, one points.',
-    sound: 'A sharp whistle, "Right, poli!", a two-note chime, doors closing.',
+    sound: 'A sharp whistle, "Right, poli!", a two note chime, doors closing.',
     draw(ctx) {
       const p = ctx.id;
       const runX = ctx.still ? 70 : CX;

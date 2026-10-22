@@ -523,7 +523,7 @@
   }
   T.register({
     id: 'h-7', rank: '7', suit: 'heart', title: 'Group Chat',
-    pair: ['Apartment association group', 'Co-op building chat'],
+    pair: ['Apartment association group', 'Building group chat'],
     sentence: ['Forty neighbours,', 'one missing parcel.'],
     why: 'Two hundred messages about one parcel. Security had it the whole time.',
     mechanism: 'One phone runs through the seam. The chat fills at both ends. The parcel shows up in both.',
@@ -762,7 +762,7 @@
   });
 
   // ======================================================================
-  // 10 of Hearts: PG Life. Paying-guest room x railroad apartment, 11 PM.
+  // 10 of Hearts: PG Life. Paying guest room x railroad apartment, 11 PM.
   // One bathroom door at the seam, a queue on both sides of it.
   // ======================================================================
   function bathDoor(ctx, fill) {
@@ -781,7 +781,7 @@
   }
   T.register({
     id: 'h-10', rank: '10', suit: 'heart', title: 'PG Life',
-    pair: ['Paying-guest room', 'Railroad apartment'],
+    pair: ['Paying guest room', 'Railroad apartment'],
     sentence: ['Too many people, one bathroom,', 'best years of your life.'],
     why: 'Three cots, one bathroom, no privacy. You would move back in tomorrow.',
     mechanism: 'One bathroom door on the seam, a queue on each side. The light under it never goes out.',
@@ -870,7 +870,7 @@
   }
   T.register({
     id: 'h-j', rank: 'J', suit: 'heart', title: 'The Istri Cart',
-    pair: ['Istriwala', 'Wash-and-fold'],
+    pair: ['Istriwala', 'Wash and fold'],
     sentence: ['Knows every shirt', 'on the street.'],
     why: 'He has pressed your shirts for ten years. He knew about the interview first.',
     mechanism: 'One table, one stack of shirts. A charcoal iron slides above, a shirt gets folded below.',

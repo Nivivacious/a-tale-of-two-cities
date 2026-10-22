@@ -1127,14 +1127,14 @@
 
   // ======================================================================
   // King: Better Before. MG Road x East Village.
-  // Two old-timers, back to back, each remembering a city that left.
+  // Two old timers, back to back, each remembering a city that left.
   // ======================================================================
   T.register({
     id: 's-k', rank: 'K', suit: 'spade', title: 'Better Before',
-    pair: ['Bangalore old-timer', 'New York old-timer'],
+    pair: ['Bangalore old timer', 'New York old timer'],
     sentence: ['Everyone says it was better', 'the year they arrived.'],
     why: 'Every city peaked the year you got there. Ask anyone who got there.',
-    mechanism: 'Two old-timers sit back to back. Each speech bubble holds the building the tower replaced.',
+    mechanism: 'Two old timers sit back to back. Each speech bubble holds the building the tower replaced.',
     sound: 'A crane groaning, a walking stick, pigeons, the same story twice.',
     draw(ctx) {
       const p = ctx.id;
