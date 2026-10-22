@@ -81,8 +81,8 @@ swap('  /* Toasts */', `  /* Local check dialog */
   dialog { background: var(--panel); color: var(--ivory); border: 1px solid var(--rule); border-radius: 3px; padding: 0; width: min(560px, calc(100vw - 32px)); }
   dialog::backdrop { background: rgba(10, 12, 18, 0.7); }
   .fb { display: grid; gap: 14px; padding: 24px; }
-  .fb h2 { font-size: 28px; }
-  textarea { font: inherit; font-size: 18px; color: var(--ivory); background: transparent; border: 1px solid var(--rule); border-radius: 2px; padding: 10px; resize: vertical; text-transform: none; letter-spacing: 0; }
+  .fb h2 { font-size: 26px; }
+  textarea { font: inherit; font-size: 16px; color: var(--ivory); background: transparent; border: 1px solid var(--rule); border-radius: 2px; padding: 10px; resize: vertical; text-transform: none; letter-spacing: 0; }
   textarea:focus-visible { outline: none; border-color: var(--marigold); }
 
   /* Toasts */`);
@@ -268,8 +268,8 @@ ${fonts}<style>
   .card svg { display: block; width: 100%; height: 100%; }
   @keyframes wobble { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg) translateY(-6px); } }
   .label { font-family: 'Faculty Glyphic', Georgia, serif; font-weight: 700; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #a8a294; }
-  h1 { font-family: 'Faculty Glyphic', Georgia, serif; font-weight: 500; font-size: clamp(40px, 9vw, 64px); line-height: 1; margin: 0; }
-  p { font-size: 22px; font-style: italic; color: #a8a294; margin: 0; }
+  h1 { font-family: 'Faculty Glyphic', Georgia, serif; font-weight: 500; font-size: clamp(36px, 8vw, 56px); line-height: 1; margin: 0; }
+  p { font-size: 19px; font-style: italic; color: #a8a294; margin: 0; }
   a { font-family: 'Faculty Glyphic', Georgia, serif; font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: #12151f; background: #f2b330; text-decoration: none; padding: 13px 18px; border-radius: 2px; }
   a:focus-visible { outline: 2px solid #f4ecdc; outline-offset: 3px; }
   @media (prefers-reduced-motion: reduce) { .card { animation: none; } }

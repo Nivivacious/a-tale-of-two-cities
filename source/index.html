@@ -28,8 +28,8 @@
     background: var(--table);
     color: var(--ivory);
     font-family: var(--body);
-    font-size: 19px;
-    line-height: 1.5;
+    font-size: 17px;
+    line-height: 1.55;
     padding-left: max(16px, env(safe-area-inset-left, 0px));
     padding-right: max(16px, env(safe-area-inset-right, 0px));
     padding-block: 0 64px;
@@ -41,12 +41,13 @@
     letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted);
   }
   h1, h2, h3 { font-family: var(--display); font-weight: 500; text-wrap: balance; margin: 0; }
-  p { margin: 0; }
+  p { margin: 0; text-wrap: pretty; }
+  header .thesis, .jokers-text blockquote { text-wrap: balance; }
 
   header { padding-top: 48px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
-  header h1 { font-size: clamp(42px, 7vw, 84px); line-height: 1; letter-spacing: -0.01em; }
+  header h1 { font-size: clamp(40px, 6.4vw, 76px); line-height: 1; letter-spacing: -0.01em; }
   header h1 em { font-style: italic; color: var(--marigold); }
-  header .thesis { font-size: 24px; font-style: italic; color: var(--muted); max-width: 40ch; }
+  header .thesis { font-size: 21px; font-style: italic; color: var(--muted); max-width: 40ch; }
 
   /* Stage */
   .stage { display: grid; grid-template-columns: minmax(0, 420px) minmax(0, 1fr); gap: 48px; align-items: start; }
@@ -64,16 +65,16 @@
   }
   .card svg { display: block; width: 100%; height: 100%; }
   .info { display: grid; gap: 22px; min-width: 0; }
-  .info h2 { font-size: clamp(30px, 4vw, 44px); line-height: 1.05; }
-  .pairing { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: baseline; font-size: 22px; }
-  .pairing .x { color: var(--vermilion); font-family: var(--display); font-size: 30px; line-height: 0.8; }
+  .info h2 { font-size: clamp(28px, 3.6vw, 40px); line-height: 1.05; }
+  .pairing { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: baseline; font-size: 19px; }
+  .pairing .x { color: var(--vermilion); font-family: var(--display); font-size: 24px; line-height: 0.8; }
   .sentence {
     border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
     padding-block: 18px; display: grid; gap: 4px;
   }
-  .sentence .half { font-family: var(--display); font-style: italic; font-size: 24px; line-height: 1.25; }
+  .sentence .half { font-family: var(--display); font-style: italic; font-size: 21px; line-height: 1.25; }
   .sentence .half.b { color: var(--marigold); }
-  .sentence .note { font-size: 16px; color: var(--muted); margin-top: 6px; }
+  .sentence .note { font-size: 14px; color: var(--muted); margin-top: 6px; }
   .info dl { display: grid; gap: 14px; margin: 0; }
   .info dt { margin-bottom: 2px; }
   .info dd { margin: 0; max-width: 60ch; }
@@ -87,11 +88,11 @@
   button:hover { border-color: var(--ivory); }
   button:focus-visible { outline: 2px solid var(--marigold); outline-offset: 2px; }
   button[aria-pressed="true"] { background: var(--ivory); color: var(--table); border-color: var(--ivory); }
-  .status { font-size: 15px; color: var(--muted); min-height: 1.5em; }
+  .status { font-size: 14px; color: var(--muted); min-height: 1.5em; }
 
   /* The deck lives in House rules: tap a suit, its cards fan out */
   .reel-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: baseline; margin-bottom: 24px; }
-  .reel-head h2 { font-size: 32px; }
+  .reel-head h2 { font-size: 28px; }
   .reel-head .controls { gap: 8px; }
   .grid > .suit { font: inherit; color: inherit; text-align: left; text-transform: none; letter-spacing: 0; border: 0; border-radius: 0; cursor: pointer; grid-template-columns: 1fr auto; column-gap: 14px; }
   .grid > .suit > :not(.pile) { grid-column: 1; }
@@ -136,21 +137,21 @@
   .pair .thumb { perspective: 1200px; }
   .pair .side { border-radius: 4.8% / 3.4%; box-shadow: 0 20px 40px -18px rgba(0, 0, 0, 0.75); }
   .jokers-text { display: grid; gap: 18px; min-width: 0; }
-  .jokers-text h2 { font-size: clamp(30px, 4vw, 44px); line-height: 1.05; }
-  .jokers-text blockquote { margin: 0; font-family: var(--display); font-style: italic; font-size: 26px; color: var(--marigold); line-height: 1.25; }
+  .jokers-text h2 { font-size: clamp(28px, 3.6vw, 40px); line-height: 1.05; }
+  .jokers-text blockquote { margin: 0; font-family: var(--display); font-style: italic; font-size: 22px; color: var(--marigold); line-height: 1.25; }
   .jokers-text p { max-width: 60ch; }
 
   /* System */
-  .system h2 { font-size: 32px; margin-bottom: 24px; }
+  .system h2 { font-size: 28px; margin-bottom: 24px; }
   .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
   .grid > div, .grid > .suit { background: var(--table); padding: 20px; display: grid; gap: 8px; align-content: start; min-width: 0; }
-  .grid h3 { font-size: 24px; display: flex; gap: 10px; align-items: baseline; }
+  .grid h3 { font-size: 21px; display: flex; gap: 10px; align-items: baseline; }
   .grid h3 svg { width: 16px; height: 16px; flex: none; }
-  .grid p { font-size: 17px; }
-  .grid .ex { font-size: 15px; color: var(--muted); font-style: italic; }
+  .grid p { font-size: 15px; }
+  .grid .ex { font-size: 14px; color: var(--muted); font-style: italic; }
   .specs { display: grid; grid-template-columns: minmax(0, 1fr); gap: 48px; margin-top: 40px; }
   .specs > div { display: grid; gap: 8px; align-content: start; min-width: 0; }
-  .specs p { font-size: 17px; }
+  .specs p { font-size: 15px; }
 
   @media (max-width: 860px) {
     .stage, .jokers { grid-template-columns: minmax(0, 1fr); }
@@ -180,8 +181,8 @@
   .seg button { text-transform: none; letter-spacing: 0.02em; font-size: 14px; }
   .progress { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; min-width: 0; flex: 1 1 260px; max-width: 460px; }
   .deck-count { display: grid; gap: 2px; }
-  .deck-count b { font-family: var(--display); font-weight: 500; font-size: 22px; font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .tips { font-size: 16px; color: var(--muted); margin-top: 6px; }
+  .deck-count b { font-family: var(--display); font-weight: 500; font-size: 20px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .tips { font-size: 15px; color: var(--muted); margin-top: 6px; }
   .tips b { color: var(--ivory); font-weight: 600; }
   .bar { flex: 1 1 80px; min-width: 60px; height: 4px; background: var(--rule); border-radius: 2px; overflow: hidden; }
   .bar i { display: block; height: 100%; width: 0; background: var(--marigold); transition: width 0.5s; }
@@ -195,7 +196,7 @@
   .found-cat svg { display: block; width: 100%; height: 100%; fill: var(--marigold); }
   .found-cat { position: fixed; z-index: 70; width: 46px; height: 46px; margin: -23px 0 0 -23px; pointer-events: none; animation: found 1.1s cubic-bezier(0.2, 0.7, 0.3, 1) forwards; }
   @keyframes found { 0% { transform: scale(0.3); opacity: 0; } 25% { transform: scale(1.2); opacity: 1; } 100% { transform: translateY(-60px) scale(1); opacity: 0; } }
-  .hint { margin: 0; text-align: center; font-style: italic; font-size: 16px; color: var(--muted); transition: opacity 0.6s; }
+  .hint { margin: 0; text-align: center; font-style: italic; font-size: 14px; color: var(--muted); transition: opacity 0.6s; }
   .hint.done { opacity: 0; }
 
   /* The card leans toward the cursor and catches the light */
@@ -203,9 +204,9 @@
   .glint { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.22) 50%, transparent 62%) no-repeat; background-size: 250% 100%; background-position: var(--gx, 120%) 0; mix-blend-mode: soft-light; }
   #feature { cursor: pointer; }
   #feature:focus-visible { outline: 2px solid var(--marigold); outline-offset: 4px; }
-  .caption { text-align: center; font-size: 15px; color: var(--muted); font-style: italic; margin: 0; }
+  .caption { text-align: center; font-size: 14px; color: var(--muted); font-style: italic; margin: 0; }
   .sentence-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-  .chip { font-family: var(--body); text-transform: none; letter-spacing: 0; font-size: 16px; padding: 6px 12px; border-color: var(--marigold); color: var(--marigold); }
+  .chip { font-family: var(--body); text-transform: none; letter-spacing: 0; font-size: 14px; padding: 6px 12px; border-color: var(--marigold); color: var(--marigold); }
   .chip span { font-family: 'Noto Sans Kannada', sans-serif; }
   .kn-tools { display: inline-flex; gap: 8px; align-items: center; }
   .chip.say { padding: 6px 10px; display: inline-grid; place-items: center; }
@@ -218,15 +219,15 @@
   #visitors b { color: var(--ivory); font-weight: 700; }
 
   /* Toasts */
-  .toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); translate: -50% 0; z-index: 60; background: var(--ivory); color: var(--table); font-family: var(--body); font-size: 17px; padding: 12px 18px; border-radius: 3px; box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.8); max-width: calc(100vw - 32px); }
+  .toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); translate: -50% 0; z-index: 60; background: var(--ivory); color: var(--table); font-family: var(--body); font-size: 15px; padding: 12px 18px; border-radius: 3px; box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.8); max-width: calc(100vw - 32px); }
 
   /* Get the deck */
   .product { display: grid; grid-template-columns: minmax(0, 1fr); max-width: 640px; border: 1px solid var(--rule); }
   .panel { background: var(--table); padding: 28px; display: grid; gap: 14px; align-content: start; min-width: 0; }
-  .panel h2, .pairings h2 { font-size: 32px; }
+  .panel h2, .pairings h2 { font-size: 28px; }
   .panel form { display: grid; gap: 14px; }
   .field { display: grid; gap: 6px; font-family: var(--label); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
-  input { font: inherit; font-family: var(--body); font-size: 18px; text-transform: none; letter-spacing: 0; color: var(--ivory); background: transparent; border: 0; border-bottom: 1px solid var(--rule); padding: 8px 2px; min-width: 0; width: 100%; }
+  input { font: inherit; font-family: var(--body); font-size: 16px; text-transform: none; letter-spacing: 0; color: var(--ivory); background: transparent; border: 0; border-bottom: 1px solid var(--rule); padding: 8px 2px; min-width: 0; width: 100%; }
   input:focus-visible { outline: none; border-bottom-color: var(--marigold); }
   input::placeholder { color: var(--muted); opacity: 0.7; }
   .count { display: flex; align-items: center; gap: 12px; }
@@ -238,10 +239,10 @@
   .pp-form { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.4fr) auto; gap: 14px; align-items: end; }
   .pp-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
   .pp-list li { background: var(--table); padding: 14px 18px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; align-items: center; }
-  .pp-pair { font-family: var(--display); font-size: 21px; }
+  .pp-pair { font-family: var(--display); font-size: 19px; }
   .pp-pair .x { color: var(--vermilion); padding: 0 6px; }
-  .pp-meta { font-size: 15px; color: var(--muted); font-style: italic; grid-column: 1; }
-  .pp-vote { grid-column: 2; grid-row: 1 / span 2; text-transform: none; letter-spacing: 0; font-size: 15px; display: flex; gap: 8px; align-items: center; }
+  .pp-meta { font-size: 14px; color: var(--muted); font-style: italic; grid-column: 1; }
+  .pp-vote { grid-column: 2; grid-row: 1 / span 2; text-transform: none; letter-spacing: 0; font-size: 14px; display: flex; gap: 8px; align-items: center; }
   .pp-vote[aria-pressed="true"] { background: var(--vermilion); border-color: var(--vermilion); color: var(--ivory); }
   .pp-empty { background: var(--table); padding: 18px; color: var(--muted); font-style: italic; }
   @media (max-width: 860px) {
@@ -444,7 +445,7 @@
 
   /* Read a card: numbered dots, one short note each */
   .suits-tip { margin: 0 0 16px; }
-  .newhere { margin: -6px 0 0; text-align: center; font-size: 15px; font-style: italic; }
+  .newhere { margin: -6px 0 0; text-align: center; font-size: 14px; font-style: italic; }
   .newhere a { color: var(--muted); text-underline-offset: 3px; }
   .newhere a:hover { color: var(--ivory); }
   .newhere a:focus-visible { outline: 2px solid var(--marigold); outline-offset: 3px; }
@@ -452,9 +453,9 @@
   .reading { display: grid; gap: 96px; }
   .read-card { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 56px; align-items: center; }
   .read-text { display: grid; gap: 18px; min-width: 0; }
-  .read-text h2 { font-size: clamp(30px, 4vw, 44px); line-height: 1.05; }
+  .read-text h2 { font-size: clamp(28px, 3.6vw, 40px); line-height: 1.05; }
   .read-list { margin: 0; padding: 0; list-style: none; counter-reset: dot; display: grid; gap: 4px; }
-  .read-list li { counter-increment: dot; position: relative; padding: 10px 12px 10px 46px; font-size: 17px; max-width: 60ch; border-radius: 3px; transition: background 0.2s; }
+  .read-list li { counter-increment: dot; position: relative; padding: 10px 12px 10px 46px; font-size: 16px; max-width: 60ch; border-radius: 3px; transition: background 0.2s; }
   .read-list li::before { content: counter(dot); position: absolute; left: 10px; top: 11px; width: 22px; height: 22px; border-radius: 50%; background: var(--marigold); color: var(--table); font-family: var(--label); font-size: 11px; font-weight: 700; display: grid; place-items: center; }
   .read-list li.on { background: var(--panel); }
   .read-list li { color: var(--muted); }
@@ -470,8 +471,8 @@
   @media (max-width: 600px) {
     .rules-row .grid > .suit { padding: 16px 14px; grid-template-columns: minmax(0, 1fr); }
     .rules-row .pile { display: none; }
-    .rules-row .grid h3 { font-size: 20px; }
-    .rules-row .grid .ex { font-size: 14px; }
+    .rules-row .grid h3 { font-size: 18px; }
+    .rules-row .grid .ex { font-size: 13px; }
   }
   @media (max-width: 360px) { .rules-row .grid { grid-template-columns: minmax(0, 1fr); } }
   .anat-card { position: relative; width: 100%; aspect-ratio: 5 / 7; margin-top: 6px; }
@@ -479,7 +480,7 @@
   .dot { position: absolute; left: var(--x); top: var(--y); translate: -50% -50%; width: 22px; height: 22px; min-height: 0; padding: 0; border-radius: 50%; border: 0; background: var(--marigold); color: var(--table); font-family: var(--label); font-size: 11px; font-weight: 700; letter-spacing: 0; display: grid; place-items: center; box-shadow: 0 0 0 4px rgba(242, 179, 48, 0.25); cursor: pointer; }
   .dot::before { content: ""; position: absolute; inset: -11px; }
   .dot:hover, .dot:focus-visible, .dot[aria-expanded="true"] { box-shadow: 0 0 0 6px rgba(242, 179, 48, 0.35); z-index: 2; }
-  .dot .note { position: absolute; left: calc(100% + 14px); top: 50%; translate: 0 -50%; white-space: nowrap; font-family: var(--body); font-size: 15px; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--ivory); background: var(--panel); border: 1px solid var(--rule); padding: 5px 10px; border-radius: 3px; opacity: 0; pointer-events: none; transition: opacity 0.2s, translate 0.2s; }
+  .dot .note { position: absolute; left: calc(100% + 14px); top: 50%; translate: 0 -50%; white-space: nowrap; font-family: var(--body); font-size: 14px; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--ivory); background: var(--panel); border: 1px solid var(--rule); padding: 5px 10px; border-radius: 3px; opacity: 0; pointer-events: none; transition: opacity 0.2s, translate 0.2s; }
   .dot .note::before { content: ""; position: absolute; right: 100%; top: 50%; width: 14px; height: 1px; background: var(--marigold); }
   .dot.left .note { left: auto; right: calc(100% + 14px); }
   .dot.left .note::before { right: auto; left: 100%; }
@@ -503,7 +504,7 @@
 
   /* Deck wall: search and size */
   .wall-tools { max-width: 1120px; margin: 14px auto 0; display: flex; gap: 8px; align-items: center; }
-  .wall-q { flex: 1; min-width: 0; font-size: 17px; border: 1px solid var(--rule); border-radius: 99px; padding: 9px 16px; background: transparent; }
+  .wall-q { flex: 1; min-width: 0; font-size: 16px; border: 1px solid var(--rule); border-radius: 99px; padding: 9px 16px; background: transparent; }
   .wall-q:focus-visible { border-color: var(--marigold); }
   .wall-z { flex: none; width: 40px; height: 40px; padding: 0; border-radius: 50%; font-size: 18px; letter-spacing: 0; }
   .wall-z:disabled { opacity: 0.35; cursor: default; }
@@ -514,9 +515,9 @@
   @media (max-width: 600px) {
     .wrap { gap: 56px; }
     header { padding-top: 22px; gap: 10px; }
-    header h1 { font-size: clamp(34px, 10vw, 84px); }
-    header .thesis { font-size: 19px; }
-    .tips { font-size: 15px; margin-top: 0; }
+    header h1 { font-size: clamp(34px, 10vw, 76px); }
+    header .thesis { font-size: 18px; }
+    .tips { font-size: 14px; margin-top: 0; }
     .strip { gap: 10px 16px; margin-top: 2px; }
     .city { padding: 6px 10px; }
     .city b { font-size: 18px; }
@@ -1005,7 +1006,7 @@
       b.addEventListener('click', () => {
         if (b.classList.contains('revealed')) return;
         if (!jokersOpen()) {
-          $('joker-lock').textContent = `The Jokers open after ${JOKER_AT} cards. ${jokersLeft()} to go.`;
+          $('joker-lock').textContent = `The Jokers open after ${JOKER_AT} cards. ${jokersLeft()}\u00a0to\u00a0go.`;
           b.animate && !reduce && b.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(6px)' }, { transform: 'translateX(0)' }], { duration: 300 });
           return;
         }
@@ -1577,7 +1578,7 @@
       const n = turned.size, total = cardIds.size;
       $('prog-label').textContent = `${n} / ${total} turned`;
       $('prog-bar').style.width = `${(n / total) * 100}%`;
-      $('joker-lock').textContent = jokersOpen() ? '' : `The Jokers open after you turn ${JOKER_AT} cards. ${jokersLeft()} to go.`;
+      $('joker-lock').textContent = jokersOpen() ? '' : `The Jokers open after you turn ${JOKER_AT} cards. ${jokersLeft()}\u00a0to\u00a0go.`;
       document.querySelectorAll('.jflip').forEach((b) => b.classList.toggle('locked', !jokersOpen()));
       $('tease').hidden = jokersOpen();
       $('jring-n').textContent = String(jokersLeft());
