@@ -15,7 +15,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Archivo+Narrow:wght@500;700&family=Noto+Sans+Kannada:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Faculty+Glyphic&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..600&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Archivo+Narrow:wght@500;700&family=Noto+Sans+Kannada:wght@500;700&display=swap">
 <style>html, body { margin: 0; } :root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); } img { max-width: 100%; }</style>
 </head>
 <body>
@@ -29,12 +29,17 @@
     --vermilion: #e2553c;
     --marigold: #f2b330;
     --rule: rgba(244, 236, 220, 0.14);
-    --display: 'Bodoni Moda', 'Bodoni 72', Didot, serif;
-    --body: 'Cormorant Garamond', Garamond, 'Times New Roman', serif;
-    --label: 'Archivo Narrow', 'Arial Narrow', sans-serif;
+    /* The site speaks in Faculty Glyphic. The cards keep their own type (see svg below). */
+    --display: 'Faculty Glyphic', Georgia, serif;
+    --body: 'Faculty Glyphic', Georgia, serif;
+    --label: 'Faculty Glyphic', Georgia, serif;
     color-scheme: dark;
   }
   * { box-sizing: border-box; }
+  /* Faculty Glyphic has one weight and no italic: no faked bold or slanted letters. */
+  html { font-synthesis: none; }
+  /* Cards draw some text without naming a font; they keep the deck's Cormorant Garamond. */
+  svg { font-family: 'Cormorant Garamond', Garamond, 'Times New Roman', serif; font-synthesis: weight style; }
   body {
     background: var(--table);
     color: var(--ivory);
@@ -476,6 +481,13 @@
   .read-list li { counter-increment: dot; position: relative; padding: 10px 12px 10px 46px; font-size: 17px; max-width: 60ch; border-radius: 3px; transition: background 0.2s; }
   .read-list li::before { content: counter(dot); position: absolute; left: 10px; top: 11px; width: 22px; height: 22px; border-radius: 50%; background: var(--marigold); color: var(--table); font-family: var(--label); font-size: 11px; font-weight: 700; display: grid; place-items: center; }
   .read-list li.on { background: var(--panel); }
+  .read-list li { color: var(--muted); }
+  .read-list li b { font-weight: inherit; color: var(--ivory); }
+  /* Faculty Glyphic runs wider than the old narrow labels: tighten them on phones so they stay on one line */
+  @media (max-width: 600px) {
+    .rules-row .grid .label { font-size: 11px; letter-spacing: 0.06em; }
+    .cross { font-size: 11px; letter-spacing: 0.06em; gap: 6px; }
+  }
   .anatomy { display: grid; gap: 8px; justify-items: start; }
   @media (max-width: 860px) { .read-card { grid-template-columns: minmax(0, 1fr); gap: 28px; } .anatomy { justify-items: center; } .anatomy .anat-card { width: min(260px, 70%); } }
   /* Phones: two neat columns of suits, no piles to crowd them */
@@ -1771,19 +1783,20 @@
       const img = new Image();
       const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }));
       await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = url; });
+      try { await document.fonts.load('40px "Faculty Glyphic"'); } catch (e) { /* draw with the fallback */ }
       const c = document.createElement('canvas'); c.width = 1080; c.height = 1920;
       const g = c.getContext('2d');
       g.fillStyle = '#12151f'; g.fillRect(0, 0, 1080, 1920);
       g.strokeStyle = 'rgba(244,236,220,0.25)'; g.lineWidth = 2; g.strokeRect(40, 40, 1000, 1840);
-      g.fillStyle = '#a8a294'; g.font = '700 30px "Archivo Narrow", sans-serif'; g.textAlign = 'center';
+      g.fillStyle = '#a8a294'; g.font = '30px "Faculty Glyphic", Georgia, serif'; g.textAlign = 'center';
       g.fillText('A  TALE  OF  TWO  CITIES', 540, 140);
       g.save(); g.shadowColor = 'rgba(0,0,0,0.6)'; g.shadowBlur = 50; g.shadowOffsetY = 24;
       g.drawImage(img, 165, 220, 750, 1050); g.restore();
-      g.fillStyle = '#f4ecdc'; g.font = '500 76px "Bodoni Moda", serif'; g.fillText(item.title, 540, 1420);
+      g.fillStyle = '#f4ecdc'; g.font = '72px "Faculty Glyphic", Georgia, serif'; g.fillText(item.title, 540, 1420);
       const line = item.kind === 'card' ? item.sentence : ['Funny how you can miss', 'two places at once.'];
-      g.font = 'italic 500 50px "Bodoni Moda", serif'; g.fillStyle = '#f4ecdc'; g.fillText(line[0], 540, 1530);
+      g.font = '46px "Faculty Glyphic", Georgia, serif'; g.fillStyle = '#f4ecdc'; g.fillText(line[0], 540, 1530);
       g.fillStyle = '#f2b330'; g.fillText(line[1], 540, 1600);
-      g.fillStyle = '#a8a294'; g.font = 'italic 500 36px "Cormorant Garamond", serif'; g.fillText('For anyone whose phone shows two clocks.', 540, 1780);
+      g.fillStyle = '#a8a294'; g.font = '34px "Faculty Glyphic", Georgia, serif'; g.fillText('For anyone whose phone shows two clocks.', 540, 1780);
       URL.revokeObjectURL(url);
       const blob = await new Promise((r) => c.toBlob(r, 'image/png'));
       try { await dl.save({ filename: `${slug(item.title)}-story.png`, data: blob }); $('status').textContent = 'Saved. Go make your group chat jealous.'; }
