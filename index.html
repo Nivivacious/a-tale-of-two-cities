@@ -317,6 +317,8 @@
   .ring-title { position: absolute; left: 50%; top: calc(50% - var(--w) * 1.4 - 34px); translate: -50% -100%; text-align: center; pointer-events: none; display: grid; gap: 8px; padding-inline: 16px; width: 100%; }
   .ring-title b { font-family: var(--display); font-weight: 500; font-size: clamp(26px, 4.4vw, 52px); line-height: 1; }
   .ring-title b em { color: var(--marigold); }
+  .ring-hint { position: absolute; left: 0; right: 0; top: calc(50% + var(--w) * 1.4 + 40px); margin: 0; text-align: center; color: var(--muted); pointer-events: none; animation: hint-in 0.6s 1.2s both; }
+  @keyframes hint-in { from { opacity: 0; } to { opacity: 1; } }
 
   /* House rules: the fan is a reel. Swipe and the cards ride an arc */
   .fan .thumb { transform: rotate(var(--r, 0deg)) translateY(var(--y, 0px)); }
@@ -461,6 +463,10 @@
 
   /* Read a card: numbered dots, one short note each */
   .suits-tip { margin: 0 0 16px; }
+  .newhere { margin: -6px 0 0; text-align: center; font-size: 15px; font-style: italic; }
+  .newhere a { color: var(--muted); text-underline-offset: 3px; }
+  .newhere a:hover { color: var(--ivory); }
+  .newhere a:focus-visible { outline: 2px solid var(--marigold); outline-offset: 3px; }
   @media (max-width: 860px) { .rules-row .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   .reading { display: grid; gap: 96px; }
   .read-card { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 56px; align-items: center; }
@@ -589,6 +595,7 @@
       <p class="cross" id="cross" aria-hidden="true"><svg viewBox="-12 -12 24 24"><circle r="10.5" fill="none" stroke="currentColor" stroke-width="1.2"/><line id="hand-h" y2="-5.5" stroke="#f4ecdc" stroke-width="1.8" stroke-linecap="round"/><line id="hand-m" y2="-8.2" stroke="#f2b330" stroke-width="1.2" stroke-linecap="round"/><circle r="1.3" fill="#f4ecdc"/></svg><b id="cross-time">--:--</b><span id="cross-city"></span><span class="cross-hint" id="cross-hint">· Scroll to cross</span></p>
       <div class="floor" id="floor" aria-hidden="true"></div><div class="tilt" id="tilt"><div class="rings" id="rings" aria-hidden="true" hidden><i></i><i></i><i></i></div><div class="card" id="feature" role="button" tabindex="0" aria-label="Turn the card around"></div><span class="glint" id="glint" aria-hidden="true"></span><div class="loupe" id="loupe" aria-hidden="true" hidden><div class="lens" id="lens"></div></div></div>
       <p class="hint" id="hint">Read half, tap for the rest, swipe for the next.</p>
+      <p class="newhere"><a href="#how-to-read" id="b-howto">New here? How to read a card</a></p>
       <div class="stepper">
         <button type="button" class="nav" id="b-sound" aria-pressed="false" aria-label="Sound on"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M3,7 H6 L10,3.5 V14.5 L6,11 H3 Z" fill="currentColor"/><path class="ico-on" d="M12.5,6.2 Q14.4,9 12.5,11.8 M14.6,4.4 Q17.6,9 14.6,13.6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path class="ico-off" d="M12.5,6.8 L16.5,11.2 M16.5,6.8 L12.5,11.2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></button>
         <span class="step-mid">
@@ -660,11 +667,11 @@
       <span class="label" id="read-tip">Tap a dot on the card</span>
       <h2>How to read a card</h2>
       <ol class="read-list" id="read-list">
-        <li><b>Rank and suit.</b> The suit is the subject: Hearts for belonging, Diamonds for ambition, Clubs for streets, Spades for weather and time. The rank is the hour. Lay a suit out from 2 to 10 and you get one day, 6 AM to 11 PM.</li>
-        <li><b>City and coordinates.</b> Real coordinates run up the side of each half, so you always know which city you are standing in.</li>
-        <li><b>The street, the time.</b> Each half has a caption with the place and the hour. Both cities share the same local hour.</li>
-        <li><b>The hidden line.</b> One sentence runs across the seam in the middle. The first half reads from Bangalore's side.</li>
-        <li><b>Turn it for New York.</b> Turn the card around and the sentence finishes, now from New York's side. Every card works either way up.</li>
+        <li><b>Rank and suit.</b> The suit tells you what the card is about: Hearts for belonging, Diamonds for ambition, Clubs for streets, Spades for weather and time.</li>
+        <li><b>City and coordinates.</b> Each half has its city's real coordinates up the side.</li>
+        <li><b>The street.</b> Each half has a small caption naming the place, one in Bangalore and one in New York.</li>
+        <li><b>The hidden line.</b> A sentence runs along the seam in the middle. You read the first half from Bangalore's side.</li>
+        <li><b>Turn it for New York.</b> Turn the card around to read the rest of the sentence from New York's side.</li>
       </ol>
     </div>
   </section>
@@ -674,7 +681,7 @@
       <button type="button" class="thumb jflip" id="j-dep" data-id="departure" aria-label="Face-down Joker"><span class="flip"><span class="side back"></span><span class="side front"></span></span></button>
       <button type="button" class="thumb jflip" id="j-ret" data-id="return" aria-label="Face-down Joker"><span class="flip"><span class="side back"></span><span class="side front"></span></span></button>
       <div class="tease" id="tease" aria-hidden="true">
-        <div class="jring"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="#12151f" stroke="rgba(244,236,220,0.18)" stroke-width="3"/><circle id="jring-arc" cx="32" cy="32" r="28" fill="none" stroke="#f2b330" stroke-width="3" stroke-linecap="round" pathLength="100" stroke-dasharray="0 100" transform="rotate(-90 32 32)"/></svg><b id="jring-n">52</b><span>to go</span></div>
+        <div class="jring"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="28" fill="#12151f" stroke="rgba(244,236,220,0.18)" stroke-width="3"/><circle id="jring-arc" cx="32" cy="32" r="28" fill="none" stroke="#f2b330" stroke-width="3" stroke-linecap="round" pathLength="100" stroke-dasharray="0 100" transform="rotate(-90 32 32)"/></svg><b id="jring-n">13</b><span>to go</span></div>
       </div>
     </div>
     <div class="jokers-text">
@@ -798,9 +805,9 @@
       sweepGlint();
       if (locked) {
         $('f-rank').textContent = 'Joker · locked';
-        $('f-a').textContent = 'Turn all 52';
+        $('f-a').textContent = `Turn ${JOKER_AT} cards`;
         $('f-b').textContent = 'then come back';
-        typeLine('Not yet.', `${52 - turnedCount()} cards to go.`, true);
+        typeLine('Not yet.', `${jokersLeft()} ${jokersLeft() === 1 ? 'card' : 'cards'} to go.`, true);
         $('f-note').textContent = '';
         $('f-why').textContent = 'No peeking.';
         $('f-title').textContent = item.title;
@@ -1024,7 +1031,7 @@
       b.addEventListener('click', () => {
         if (b.classList.contains('revealed')) return;
         if (!jokersOpen()) {
-          $('joker-lock').textContent = `The Jokers come last. ${52 - turnedCount()} cards to go.`;
+          $('joker-lock').textContent = `The Jokers open after ${JOKER_AT} cards. ${jokersLeft()} to go.`;
           b.animate && !reduce && b.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(6px)' }, { transform: 'translateX(0)' }], { duration: 300 });
           return;
         }
@@ -1219,8 +1226,8 @@
         const stage = document.createElement('div');
         stage.className = 'ring-stage';
         stage.style.setProperty('--w', w + 'px');
-        stage.innerHTML = `<div class="ring"></div><div class="ring-title"><b>A Tale of <em>Two</em> Cities</b><span class="label">52 cards, two cities · pick one to start</span></div>`;
-        const ring = stage.firstChild, title = stage.lastChild;
+        stage.innerHTML = `<div class="ring"></div><div class="ring-title"><b>A Tale of <em>Two</em> Cities</b><span class="label">52 cards, two cities · pick one to start</span></div><p class="ring-hint label">Drag to spin · tap a card to take it</p>`;
+        const ring = stage.firstChild, title = stage.querySelector('.ring-title'), ringHint = stage.querySelector('.ring-hint');
         const src = backImg();
         const slots = [];
         for (let i = 0; i < N; i++) {
@@ -1269,7 +1276,7 @@
           const rect = b.getBoundingClientRect();
           stop();
           slots.forEach((s) => { if (s !== b) s.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' }); });
-          title.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' });
+          [title, ringHint].forEach((el) => el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, fill: 'forwards' }));
           b.style.visibility = 'hidden';
           resolve({ id: ids[i % ids.length], rect });
         }
@@ -1298,6 +1305,7 @@
       if (v === 'home') { layoutRunway(); onScroll(); if (openSuitId) arcFan(); }
     }
     document.querySelectorAll('.tabs a').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); if (a.dataset.tab !== state.view) setView(a.dataset.tab, true); }));
+    $('b-howto').addEventListener('click', (e) => { e.preventDefault(); setView('read', true); });
     addEventListener('popstate', () => setView(VIEWS[(location.hash || '').slice(1)] || 'home', false));
 
     // ---------- small motions: ink under the cursor, magnetic buttons, rolling numbers, the road ----------
@@ -1374,7 +1382,7 @@
 
     // Read a card: five dots on one card, a few words each.
     {
-      const DOTS = [[10, 12, 'Rank and suit'], [90, 22, 'City and coordinates'], [50, 7.5, 'The street, the time'], [50, 49.5, 'The hidden line'], [50, 74, 'Turn it for New York']];
+      const DOTS = [[10, 12, 'Rank and suit'], [90, 22, 'City and coordinates'], [50, 7.5, 'The street'], [50, 49.5, 'The hidden line'], [50, 74, 'Turn it for New York']];
       $('anat').innerHTML = render('ride', { static: true }) + DOTS.map(([x, y, note], i) =>
         `<button type="button" class="dot${x > 70 ? ' left' : ''}" style="--x:${x}%;--y:${y}%" aria-expanded="false" aria-label="${i + 1}: ${note}">${i + 1}<span class="note" aria-hidden="true">${note}</span></button>`).join('');
       const items = [...$('read-list').children];
@@ -1585,25 +1593,28 @@
     const turned = new Set((store.get('turned', []) || []).filter((id) => cardIds.has(id)));
     const turnedCount = () => turned.size;
     const suitDone = (suit) => all.filter((x) => x.kind === 'card' && x.suit === suit).every((x) => turned.has(x.id));
-    const jokersOpen = () => turned.size >= cardIds.size;
+    // The Jokers open after one suit's worth of cards, so most visitors get to see them.
+    const JOKER_AT = 13;
+    const jokersLeft = () => Math.max(0, JOKER_AT - turned.size);
+    const jokersOpen = () => jokersLeft() === 0;
     let celebrated = jokersOpen();
     function saveTurned() { store.set('turned', [...turned]); logVisit(); }
     function updateProgress(fresh) {
       const n = turned.size, total = cardIds.size;
       $('prog-label').textContent = `${n} / ${total} turned`;
       $('prog-bar').style.width = `${(n / total) * 100}%`;
-      $('joker-lock').textContent = jokersOpen() ? '' : `The Jokers come last. Turn all ${total} first.`;
+      $('joker-lock').textContent = jokersOpen() ? '' : `The Jokers open after you turn ${JOKER_AT} cards. ${jokersLeft()} to go.`;
       document.querySelectorAll('.jflip').forEach((b) => b.classList.toggle('locked', !jokersOpen()));
       $('tease').hidden = jokersOpen();
-      $('jring-n').textContent = String(total - n);
-      $('jring-arc').setAttribute('stroke-dasharray', `${((n / total) * 100).toFixed(1)} 100`);
+      $('jring-n').textContent = String(jokersLeft());
+      $('jring-arc').setAttribute('stroke-dasharray', `${((Math.min(n, JOKER_AT) / JOKER_AT) * 100).toFixed(1)} 100`);
       if (fresh) suits.forEach((s) => {
         const done = store.get('suitsDone', []);
         if (suitDone(s.s) && !done.includes(s.s)) { store.set('suitsDone', [...done, s.s]); toast(`${s.name} done. There's a sticker for you on your deck wall.`); }
       });
       if (fresh && jokersOpen() && !celebrated) {
         celebrated = true;
-        toast('All 52 turned. The Jokers are open under How to read the cards.');
+        toast(`${JOKER_AT} turned. The Jokers are open under How to read the cards.`);
       }
     }
     updateProgress(false);
@@ -1863,7 +1874,12 @@
       });
     }
     const boardDown = 'The pairing board is taking a nap. Try again later.';
-    api('/api/pairings?voter=' + encodeURIComponent(anon)).then((d) => { pairs = d.items || []; renderPairings(); }).catch(() => { $('pp-status').textContent = boardDown; });
+    // While the board's database is not connected, hide the tab rather than show a broken one.
+    api('/api/pairings?voter=' + encodeURIComponent(anon)).then((d) => { pairs = d.items || []; renderPairings(); }).catch(() => {
+      $('pp-status').textContent = boardDown;
+      document.querySelector('.tabs a[data-tab="turn"]').hidden = true;
+      if (state.view === 'turn') setView('home', true);
+    });
     async function vote(key) {
       try { const d = await api('/api/pairings', { action: 'vote', voter: anon, key }); pairs = d.items || pairs; renderPairings(); }
       catch (err) { $('pp-status').textContent = err.status === 429 ? 'Slow down, democracy takes a minute.' : 'That vote did not stick. Try again.'; }
