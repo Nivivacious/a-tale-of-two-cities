@@ -164,7 +164,12 @@ ${keep}
       });
     }
     const boardDown = 'The pairing board is taking a nap. Try again later.';
-    api('/api/pairings?voter=' + encodeURIComponent(anon)).then((d) => { pairs = d.items || []; renderPairings(); }).catch(() => { $('pp-status').textContent = boardDown; });
+    // While the board's database is not connected, hide the tab rather than show a broken one.
+    api('/api/pairings?voter=' + encodeURIComponent(anon)).then((d) => { pairs = d.items || []; renderPairings(); }).catch(() => {
+      $('pp-status').textContent = boardDown;
+      document.querySelector('.tabs a[data-tab="turn"]').hidden = true;
+      if (state.view === 'turn') setView('home', true);
+    });
     async function vote(key) {
       try { const d = await api('/api/pairings', { action: 'vote', voter: anon, key }); pairs = d.items || pairs; renderPairings(); }
       catch (err) { $('pp-status').textContent = err.status === 429 ? 'Slow down, democracy takes a minute.' : 'That vote did not stick. Try again.'; }
