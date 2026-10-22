@@ -39,8 +39,8 @@ swap('<meta name="claude:viewport-fit-sides" content="cover">\n', '');
 swap("    const ARTIFACT = 'https://claude.ai/artifact/UQW9ejggK1W4hsSihkDiDQ';", "    const ARTIFACT = location.origin + location.pathname;");
 // Shared links go to the card's own page, which carries that card's preview image.
 swap("    const shareUrl = () => `${ARTIFACT}#${state.id}`;", "    const shareUrl = () => `${location.origin}/card/${state.id}`;");
-swap("      if (animate) blurIn([$('f-rank'), $('f-title'), document.querySelector('.pairing'), $('f-why')], 70);\n      reveal(id);",
-  "      if (animate) blurIn([$('f-rank'), $('f-title'), document.querySelector('.pairing'), $('f-why')], 70);\n      if (state.view === 'home') try { history.replaceState(null, '', '#' + id); } catch (e) { /* file view */ }\n      reveal(id);");
+swap("      if (animate) blurIn([$('f-rank'), $('f-title'), document.querySelector('.pairing')], 70);\n      reveal(id);",
+  "      if (animate) blurIn([$('f-rank'), $('f-title'), document.querySelector('.pairing')], 70);\n      if (state.view === 'home') try { history.replaceState(null, '', '#' + id); } catch (e) { /* file view */ }\n      reveal(id);");
 swap("'Link copied. It opens straight on this card for anyone you have shared the deck with.'", "'Link copied. It opens straight on this card.'");
 
 // Downloads are ordinary downloads on the open web.
@@ -68,7 +68,7 @@ swap('</div>\n\n<script src="cards.js"></script>', `  <dialog id="fb" aria-label
       <h2 id="fb-h">What's off on <span id="fb-card"></span>?</h2>
       <p>Wrong bus colour? A joke only a tourist would make? Only the person who made the deck sees this.</p>
       <label class="field" for="fb-text">Your note<textarea id="fb-text" required minlength="3" maxlength="1000" rows="4" placeholder="Macha, BMTC buses haven't looked like that since 2009."></textarea></label>
-      <label class="field" for="fb-contact">How to reach you (optional)<input id="fb-contact" maxlength="120" placeholder="Email, Instagram, carrier pigeon"></label>
+      <label class="field" for="fb-contact">How to reach you (optional)<input id="fb-contact" maxlength="120" placeholder="Email or Instagram"></label>
       <div class="controls"><button type="submit" id="fb-send">Send it</button><button type="button" id="fb-cancel">Never mind</button></div>
       <p class="status" id="fb-status" role="status"></p>
     </form>
@@ -112,9 +112,9 @@ page = page.slice(0, start) + `    // ---------- local check: a private note to 
         await api('/api/feedback', { card: state.id, text: $('fb-text').value, contact: $('fb-contact').value });
         $('fb-form').reset();
         fb.close ? fb.close() : fb.removeAttribute('open');
-        toast('Thanks. A local fact checker owes you a filter coffee.');
+        toast('Thanks. I read every one of these.');
       } catch (err) {
-        $('fb-status').textContent = err.status === 429 ? 'Easy, tiger. Try again in a few minutes.' : 'That did not send. Try again in a moment.';
+        $('fb-status').textContent = err.status === 429 ? 'Too many at once. Try again in a few minutes.' : 'That did not send. Try again in a moment.';
       }
       $('fb-send').disabled = false;
     });
@@ -186,7 +186,7 @@ ${keep}
     });
     async function vote(key) {
       try { const d = await api('/api/pairings', { action: 'vote', voter: anon, key }); pairs = d.items || pairs; renderPairings(); }
-      catch (err) { $('pp-status').textContent = err.status === 429 ? 'Slow down, democracy takes a minute.' : 'That vote did not stick. Try again.'; }
+      catch (err) { $('pp-status').textContent = err.status === 429 ? 'Too many votes at once. Try again in a minute.' : 'That vote did not stick. Try again.'; }
     }
     $('pp-form').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -195,7 +195,7 @@ ${keep}
         const d = await api('/api/pairings', body);
         pairs = d.items || pairs; renderPairings();
         $('pp-form').reset();
-        $('pp-status').textContent = 'Added. May the votes be kind.';
+        $('pp-status').textContent = 'Added.';
       } catch (err) {
         $('pp-status').textContent = err.status === 409 ? 'Three each, so everyone gets a turn. Vote for someone else\\'s.'
           : err.status === 429 ? 'Easy. Try again in a minute.' : err.status === 400 ? 'Both sides need a name. Keep it short.' : boardDown;

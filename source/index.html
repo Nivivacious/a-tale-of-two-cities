@@ -75,9 +75,6 @@
   .sentence .half { font-family: var(--display); font-style: italic; font-size: 21px; line-height: 1.25; }
   .sentence .half.b { color: var(--marigold); }
   .sentence .note { font-size: 14px; color: var(--muted); margin-top: 6px; }
-  .info dl { display: grid; gap: 14px; margin: 0; }
-  .info dt { margin-bottom: 2px; }
-  .info dd { margin: 0; max-width: 60ch; }
   .controls { display: flex; flex-wrap: wrap; gap: 10px; }
   .controls .send { border-color: var(--marigold); color: var(--marigold); }
   .controls .send:hover { background: var(--marigold); color: var(--table); }
@@ -182,8 +179,10 @@
   .progress { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; min-width: 0; flex: 1 1 260px; max-width: 460px; }
   .deck-count { display: grid; gap: 2px; }
   .deck-count b { font-family: var(--display); font-weight: 500; font-size: 18px; font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .tips { font-size: 14px; color: var(--muted); opacity: 0.8; margin-top: 10px; }
+  .tips { font-size: 14px; color: var(--muted); opacity: 0.8; margin-left: auto; text-align: right; }
   .tips b { color: var(--ivory); font-weight: 600; }
+  @media (max-width: 960px) { .tips { margin-left: 0; text-align: left; } }
+  @media (max-width: 600px) { .tips br { display: none; } }
   .bar { flex: 1 1 80px; min-width: 60px; height: 4px; background: var(--rule); border-radius: 2px; overflow: hidden; }
   .bar i { display: block; height: 100%; width: 0; background: var(--marigold); transition: width 0.5s; }
   .linkish { border: 0; padding: 4px 2px; min-height: 0; font-size: 11px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
@@ -550,7 +549,7 @@
     header { padding-top: 22px; gap: 10px; }
     header h1 { font-size: clamp(34px, 10vw, 76px); }
     header .thesis { font-size: 15px; margin-top: -2px; }
-    .tips { font-size: 13px; margin-top: 4px; }
+    .tips { font-size: 13px; margin-left: 0; text-align: left; }
     .strip { gap: 10px 16px; margin-top: 2px; }
     .city { padding: 6px 10px; }
     .city b { font-size: 18px; }
@@ -592,13 +591,13 @@
     </div>
     <h1>A Tale of <em>Two</em> Cities</h1>
     <p class="thesis">For anyone whose phone shows two clocks.</p>
-    <p class="tips">52 playing cards with Bangalore on one end, New York on the other.<br>Each card has one sentence across the middle that only finishes when you turn the card.</p>
     <div class="strip">
       <div class="where" role="group" aria-label="Which city are you in?">
         <span class="label">I'm in</span>
         <button type="button" class="city" id="city-blr" aria-pressed="true"><span>Bengaluru</span><b id="clk-blr">--:--</b></button>
         <button type="button" class="city" id="city-nyc" aria-pressed="false"><span>New York</span><b id="clk-nyc">--:--</b></button>
       </div>
+      <p class="tips">52 playing cards with Bangalore on one end, New York on the other. <br>Each card has one sentence across the middle that only finishes when you turn the card.</p>
     </div>
   </header>
 
@@ -635,9 +634,6 @@
         <span class="kn" id="f-kn" lang="kn" hidden></span>
         <span class="note" id="f-note"></span>
       </div>
-      <dl>
-        <div><dt class="label">Why</dt><dd id="f-why"></dd></div>
-      </dl>
       <div class="controls">
         <button type="button" id="b-send" class="send">Send to someone in New York</button>
         <button type="button" id="b-shuffle">Shuffle</button>
@@ -834,7 +830,6 @@
         $('f-b').textContent = 'then come back';
         typeLine('Not yet.', `${jokersLeft()} ${jokersLeft() === 1 ? 'card' : 'cards'} to go.`, true);
         $('f-note').textContent = '';
-        $('f-why').textContent = 'No peeking.';
         $('f-title').textContent = item.title;
         $('f-kn').hidden = true;
         $('b-say').hidden = true;
@@ -857,18 +852,16 @@
         $('f-b').textContent = item.pair[1];
         typeLine(item.sentence[0], item.sentence[1], !animate);
         $('f-note').textContent = NOTE;
-        $('f-why').textContent = item.why;
       } else {
         const j = jokerInfo[id];
         $('f-rank').textContent = j.rank;
         $('f-a').textContent = j.a; $('f-b').textContent = j.b;
         typeLine('Funny how you can miss', 'two places at once.', !animate);
         $('f-note').textContent = j.note;
-        $('f-why').textContent = j.why;
       }
       $('f-title').textContent = item.title;
       $('pos').textContent = `${all.indexOf(item) + 1} / ${all.length}`;
-      if (animate) blurIn([$('f-rank'), $('f-title'), document.querySelector('.pairing'), $('f-why')], 70);
+      if (animate) blurIn([$('f-rank'), $('f-title'), document.querySelector('.pairing')], 70);
       reveal(id);
       document.querySelectorAll('.thumb').forEach((b) => b.setAttribute('aria-current', String(b.dataset.id === id)));
       $('status').textContent = '';
@@ -1118,7 +1111,7 @@
       }
       Snd.flick && Snd.flick();
       const left = 3 - catsFound.size;
-      toast(left ? `Cat found. ${left === 1 ? 'One more' : 'Two more'} hiding somewhere.` : 'All three cats found. The bodega union thanks you for your service.');
+      toast(left ? `Cat found. ${left === 1 ? 'One more' : 'Two more'} hiding somewhere.` : 'All three cats found.');
       return true;
     }
 
@@ -1155,7 +1148,7 @@
         await dl.save({ filename: name, data: blob });
         $('status').textContent = 'Saved.';
       } catch (e) {
-        $('status').textContent = e && e.code === 'declined' ? 'No problem. It is here whenever you want it.' : 'That did not save. The PDFs are also in the repo under prototype/print.';
+        $('status').textContent = e && e.code === 'declined' ? 'No problem.' : 'That did not save. The PDFs are also in the repo under prototype/print.';
       }
     }
     $('b-pdf-card').addEventListener('click', () => {
@@ -1599,7 +1592,7 @@
       $('b-send').textContent = `Send to someone in ${otherCity()}`;
       if (announce && state.id) {
         setFeature(state.id, true);
-        $('status').textContent = c === 'nyc' ? 'New York side up. Hello from the other side of the seam.' : 'Bengaluru side up. Namaskara.';
+        $('status').textContent = c === 'nyc' ? 'New York side up.' : 'Bengaluru side up.';
       }
     }
     setCity(state.city, false);
@@ -1702,7 +1695,7 @@
       if (e.key.length !== 1) return;
       typed = (typed + e.key.toLowerCase()).slice(-8);
       if (typed.endsWith('macha')) toast('Enna macha, all good? Have a filter coffee on us.');
-      if (typed.endsWith('bodega')) toast('Chopped cheese is on the house. It isn\'t, but the cat says hi.');
+      if (typed.endsWith('bodega')) toast('The bodega cat says hi.');
     });
 
     // ---------- Kannada line, read aloud (files made by source/sarvam.js) ----------
@@ -1853,7 +1846,7 @@
       g.fillStyle = '#a8a294'; g.font = '34px "Faculty Glyphic", Georgia, serif'; g.fillText('For anyone whose phone shows two clocks.', 540, 1780);
       URL.revokeObjectURL(url);
       const blob = await new Promise((r) => c.toBlob(r, 'image/png'));
-      try { await dl.save({ filename: `${slug(item.title)}-story.png`, data: blob }); $('status').textContent = 'Saved. Go make your group chat jealous.'; }
+      try { await dl.save({ filename: `${slug(item.title)}-story.png`, data: blob }); $('status').textContent = 'Saved.'; }
       catch (e) { $('status').textContent = e && e.code === 'declined' ? 'No problem.' : 'That did not save. Try again in a moment.'; }
     }
     $('b-story').addEventListener('click', () => { storyImage().catch(() => { $('status').textContent = 'The image did not come out. Try again in a moment.'; }); });
@@ -1875,8 +1868,8 @@
         $(el).textContent = 'Getting the PDF ready.';
         const blob = await (await fetch('print/' + file)).blob();
         await dl.save({ filename: name, data: blob });
-        $(el).textContent = 'Saved. Use the thickest card stock you can find.';
-      } catch (err) { $(el).textContent = err && err.code === 'declined' ? 'No problem. It is here whenever you want it.' : 'That did not save. Try again in a moment.'; }
+        $(el).textContent = 'Saved.';
+      } catch (err) { $(el).textContent = err && err.code === 'declined' ? 'No problem.' : 'That did not save. Try again in a moment.'; }
     }
     // US Letter for anyone set to New York, A4 for everyone else.
     $('b-home').addEventListener('click', () => {
@@ -1933,7 +1926,7 @@
       try {
         await db.doc(`pairings/${me}`).set({ items: [...mineDoc, item] });
         $('pp-form').reset();
-        $('pp-status').textContent = 'Added. May the votes be kind.';
+        $('pp-status').textContent = 'Added.';
       } catch (err) { $('pp-status').textContent = err && err.code === 'invalid_argument' ? noWrite : 'That did not save. Try again in a moment.'; }
     });
 
