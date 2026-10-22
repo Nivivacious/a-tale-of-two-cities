@@ -298,7 +298,7 @@
   .ring-title { position: absolute; left: 50%; top: calc(50% - var(--w) * 1.4 - 34px); translate: -50% -100%; text-align: center; pointer-events: none; display: grid; gap: 8px; padding-inline: 16px; width: 100%; }
   .ring-title b { font-family: var(--display); font-weight: 500; font-size: clamp(26px, 4.4vw, 52px); line-height: 1; }
   .ring-title b em { color: var(--marigold); }
-  .ring-hint { position: absolute; left: 0; right: 0; top: calc(50% + var(--w) * 1.4 + 40px); margin: 0; text-align: center; color: var(--muted); pointer-events: none; animation: hint-in 0.6s 1.2s both; }
+  .ring-hint { position: absolute; left: 0; right: 0; bottom: calc(48px + env(safe-area-inset-bottom, 0px)); margin: 0; text-align: center; color: var(--muted); pointer-events: none; animation: hint-in 0.6s 1.2s both; }
   @keyframes hint-in { from { opacity: 0; } to { opacity: 1; } }
 
   /* House rules: the fan is a reel. Swipe and the cards ride an arc */
@@ -1248,7 +1248,7 @@
         const stage = document.createElement('div');
         stage.className = 'ring-stage';
         stage.style.setProperty('--w', w + 'px');
-        stage.innerHTML = `<div class="ring"></div><div class="ring-title"><b>A Tale of <em>Two</em> Cities</b><span class="label">52 cards, two cities · pick one to start</span></div><p class="ring-hint label">Drag to spin · tap a card to take it</p>`;
+        stage.innerHTML = `<div class="ring"></div><div class="ring-title"><b>A Tale of <em>Two</em> Cities</b><span class="label">52 cards, two cities · pick one to start</span></div><p class="ring-hint label">Drag to spin · ${finePointer ? 'click' : 'tap'} a card to take it</p>`;
         const ring = stage.firstChild, title = stage.querySelector('.ring-title'), ringHint = stage.querySelector('.ring-hint');
         const src = backImg();
         const slots = [];
