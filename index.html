@@ -411,7 +411,7 @@
   .tabs a:hover { color: var(--ivory); }
   .tabs a[aria-current="page"] { color: var(--ivory); border-bottom-color: var(--marigold); }
   .tabs a:focus-visible { outline: 2px solid var(--marigold); outline-offset: 3px; }
-  [data-view="jokers"] header .tips, [data-view="jokers"] header .strip, [data-view="turn"] header .tips, [data-view="turn"] header .strip { display: none; }
+  [data-view="read"] header .tips, [data-view="read"] header .strip, [data-view="turn"] header .tips, [data-view="turn"] header .strip { display: none; }
 
   /* Hover Ink: the outlined word fills in marigold where the cursor is */
   .bigword.ink { color: var(--marigold); -webkit-text-stroke: 0; opacity: 0.32; -webkit-mask-image: radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), #000 0%, transparent 70%); mask-image: radial-gradient(circle 150px at var(--mx, -999px) var(--my, -999px), #000 0%, transparent 70%); }
@@ -460,10 +460,18 @@
   @keyframes ring { 0% { transform: scale(0.7); opacity: 0.7; } 100% { transform: scale(1.7); opacity: 0; } }
 
   /* Read a card: numbered dots, one short note each */
-  .rules-row { display: grid; grid-template-columns: minmax(0, 1fr) 230px; gap: 40px; align-items: start; }
-  .rules-row .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .suits-tip { margin: 0 0 16px; }
+  @media (max-width: 860px) { .rules-row .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .reading { display: grid; gap: 96px; }
+  .read-card { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 56px; align-items: center; }
+  .read-text { display: grid; gap: 18px; min-width: 0; }
+  .read-text h2 { font-size: clamp(30px, 4vw, 44px); line-height: 1.05; }
+  .read-list { margin: 0; padding: 0; list-style: none; counter-reset: dot; display: grid; gap: 4px; }
+  .read-list li { counter-increment: dot; position: relative; padding: 10px 12px 10px 46px; font-size: 17px; max-width: 60ch; border-radius: 3px; transition: background 0.2s; }
+  .read-list li::before { content: counter(dot); position: absolute; left: 10px; top: 11px; width: 22px; height: 22px; border-radius: 50%; background: var(--marigold); color: var(--table); font-family: var(--label); font-size: 11px; font-weight: 700; display: grid; place-items: center; }
+  .read-list li.on { background: var(--panel); }
   .anatomy { display: grid; gap: 8px; justify-items: start; }
-  @media (max-width: 860px) { .rules-row { grid-template-columns: minmax(0, 1fr); } .rules-row .anat-card { width: min(230px, 70%); } }
+  @media (max-width: 860px) { .read-card { grid-template-columns: minmax(0, 1fr); gap: 28px; } .anatomy { justify-items: center; } .anatomy .anat-card { width: min(260px, 70%); } }
   /* Phones: two neat columns of suits, no piles to crowd them */
   @media (max-width: 600px) {
     .rules-row .grid > .suit { padding: 16px 14px; grid-template-columns: minmax(0, 1fr); }
@@ -482,11 +490,6 @@
   .dot.left .note { left: auto; right: calc(100% + 14px); }
   .dot.left .note::before { right: auto; left: 100%; }
   .dot:hover .note, .dot:focus-visible .note, .dot[aria-expanded="true"] .note { opacity: 1; }
-  /* Beside the suits, the card sits on the right edge, so every note opens to the left */
-  @media (min-width: 861px) {
-    .rules-row .dot .note { left: auto; right: calc(100% + 14px); }
-    .rules-row .dot .note::before { right: auto; left: 100%; }
-  }
 
   /* Cursor ring (computers only) */
   .cursor-ring { position: fixed; left: 0; top: 0; z-index: 75; width: 30px; height: 30px; margin: -15px 0 0 -15px; border-radius: 50%; border: 1.5px solid rgba(244, 236, 220, 0.7); pointer-events: none; transition: width 0.25s, height 0.25s, margin 0.25s, opacity 0.25s, border-color 0.25s, background 0.25s; opacity: 0; }
@@ -555,7 +558,7 @@
       <span class="label" id="count">52 cards, 2 Jokers, one very long flight<span id="visitors" hidden> · <b id="vcount">0</b> <span id="vword">visitors</span> so far</span></span>
       <nav class="tabs" aria-label="Sections">
         <a href="#" data-tab="home" aria-current="page">Deck</a>
-        <a href="#jokers" data-tab="jokers">Jokers</a>
+        <a href="#how-to-read" data-tab="read">How to read the cards</a>
         <a href="#your-turn" data-tab="turn">Your pairings</a>
       </nav>
     </div>
@@ -635,16 +638,9 @@
   </section>
 
   <section class="system" aria-label="Deck system" data-in="home">
-    <div class="reel-head">
-      <h2>How to read the deck</h2>
-      <span class="label" id="rules-tip">Tap a suit to fan out its cards. Three cats are hiding in the deck, so tap them when you spot them.</span>
-    </div>
+    <p class="label suits-tip" id="rules-tip">Tap a suit to fan out its cards. Three cats are hiding in the deck, so tap them when you spot them.</p>
     <div class="rules-row">
       <div class="grid" id="suits"></div>
-      <div class="anatomy">
-        <span class="label">Read a card</span>
-        <div class="anat-card" id="anat"></div>
-      </div>
     </div>
     <div class="spread" id="spread" hidden>
       <div class="spread-head">
@@ -655,7 +651,25 @@
     </div>
   </section>
 
-  <section class="jokers" aria-label="The Jokers" data-in="jokers" hidden>
+  <div class="reading" data-in="read" hidden>
+  <section class="read-card" aria-label="How to read a card">
+    <div class="anatomy">
+      <div class="anat-card" id="anat"></div>
+    </div>
+    <div class="read-text">
+      <span class="label" id="read-tip">Tap a dot on the card</span>
+      <h2>How to read a card</h2>
+      <ol class="read-list" id="read-list">
+        <li><b>Rank and suit.</b> The suit is the subject: Hearts for belonging, Diamonds for ambition, Clubs for streets, Spades for weather and time. The rank is the hour. Lay a suit out from 2 to 10 and you get one day, 6 AM to 11 PM.</li>
+        <li><b>City and coordinates.</b> Real coordinates run up the side of each half, so you always know which city you are standing in.</li>
+        <li><b>The street, the time.</b> Each half has a caption with the place and the hour. Both cities share the same local hour.</li>
+        <li><b>The hidden line.</b> One sentence runs across the seam in the middle. The first half reads from Bangalore's side.</li>
+        <li><b>Turn it for New York.</b> Turn the card around and the sentence finishes, now from New York's side. Every card works either way up.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="jokers" aria-label="The Jokers">
     <div class="pair">
       <button type="button" class="thumb jflip" id="j-dep" data-id="departure" aria-label="Face-down Joker"><span class="flip"><span class="side back"></span><span class="side front"></span></span></button>
       <button type="button" class="thumb jflip" id="j-ret" data-id="return" aria-label="Face-down Joker"><span class="flip"><span class="side back"></span><span class="side front"></span></span></button>
@@ -671,6 +685,7 @@
       <p>Every other card works upside down. These two can't, because coffee only pours one way.</p>
     </div>
   </section>
+  </div>
 
 
   <section class="pairings" aria-label="Your pairings" data-in="turn" hidden>
@@ -1262,9 +1277,9 @@
     }
 
 
-    // ---------- tabs: the deck on the homepage, the Jokers and Your turn on their own ----------
-    const VIEWS = { '': 'home', jokers: 'jokers', 'your-turn': 'turn' };
-    const HASH = { home: '', jokers: 'jokers', turn: 'your-turn' };
+    // ---------- tabs: the deck on the homepage, How to read (with the Jokers) and Your turn on their own ----------
+    const VIEWS = { '': 'home', 'how-to-read': 'read', jokers: 'read', 'your-turn': 'turn' };
+    const HASH = { home: '', read: 'how-to-read', turn: 'your-turn' };
     state.view = VIEWS[(location.hash || '').slice(1)] || 'home';
     document.documentElement.dataset.view = state.view;
     function setView(v, push) {
@@ -1327,7 +1342,7 @@
     // The hint by the card fades once you have the hang of it.
     let hintCount = 0;
     function hintStep() { if (++hintCount >= 3) $('hint').classList.add('done'); }
-    if (finePointer) { $('hint').textContent = 'Read half, click for the rest, use the arrows for the next.'; $('rules-tip').textContent = $('rules-tip').textContent.replace('Tap a suit', 'Click a suit').replace('so tap them', 'so click them'); }
+    if (finePointer) { $('hint').textContent = 'Read half, click for the rest, use the arrows for the next.'; $('rules-tip').textContent = $('rules-tip').textContent.replace('Tap a suit', 'Click a suit').replace('so tap them', 'so click them'); $('read-tip').textContent = 'Hover or click a dot on the card'; }
 
     // ---------- premium touches ----------
     // Text sharpens in from a soft blur instead of popping.
@@ -1362,11 +1377,18 @@
       const DOTS = [[10, 12, 'Rank and suit'], [90, 22, 'City and coordinates'], [50, 7.5, 'The street, the time'], [50, 49.5, 'The hidden line'], [50, 74, 'Turn it for New York']];
       $('anat').innerHTML = render('ride', { static: true }) + DOTS.map(([x, y, note], i) =>
         `<button type="button" class="dot${x > 70 ? ' left' : ''}" style="--x:${x}%;--y:${y}%" aria-expanded="false" aria-label="${i + 1}: ${note}">${i + 1}<span class="note" aria-hidden="true">${note}</span></button>`).join('');
+      const items = [...$('read-list').children];
+      const mark = (i) => items.forEach((li, j) => li.classList.toggle('on', j === i));
       $('anat').addEventListener('click', (e) => {
         const d = e.target.closest('.dot'); if (!d) return;
         const open = d.getAttribute('aria-expanded') !== 'true';
         $('anat').querySelectorAll('.dot').forEach((x) => x.setAttribute('aria-expanded', 'false'));
         d.setAttribute('aria-expanded', String(open));
+        mark(open ? [...$('anat').querySelectorAll('.dot')].indexOf(d) : -1);
+      });
+      $('anat').querySelectorAll('.dot').forEach((d, i) => {
+        d.addEventListener('pointerenter', () => mark(i));
+        d.addEventListener('pointerleave', () => { if (d.getAttribute('aria-expanded') !== 'true') mark(-1); });
       });
     }
 
@@ -1581,7 +1603,7 @@
       });
       if (fresh && jokersOpen() && !celebrated) {
         celebrated = true;
-        toast('All 52 turned. The Jokers tab is open.');
+        toast('All 52 turned. The Jokers are open under How to read the cards.');
       }
     }
     updateProgress(false);
@@ -1872,7 +1894,7 @@
       const io = new IntersectionObserver((entries) => entries.forEach((en) => {
         if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
       }), { rootMargin: '0px 0px -12% 0px' });
-      document.querySelectorAll('.system, .jokers, .pairings').forEach((el) => { el.classList.add('reveal'); io.observe(el); });
+      document.querySelectorAll('.system, .read-card, .jokers, .pairings').forEach((el) => { el.classList.add('reveal'); io.observe(el); });
     }
 
     // On a computer, a small ring follows the cursor, grows over anything you can press, and says what the card does.
