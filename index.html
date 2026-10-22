@@ -1204,7 +1204,7 @@
         const stage = document.createElement('div');
         stage.className = 'ring-stage';
         stage.style.setProperty('--w', w + 'px');
-        stage.innerHTML = `<div class="ring"></div><div class="ring-title"><b>A Tale of <em>Two</em> Cities</b><span class="label">Pick a card · drag to spin</span></div>`;
+        stage.innerHTML = `<div class="ring"></div><div class="ring-title"><b>A Tale of <em>Two</em> Cities</b><span class="label">52 cards, two cities · pick one to start</span></div>`;
         const ring = stage.firstChild, title = stage.lastChild;
         const src = backImg();
         const slots = [];
@@ -1570,7 +1570,7 @@
       const n = turned.size, total = cardIds.size;
       $('prog-label').textContent = `${n} / ${total} turned`;
       $('prog-bar').style.width = `${(n / total) * 100}%`;
-      $('joker-lock').textContent = jokersOpen() ? '' : `Locked until you turn all ${total}.`;
+      $('joker-lock').textContent = jokersOpen() ? '' : `The Jokers come last. Turn all ${total} first.`;
       document.querySelectorAll('.jflip').forEach((b) => b.classList.toggle('locked', !jokersOpen()));
       $('tease').hidden = jokersOpen();
       $('jring-n').textContent = String(total - n);
