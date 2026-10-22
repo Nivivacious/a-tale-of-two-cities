@@ -532,12 +532,12 @@
       <nav class="tabs" aria-label="Sections">
         <a href="#" data-tab="home" aria-current="page">Deck</a>
         <a href="#jokers" data-tab="jokers">Jokers</a>
-        <a href="#your-turn" data-tab="turn">Your turn</a>
+        <a href="#your-turn" data-tab="turn">Your pairings</a>
       </nav>
     </div>
     <h1>A Tale of <em>Two</em> Cities</h1>
     <p class="thesis">For anyone whose phone shows two clocks.</p>
-    <p class="tips">Turn <b>all 52</b> for the Jokers. Spot the three hidden cats and tap them.</p>
+    <p class="tips">52 playing cards with Bangalore on one end, New York on the other.<br>Each card has one sentence across the middle that only finishes when you turn the card.</p>
     <div class="strip">
       <div class="where" role="group" aria-label="Which city are you in?">
         <span class="label">I'm in</span>
@@ -549,7 +549,7 @@
         <span class="bar" aria-hidden="true"><i id="prog-bar"></i></span>
         <span class="cats" id="cats" role="img" aria-label="Cats found: 0 of 3"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z"/></svg></span>
         <span id="cat-badge" hidden title="You found all three cats"><svg viewBox="0 0 24 24" aria-label="Cat badge"><path d="M5,20 C4,14 6,10 9,9 L8,4 L11,7 H13 L16,4 L15,9 C18,10 20,14 19,20 Z" fill="#f2b330"/><circle cx="10" cy="13" r="1" fill="#12151f"/><circle cx="14" cy="13" r="1" fill="#12151f"/></svg></span>
-        <button type="button" class="linkish" id="b-reset">Start over</button>
+        <button type="button" class="linkish" id="b-reset">Put the deck back</button>
       </div>
     </div>
   </header>
@@ -612,8 +612,8 @@
 
   <section class="system" aria-label="Deck system" data-in="home">
     <div class="reel-head">
-      <h2>House rules</h2>
-      <span class="label">Tap a suit to fan out its cards</span>
+      <h2>How to read the deck</h2>
+      <span class="label" id="rules-tip">Tap a suit to fan out its cards. Three cats are hiding in the deck, so tap them when you spot them.</span>
     </div>
     <div class="rules-row">
       <div class="grid" id="suits"></div>
@@ -651,7 +651,7 @@
 
   <section class="pairings" aria-label="Your pairings" data-in="turn" hidden>
     <div class="reel-head">
-      <h2>Your turn</h2>
+      <h2>Your pairings</h2>
       <span class="label">The best ones go in the expansion pack</span>
     </div>
     <p>Know a Bangalore thing with a New York twin we missed? Add it, then vote for the ones that make you snort.</p>
@@ -971,7 +971,7 @@
       b.addEventListener('click', () => {
         if (b.classList.contains('revealed')) return;
         if (!jokersOpen()) {
-          $('joker-lock').textContent = `Locked. Turn all 52 cards first. ${52 - turnedCount()} to go.`;
+          $('joker-lock').textContent = `The Jokers come last. ${52 - turnedCount()} cards to go.`;
           b.animate && !reduce && b.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(6px)' }, { transform: 'translateX(0)' }], { duration: 300 });
           return;
         }
@@ -1289,7 +1289,7 @@
     // The hint by the card fades once you have the hang of it.
     let hintCount = 0;
     function hintStep() { if (++hintCount >= 3) $('hint').classList.add('done'); }
-    if (finePointer) { $('hint').textContent = 'Read half, click for the rest, use the arrows for the next.'; document.querySelector('.tips').innerHTML = document.querySelector('.tips').innerHTML.replace('and tap them', 'and click them'); }
+    if (finePointer) { $('hint').textContent = 'Read half, click for the rest, use the arrows for the next.'; $('rules-tip').textContent = $('rules-tip').textContent.replace('Tap a suit', 'Click a suit').replace('so tap them', 'so click them'); }
 
     // ---------- premium touches ----------
     // Text sharpens in from a soft blur instead of popping.
