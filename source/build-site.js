@@ -242,7 +242,7 @@ fs.writeFileSync(path.join(out, 'index.html'), page);
 <link rel="canonical" href="${SITE}/#${c.id}">
 <meta http-equiv="refresh" content="0; url=/#${c.id}">
 <script>location.replace('/#${c.id}')</script>
-<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#12151f;color:#f4ecdc;font-family:Georgia,serif}a{color:#f2b330}</style>
+<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#12151f;color:#f4ecdc;font-family:'Faculty Glyphic',Georgia,serif}a{color:#f2b330}</style>
 </head>
 <body><a href="/#${c.id}">${esc(c.title)}</a></body>
 </html>
@@ -262,15 +262,15 @@ fs.writeFileSync(path.join(out, '404.html'), `<!doctype html>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 ${fonts}<style>
   html, body { margin: 0; }
-  body { min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; background: #12151f; color: #f4ecdc; font-family: 'Cormorant Garamond', Garamond, serif; padding-block: 32px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); box-sizing: border-box; }
+  body { min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; background: #12151f; color: #f4ecdc; font-family: 'Faculty Glyphic', Georgia, serif; font-synthesis: none; padding-block: 32px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); box-sizing: border-box; }
   main { display: grid; gap: 18px; justify-items: center; text-align: center; max-width: 34ch; }
   .card { width: min(190px, 46vw); aspect-ratio: 5 / 7; border-radius: 6% / 4.3%; overflow: hidden; box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8); animation: wobble 4s ease-in-out infinite; }
   .card svg { display: block; width: 100%; height: 100%; }
   @keyframes wobble { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg) translateY(-6px); } }
-  .label { font-family: 'Archivo Narrow', 'Arial Narrow', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #a8a294; }
-  h1 { font-family: 'Bodoni Moda', Didot, serif; font-weight: 500; font-size: clamp(40px, 9vw, 64px); line-height: 1; margin: 0; }
+  .label { font-family: 'Faculty Glyphic', Georgia, serif; font-weight: 700; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #a8a294; }
+  h1 { font-family: 'Faculty Glyphic', Georgia, serif; font-weight: 500; font-size: clamp(40px, 9vw, 64px); line-height: 1; margin: 0; }
   p { font-size: 22px; font-style: italic; color: #a8a294; margin: 0; }
-  a { font-family: 'Archivo Narrow', 'Arial Narrow', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: #12151f; background: #f2b330; text-decoration: none; padding: 13px 18px; border-radius: 2px; }
+  a { font-family: 'Faculty Glyphic', Georgia, serif; font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: #12151f; background: #f2b330; text-decoration: none; padding: 13px 18px; border-radius: 2px; }
   a:focus-visible { outline: 2px solid #f4ecdc; outline-offset: 3px; }
   @media (prefers-reduced-motion: reduce) { .card { animation: none; } }
 </style>
