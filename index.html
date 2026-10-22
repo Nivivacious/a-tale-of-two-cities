@@ -470,7 +470,6 @@
   .read-list li { counter-increment: dot; position: relative; padding: 10px 12px 10px 46px; font-size: 17px; max-width: 60ch; border-radius: 3px; transition: background 0.2s; }
   .read-list li::before { content: counter(dot); position: absolute; left: 10px; top: 11px; width: 22px; height: 22px; border-radius: 50%; background: var(--marigold); color: var(--table); font-family: var(--label); font-size: 11px; font-weight: 700; display: grid; place-items: center; }
   .read-list li.on { background: var(--panel); }
-  .read-cats { color: var(--muted); font-style: italic; }
   .anatomy { display: grid; gap: 8px; justify-items: start; }
   @media (max-width: 860px) { .read-card { grid-template-columns: minmax(0, 1fr); gap: 28px; } .anatomy { justify-items: center; } .anatomy .anat-card { width: min(260px, 70%); } }
   /* Phones: two neat columns of suits, no piles to crowd them */
@@ -639,7 +638,7 @@
   </section>
 
   <section class="system" aria-label="Deck system" data-in="home">
-    <p class="label suits-tip" id="rules-tip">Tap a suit to fan out its cards.</p>
+    <p class="label suits-tip" id="rules-tip">Tap a suit to fan out its cards. Three cats are hiding in the deck, so tap them when you spot them.</p>
     <div class="rules-row">
       <div class="grid" id="suits"></div>
     </div>
@@ -667,7 +666,6 @@
         <li><b>The hidden line.</b> One sentence runs across the seam in the middle. The first half reads from Bangalore's side.</li>
         <li><b>Turn it for New York.</b> Turn the card around and the sentence finishes, now from New York's side. Every card works either way up.</li>
       </ol>
-      <p class="read-cats">Three cats are hiding in the deck. Tap them when you spot them.</p>
     </div>
   </section>
 
@@ -1344,7 +1342,7 @@
     // The hint by the card fades once you have the hang of it.
     let hintCount = 0;
     function hintStep() { if (++hintCount >= 3) $('hint').classList.add('done'); }
-    if (finePointer) { $('hint').textContent = 'Read half, click for the rest, use the arrows for the next.'; $('rules-tip').textContent = $('rules-tip').textContent.replace('Tap a suit', 'Click a suit'); $('read-tip').textContent = 'Hover or click a dot on the card'; document.querySelector('.read-cats').textContent = 'Three cats are hiding in the deck. Click them when you spot them.'; }
+    if (finePointer) { $('hint').textContent = 'Read half, click for the rest, use the arrows for the next.'; $('rules-tip').textContent = $('rules-tip').textContent.replace('Tap a suit', 'Click a suit').replace('so tap them', 'so click them'); $('read-tip').textContent = 'Hover or click a dot on the card'; }
 
     // ---------- premium touches ----------
     // Text sharpens in from a soft blur instead of popping.
